@@ -1,0 +1,173 @@
+@layer components {
+  .ui-comments {
+    @apply grid gap-3;
+  }
+
+  .ui-comment-list {
+    @apply grid divide-y [&>li]:py-4 [&>li:first-child]:pt-0 [&>li:last-child]:pb-0;
+  }
+
+  .ui-thread {
+    @apply grid gap-2;
+  }
+
+  .ui-comment {
+    @apply flex scroll-mt-[calc(var(--page-header-height,0px)+1rem)] gap-3;
+
+    & > .ui-avatar {
+      @apply size-7;
+    }
+
+    & > div {
+      @apply grid min-w-0 flex-1 gap-1;
+    }
+
+    & > div > header {
+      @apply flex min-w-0 flex-wrap items-baseline gap-x-2 text-xs text-muted-foreground;
+
+      & > :first-child {
+        @apply min-w-0 text-sm font-medium wrap-break-word text-foreground;
+      }
+
+      & > :not(:first-child) {
+        @apply shrink-0;
+      }
+    }
+
+    &[data-size="compact"] {
+      & > .ui-avatar {
+        @apply size-6;
+      }
+
+      & > div > header > :first-child {
+        @apply text-xs;
+      }
+    }
+  }
+
+  .ui-comment-meta {
+    @apply ml-auto flex shrink-0 items-center gap-x-2;
+
+    & > button {
+      @apply hover:text-foreground hover:underline;
+    }
+  }
+
+  .ui-permalink {
+    @apply inline-flex items-center gap-1 text-muted-foreground hover:text-foreground;
+  }
+
+  .ui-comment-body {
+    @apply grid min-w-0 gap-1 text-sm;
+  }
+
+  .ui-comment-tools {
+    @apply flex gap-1;
+
+    & .ui-button {
+      @apply h-6 gap-1 px-1.5 text-xs;
+    }
+  }
+
+  :is(.ui-reply-line, .ui-resolved-line) {
+    @apply flex flex-wrap items-center text-xs text-muted-foreground;
+
+    & > details {
+      @apply contents;
+    }
+
+    & > details > summary {
+      @apply flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden;
+    }
+
+    & > details::details-content {
+      @apply order-1 basis-full text-sm text-foreground;
+    }
+
+    & > details:not([open])::details-content {
+      @apply hidden;
+    }
+
+    & > button {
+      @apply hover:text-foreground hover:underline;
+    }
+  }
+
+  .ui-reply-line {
+    @apply gap-x-2 gap-y-1;
+
+    & > details::details-content {
+      @apply rounded-md bg-muted/50 p-3;
+    }
+
+    &:has(> .ui-replies[open]):has(> .ui-reply-form[open]) {
+      & > .ui-replies::details-content {
+        @apply rounded-b-none;
+      }
+
+      & > .ui-reply-form::details-content {
+        @apply -mt-1 rounded-t-none pt-0;
+      }
+    }
+  }
+
+  .ui-resolved-line {
+    @apply gap-2;
+
+    & > details > summary > .ui-icon {
+      @apply text-(--chart-green);
+    }
+
+    & > button {
+      @apply ml-auto;
+    }
+  }
+
+  .ui-replies > summary > :nth-child(2) {
+    @apply font-medium text-primary hover:underline;
+  }
+
+  .ui-reply-form > summary {
+    @apply hover:text-foreground hover:underline;
+  }
+
+  .ui-repliers {
+    @apply flex -space-x-1.5 [&>.ui-avatar]:ring-2 [&>.ui-avatar]:ring-background;
+  }
+
+  .ui-comment-replies {
+    @apply grid gap-3;
+  }
+
+  .ui-comment-edit {
+    @apply grid gap-2;
+
+    & > div:last-child {
+      @apply flex gap-2;
+    }
+  }
+
+  .ui-comment-form {
+    @apply grid gap-3;
+  }
+
+  :is(.ui-comment-form, .ui-comment-edit) .ui-textarea {
+    @apply font-mono text-sm;
+  }
+
+  .ui-editor-hints {
+    @apply flex items-center gap-3 text-xs text-muted-foreground;
+
+    & > label {
+      @apply cursor-pointer underline;
+    }
+  }
+
+  .ui-thread-anchor {
+    @apply font-mono text-xs wrap-anywhere text-muted-foreground hover:underline;
+  }
+
+  .ui-review-thread {
+    @apply grid max-w-3xl gap-2 rounded-md border bg-background px-3 py-2 font-sans text-sm whitespace-normal target:ring-2 target:ring-primary;
+  }
+}
