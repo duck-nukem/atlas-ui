@@ -23,3 +23,5 @@
 @import "./components/status.css";
 @import "./components/task-groups.css";
 @import "./components/storage.css";
+@plugin "@tailwindcss/typography";
+@import "./components/markdown.css";
