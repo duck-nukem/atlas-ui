@@ -46,8 +46,13 @@
     --ui-color-accent: light-dark(#edf3ff, #313244);
     --ui-color-accent-fg: var(--ui-color-fg);
     --ui-color-danger: light-dark(#c7303f, #f38ba8);
+    --ui-color-danger-soft: color-mix(
+      in oklch,
+      var(--ui-color-danger) 12%,
+      var(--ui-color-bg)
+    );
     --ui-color-border: light-dark(#dfe1e5, #393b50);
-    --ui-color-input: light-dark(#c9ccd6, #45475a);
+    --ui-color-input: light-dark(#868a96, #7f849c);
     --ui-color-ring: light-dark(#3574f0, #b4befe);
     --ui-color-glow: light-dark(#e56d17, #fab387);
     --ui-color-sidebar: light-dark(#f7f8fa, #181825);
@@ -76,7 +81,7 @@
 
     --ui-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 8%);
-    --ui-shadow-lg: 0 8px 24px rgb(0 0 0 / 16%);
+    --ui-shadow-lg: 0 8px 24px light-dark(rgb(0 0 0 / 16%), rgb(0 0 0 / 50%));
     --ui-focus-ring: 0 0 0 3px
       color-mix(in oklch, var(--ui-color-ring) 50%, transparent);
   }

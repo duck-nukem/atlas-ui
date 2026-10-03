@@ -2,11 +2,12 @@ import type { Meta } from "@storybook/react-vite";
 import { html, mobile } from "../html";
 
 const toggles = `
-<div class="ui-fieldset">
+<fieldset class="ui-fieldset">
+  <legend>Notifications</legend>
   <label class="ui-check"><input class="ui-switch" type="checkbox" role="switch" checked> Email notifications</label>
   <label class="ui-check"><input class="ui-switch" type="checkbox" role="switch"> Weekly digest</label>
   <label class="ui-check"><input class="ui-switch" type="checkbox" role="switch" disabled> Push notifications</label>
-</div>`;
+</fieldset>`;
 
 export default { title: "Primitives/Toggle" } satisfies Meta;
 

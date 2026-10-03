@@ -1,3 +1,4 @@
+// usage: node scripts/build-icons.ts
 import { readFileSync, writeFileSync } from "node:fs";
 import { icons } from "../src/icons/names.ts";
 

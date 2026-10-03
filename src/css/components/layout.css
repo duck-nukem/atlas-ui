@@ -71,6 +71,13 @@
     }
   }
 
+  .ui-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-2);
+    align-items: center;
+  }
+
   .ui-stack {
     display: grid;
     gap: var(--ui-stack-gap, var(--ui-space-4));

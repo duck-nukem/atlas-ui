@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react-vite";
 import { html, icon, mobile } from "../html";
 
 const variants = `
-<div class="ui-button-group">
+<div class="ui-row">
   <button class="ui-button" type="button">Save</button>
   <button class="ui-button" data-variant="outline" type="button">Cancel</button>
   <button class="ui-button" data-variant="secondary" type="button">Draft</button>
@@ -12,12 +12,22 @@ const variants = `
   <a class="ui-button" data-variant="link" href="#docs">Read the docs</a>
 </div>`;
 
-export default { title: "Primitives/Button" } satisfies Meta;
+export default {
+  title: "Primitives/Button",
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A disabled link keeps its aria-disabled and drops its href, so the keyboard cannot follow it either",
+      },
+    },
+  },
+} satisfies Meta;
 
 export const Variants = html(variants);
 
 export const Sizes = html(`
-<div class="ui-button-group">
+<div class="ui-row">
   <button class="ui-button" data-size="xs" type="button">Extra small</button>
   <button class="ui-button" data-size="sm" type="button">Small</button>
   <button class="ui-button" type="button">Default</button>
@@ -25,7 +35,7 @@ export const Sizes = html(`
 </div>`);
 
 export const States = html(`
-<div class="ui-button-group">
+<div class="ui-row">
   <button class="ui-button" type="button" disabled>Disabled</button>
   <button class="ui-button" type="submit" aria-busy="true">Saving</button>
   <button class="ui-button" data-variant="outline" type="button" aria-pressed="true">Pinned</button>
@@ -33,7 +43,7 @@ export const States = html(`
 </div>`);
 
 export const WithIcons = html(`
-<div class="ui-button-group">
+<div class="ui-row">
   <button class="ui-button" type="button">${icon("plus")} New task</button>
   <button class="ui-button" data-variant="outline" type="button">Next ${icon("chevron-right")}</button>
   <button class="ui-button" data-variant="ghost" data-shape="icon" type="button" aria-label="Settings">${icon("settings")}</button>

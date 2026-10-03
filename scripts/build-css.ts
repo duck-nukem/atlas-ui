@@ -1,3 +1,4 @@
+// usage: node scripts/build-css.ts
 import { bundle } from "lightningcss";
 import { writeFileSync } from "node:fs";
 

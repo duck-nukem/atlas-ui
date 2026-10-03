@@ -47,17 +47,15 @@
 
     &:focus-visible {
       border-color: var(--ui-color-ring);
-      outline: none;
-      box-shadow: var(--ui-focus-ring);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      outline-offset: 0;
     }
 
     &[aria-invalid="true"] {
       border-color: var(--ui-color-danger);
+    }
+
+    @media (width < 768px) {
+      font-size: max(1rem, 16px);
     }
   }
 
@@ -93,7 +91,7 @@
     gap: var(--ui-space-2);
     align-items: center;
 
-    & input {
+    & > input:not(.ui-switch) {
       inline-size: 1rem;
       block-size: 1rem;
       margin: 0;
@@ -107,6 +105,7 @@
     inline-size: 2.25rem;
     block-size: 1.25rem;
     margin: 0;
+    border: 1px solid var(--ui-color-input);
     border-radius: var(--ui-radius-full);
     background: var(--ui-color-input);
     cursor: pointer;
@@ -116,8 +115,8 @@
     &::before {
       content: "";
       position: absolute;
-      inset-block-start: 2px;
-      inset-inline-start: 2px;
+      inset-block-start: 1px;
+      inset-inline-start: 1px;
       inline-size: 1rem;
       block-size: 1rem;
       border-radius: var(--ui-radius-full);
@@ -127,6 +126,7 @@
     }
 
     &:checked {
+      border-color: var(--ui-color-primary);
       background: var(--ui-color-primary);
 
       &::before {
@@ -134,14 +134,14 @@
       }
     }
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    @media (forced-colors: active) {
+      &::before {
+        background: CanvasText;
+      }
 
-    &:focus-visible {
-      outline: none;
-      box-shadow: var(--ui-focus-ring);
+      &:checked {
+        background: Highlight;
+      }
     }
   }
 

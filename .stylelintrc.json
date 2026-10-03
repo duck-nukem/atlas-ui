@@ -4,7 +4,6 @@
     "selector-class-pattern": "^(ui-[a-z0-9-]+|light|dark)$",
     "custom-property-pattern": "^ui-[a-z0-9-]+$",
     "custom-property-empty-line-before": null,
-    "import-notation": "string",
-    "no-descending-specificity": null
+    "import-notation": "string"
   }
 }

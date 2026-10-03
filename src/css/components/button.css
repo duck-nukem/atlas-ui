@@ -8,7 +8,16 @@
       var(--ui-button-bg) 90%,
       var(--ui-color-fg)
     );
+    --ui-button-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 25%),
+      transparent 50%,
+      rgb(0 0 0 / 5%)
+    );
+    --ui-button-shadow:
+      var(--ui-shadow-sm), inset 0 1px 0 rgb(255 255 255 / 45%);
     --ui-button-height: var(--ui-control-height);
+    --ui-button-padding: var(--ui-space-3);
     --ui-icon-size: 1rem;
 
     display: inline-flex;
@@ -17,19 +26,12 @@
     align-items: center;
     justify-content: center;
     block-size: var(--ui-button-height);
-    padding-inline: var(--ui-space-3);
+    padding-inline: var(--ui-button-padding);
     border: 1px solid var(--ui-button-border);
     border-radius: var(--ui-radius);
     background-color: var(--ui-button-bg);
-    background-image: linear-gradient(
-      to bottom,
-      rgb(255 255 255 / 25%),
-      transparent 50%,
-      rgb(0 0 0 / 5%)
-    );
-    box-shadow:
-      var(--ui-shadow-sm),
-      inset 0 1px 0 rgb(255 255 255 / 45%);
+    background-image: var(--ui-button-image);
+    box-shadow: var(--ui-button-shadow);
     color: var(--ui-button-fg);
     font: inherit;
     font-weight: 500;
@@ -37,46 +39,7 @@
     white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
-    user-select: none;
     transition: background-color var(--ui-duration);
-
-    &:hover {
-      background-color: var(--ui-button-hover);
-    }
-
-    &:active:not([aria-haspopup]) {
-      translate: 0 1px;
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow: var(--ui-focus-ring);
-    }
-
-    &:disabled,
-    &[aria-disabled="true"] {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    &[aria-busy="true"] {
-      cursor: progress;
-
-      &::before {
-        content: "";
-        inline-size: 0.875em;
-        block-size: 0.875em;
-        border: 2px solid currentcolor;
-        border-inline-end-color: transparent;
-        border-radius: var(--ui-radius-full);
-        animation: ui-spin 0.7s linear infinite;
-      }
-    }
-
-    &[aria-pressed="true"],
-    &[aria-expanded="true"] {
-      --ui-button-bg: var(--ui-color-muted);
-    }
 
     &[data-variant="outline"] {
       --ui-button-bg: var(--ui-color-bg);
@@ -92,11 +55,7 @@
     }
 
     &[data-variant="danger"] {
-      --ui-button-bg: color-mix(
-        in oklch,
-        var(--ui-color-danger) 12%,
-        var(--ui-color-bg)
-      );
+      --ui-button-bg: var(--ui-color-danger-soft);
       --ui-button-fg: var(--ui-color-danger);
       --ui-button-border: transparent;
       --ui-button-hover: color-mix(
@@ -113,42 +72,29 @@
       --ui-button-fg: var(--ui-color-fg);
       --ui-button-border: transparent;
       --ui-button-hover: var(--ui-color-muted);
-
-      background-image: none;
-      box-shadow: none;
+      --ui-button-image: none;
+      --ui-button-shadow: none;
     }
 
     &[data-variant="danger-ghost"] {
       --ui-button-fg: var(--ui-color-danger);
     }
 
-    &[data-variant="link"] {
-      --ui-button-fg: var(--ui-color-primary);
-      --ui-button-hover: transparent;
-
-      padding-inline: 0;
-      text-underline-offset: 4px;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
     &[data-size="xs"] {
       --ui-button-height: var(--ui-control-height-xs);
+      --ui-button-padding: var(--ui-space-2);
       --ui-icon-size: 0.75rem;
 
       gap: var(--ui-space-1);
-      padding-inline: var(--ui-space-2);
       font-size: var(--ui-font-size-xs);
     }
 
     &[data-size="sm"] {
       --ui-button-height: var(--ui-control-height-sm);
+      --ui-button-padding: var(--ui-space-2);
       --ui-icon-size: 0.875rem;
 
       gap: var(--ui-space-1);
-      padding-inline: var(--ui-space-2);
       font-size: 0.8rem;
     }
 
@@ -160,13 +106,52 @@
       inline-size: var(--ui-button-height);
       padding: 0;
     }
-  }
 
-  .ui-button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--ui-space-2);
-    align-items: center;
+    &[data-variant="link"] {
+      --ui-button-fg: var(--ui-color-primary);
+      --ui-button-hover: transparent;
+      --ui-button-padding: 0;
+
+      text-underline-offset: 4px;
+    }
+
+    &[aria-pressed="true"],
+    &[aria-expanded="true"] {
+      --ui-button-bg: var(--ui-color-accent);
+      --ui-button-fg: var(--ui-color-accent-fg);
+      --ui-button-border: var(--ui-color-ring);
+    }
+
+    &:hover {
+      background-color: var(--ui-button-hover);
+    }
+
+    &[data-variant="link"]:hover {
+      text-decoration: underline;
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      pointer-events: none;
+    }
+
+    &:active:not([aria-haspopup]) {
+      translate: 0 1px;
+    }
+
+    &[aria-busy="true"] {
+      cursor: progress;
+
+      &::before {
+        content: "";
+        inline-size: 0.875em;
+        block-size: 0.875em;
+        border: 2px solid currentcolor;
+        border-inline-end-color: transparent;
+        border-radius: var(--ui-radius-full);
+        animation: ui-spin 0.7s linear infinite;
+      }
+    }
   }
 
   @keyframes ui-spin {
