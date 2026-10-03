@@ -20,7 +20,7 @@ npm install "git+https://<host>/atlas-ui.git#<commit>"
 
 Copy `dist/` into your static files, or import the same paths from the npm package. There is nothing to compile in the app.
 
-`<atlas-select>` wraps a server-rendered `<select>`; without JavaScript it is that select, with `elements.js` it becomes the searchable dropdown and keeps the select as its value, so forms and Datastar see a normal select. Add `search-url` to search on the server; it is asked `?q=<text>` and answers `{"options":[{"value","label","hint"}]}`. `<atlas-channel-picker>` wraps a list of channel links and turns it into a searchable popover. Storybook shows the markup for both.
+`<atlas-select>` wraps a server-rendered `<select>`; without JavaScript it is that select, with `elements.js` it becomes the searchable dropdown and keeps the select as its value, so forms and Datastar see a normal select. Add `search-url` to search on the server; it is asked `?q=<text>` and answers `{"options":[{"value","label","hint"}]}`. `<atlas-channel-picker>` wraps a `.ui-channel-list` of `li > a` channel links and turns it into a searchable popover. Both elements rebuild themselves when the server patches or morphs their content, so Datastar can update them like any other HTML. Storybook shows the markup for both.
 
 `interest.js` makes hover popovers open on hover in browsers without `interestfor` (Safari, Firefox).
 

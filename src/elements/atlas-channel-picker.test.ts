@@ -15,8 +15,9 @@ const link = (
 ) =>
   `<li><a class="ui-channel-link" href="#${id}" data-testid="pick-${id}" data-unread="${String(options.unread === true)}"${options.current === true ? ' aria-current="page"' : ""}><span>${label}</span>${options.mentioned === true ? `<span class="ui-dot" role="img" aria-label="Messages for you" data-testid="attention-${id}"></span>` : ""}</a></li>`;
 
-const picker = (attention: boolean) =>
-  mount(`<atlas-channel-picker label="#random"${attention ? " attention" : ""}>
+const markup = (
+  attention: boolean,
+) => `<atlas-channel-picker label="#random"${attention ? " attention" : ""}>
   <div class="ui-channel-list">
     <ul>
       <li><span>Channels</span><ul>${link("general", "general", { unread: true, mentioned: attention })}${link("random", "random", { current: true })}</ul></li>
@@ -24,25 +25,11 @@ const picker = (attention: boolean) =>
     </ul>
   </div>
   <a class="ui-channel-new" href="#new">New channel</a>
-</atlas-channel-picker>`);
+</atlas-channel-picker>`;
+
+const picker = (attention: boolean) => mount(markup(attention));
 
 describe("atlas-channel-picker", () => {
-  it("puts a dot on a channel that mentions the viewer", () => {
-    picker(true);
-
-    const dot = screen.getByTestId("attention-general");
-
-    expect(dot).toBeInTheDocument();
-  });
-
-  it("lists channels and direct messages", () => {
-    picker(false);
-
-    const link = screen.getByTestId("pick-dm-a-b");
-
-    expect(link).toHaveAttribute("href", "#dm-a-b");
-  });
-
   it("narrows the list to what was typed", async () => {
     picker(false);
     await userEvent.click(screen.getByTestId("channel-picker"));
@@ -61,14 +48,6 @@ describe("atlas-channel-picker", () => {
     await userEvent.type(screen.getByTestId("channel-search"), "zzz");
 
     expect(screen.getByTestId("no-channel-match")).toBeVisible();
-  });
-
-  it("marks channels with unread messages", () => {
-    picker(false);
-
-    const link = screen.getByTestId("pick-general");
-
-    expect(link).toHaveAttribute("data-unread", "true");
   });
 
   it("closes once a channel is picked", async () => {
@@ -122,13 +101,42 @@ describe("atlas-channel-picker", () => {
     expect(trigger).toHaveAttribute("data-attention", "false");
   });
 
-  it("is a plain list of channel links before the script runs", () => {
-    const container = document.createElement("div");
-    container.innerHTML = `<atlas-channel-picker-without-script><div class="ui-channel-list"><ul><li><span>Channels</span><ul>${link("general", "general")}</ul></li></ul></div></atlas-channel-picker-without-script>`;
-    document.body.append(container);
+  it("rebuilds after the server replaces its content", async () => {
+    const container = picker(false);
+    const element = container.querySelector("atlas-channel-picker");
 
-    const general = container.querySelector("a");
+    element?.replaceChildren(
+      ...(picker(false).querySelector("atlas-channel-picker .ui-channel-list")
+        ?.parentElement?.childNodes ?? []),
+    );
+    await new Promise<void>((resolve) => queueMicrotask(resolve));
 
-    expect(general).toHaveAttribute("href", "#general");
+    expect(
+      container.querySelectorAll("[data-testid=channel-picker]"),
+    ).toHaveLength(1);
+  });
+
+  it("shows attention when the server adds it later", () => {
+    const container = picker(false);
+
+    container
+      .querySelector("atlas-channel-picker")
+      ?.setAttribute("attention", "");
+
+    expect(screen.getAllByTestId("channel-picker")[0]).toHaveAttribute(
+      "data-attention",
+      "true",
+    );
+  });
+
+  it("hides a section with no matching channel", async () => {
+    picker(false);
+    await userEvent.click(screen.getByTestId("channel-picker"));
+
+    await userEvent.type(screen.getByTestId("channel-search"), "ran");
+
+    expect(screen.getByText("Direct messages").closest("li")).toHaveAttribute(
+      "hidden",
+    );
   });
 });

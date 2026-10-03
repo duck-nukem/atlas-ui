@@ -1,87 +1,120 @@
 import { icons } from "./icons";
 import { Popover } from "./popover";
 
+const texts = {
+  search: "Find a channel or person",
+  none: "Nothing matches",
+  attention: "Messages for you",
+};
+
+type Text = keyof typeof texts;
+
 let count = 0;
 
 export class AtlasChannelPicker extends HTMLElement {
+  static readonly observedAttributes = [
+    "label",
+    "attention",
+    ...Object.keys(texts).map((name) => `text-${name}`),
+  ];
+
+  #trigger = document.createElement("button");
+  #panel = document.createElement("div");
+  #input = document.createElement("input");
+  #none = document.createElement("p");
   #popover: Popover | undefined;
+  #host = new MutationObserver(() => this.#sync());
 
   connectedCallback(): void {
-    const list = this.querySelector<HTMLElement>(".ui-channel-list");
+    this.#host.observe(this, { childList: true });
+    this.#sync();
+  }
 
-    if (list === null || this.#popover !== undefined) {
-      return;
+  disconnectedCallback(): void {
+    this.#host.disconnect();
+  }
+
+  attributeChangedCallback(): void {
+    if (this.contains(this.#trigger)) {
+      this.#label();
     }
+  }
+
+  #text(name: Text): string {
+    return this.getAttribute(`text-${name}`) ?? texts[name];
+  }
+
+  #sync(): void {
+    const built =
+      this.children.length === 2 &&
+      this.children[0] === this.#trigger &&
+      this.children[1] === this.#panel;
+
+    if (!built && this.querySelector("a") !== null) {
+      this.#build();
+      this.#host.takeRecords();
+    }
+  }
+
+  #build(): void {
+    const stalePanel = this.querySelector(":scope > .ui-channel-popover");
+
+    stalePanel?.querySelector(":scope > input")?.remove();
+    stalePanel?.querySelector("[data-testid=no-channel-match]")?.remove();
+    stalePanel?.replaceWith(...stalePanel.childNodes);
+    this.querySelectorAll(":scope > .ui-channel-trigger").forEach((stale) =>
+      stale.remove(),
+    );
 
     const id = `atlas-channel-picker-${String((count += 1))}`;
-    const search =
-      this.getAttribute("text-search") ?? "Find a channel or person";
-    const trigger = document.createElement("button");
-    const label = document.createElement("span");
-    const input = document.createElement("input");
-    const none = document.createElement("p");
-    const panel = document.createElement("div");
 
-    label.textContent = this.getAttribute("label") ?? "";
-    trigger.type = "button";
-    trigger.className = "ui-channel-trigger";
-    trigger.dataset["testid"] = "channel-picker";
-    trigger.dataset["attention"] = String(this.hasAttribute("attention"));
-    trigger.setAttribute("popovertarget", id);
-    trigger.setAttribute("aria-haspopup", "dialog");
-    trigger.setAttribute("aria-expanded", "false");
-    trigger.append(label);
-    trigger.insertAdjacentHTML("beforeend", icons.chevronsUpDown);
-
-    if (this.hasAttribute("attention")) {
-      const dot = document.createElement("span");
-
-      dot.className = "ui-dot";
-      dot.setAttribute("role", "img");
-      dot.setAttribute(
-        "aria-label",
-        this.getAttribute("text-attention") ?? "Messages for you",
-      );
-      trigger.append(dot);
-    }
-
-    input.className = "ui-input";
-    input.placeholder = search;
-    input.setAttribute("aria-label", search);
-    input.dataset["testid"] = "channel-search";
-    none.dataset["testid"] = "no-channel-match";
-    none.hidden = true;
-    none.textContent = this.getAttribute("text-none") ?? "Nothing matches";
-    list.append(none);
-    panel.id = id;
-    panel.popover = "auto";
-    panel.className = "ui-channel-popover";
-    panel.setAttribute("role", "dialog");
-    panel.setAttribute("aria-label", search);
-    panel.append(input, ...this.childNodes);
-    this.replaceChildren(trigger, panel);
-
-    this.#popover = new Popover(panel, trigger, {
+    this.#trigger = document.createElement("button");
+    this.#trigger.type = "button";
+    this.#trigger.className = "ui-channel-trigger";
+    this.#trigger.dataset["testid"] = "channel-picker";
+    this.#trigger.setAttribute("popovertarget", id);
+    this.#trigger.setAttribute("aria-haspopup", "dialog");
+    this.#trigger.setAttribute("aria-expanded", "false");
+    this.#input = document.createElement("input");
+    this.#input.className = "ui-input";
+    this.#input.dataset["testid"] = "channel-search";
+    this.#none = document.createElement("p");
+    this.#none.dataset["testid"] = "no-channel-match";
+    this.#none.hidden = true;
+    this.#panel = document.createElement("div");
+    this.#panel.id = id;
+    this.#panel.popover = "auto";
+    this.#panel.className = "ui-channel-popover";
+    this.#panel.setAttribute("role", "dialog");
+    this.#panel.append(this.#input, ...this.childNodes);
+    (this.#panel.querySelector(".ui-channel-list") ?? this.#panel).append(
+      this.#none,
+    );
+    this.replaceChildren(this.#trigger, this.#panel);
+    this.#label();
+    this.#popover = new Popover(this.#panel, this.#trigger, {
       changing: (open) => {
-        trigger.setAttribute("aria-expanded", String(open));
+        this.#trigger.setAttribute("aria-expanded", String(open));
 
         if (open) {
-          input.value = "";
-          this.#filter(list, none, "");
+          this.#input.value = "";
+          this.#filter("");
         }
       },
-      shown: () => input.focus(),
+      shown: () => this.#input.focus(),
     });
-    input.addEventListener("input", () =>
-      this.#filter(list, none, input.value),
+    this.#input.addEventListener("input", () =>
+      this.#filter(this.#input.value),
     );
-    input.addEventListener("keydown", (event) => {
+    this.#input.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.isComposing) {
         event.preventDefault();
-        list.querySelector<HTMLAnchorElement>("li:not([hidden]) > a")?.click();
+        this.#links()
+          .find((link) => !this.#hidden(link))
+          ?.click();
       }
     });
-    panel.addEventListener("click", (event) => {
+    this.#panel.addEventListener("click", (event) => {
       if (
         event.target instanceof Element &&
         event.target.closest("a") !== null
@@ -91,22 +124,55 @@ export class AtlasChannelPicker extends HTMLElement {
     });
   }
 
-  #filter(list: HTMLElement, none: HTMLElement, query: string): void {
+  #label(): void {
+    const label = document.createElement("span");
+
+    label.textContent = this.getAttribute("label") ?? "";
+    this.#trigger.replaceChildren(label);
+    this.#trigger.insertAdjacentHTML("beforeend", icons.chevronsUpDown);
+    this.#trigger.dataset["attention"] = String(this.hasAttribute("attention"));
+
+    if (this.hasAttribute("attention")) {
+      const dot = document.createElement("span");
+
+      dot.className = "ui-dot";
+      dot.setAttribute("role", "img");
+      dot.setAttribute("aria-label", this.#text("attention"));
+      this.#trigger.append(dot);
+    }
+
+    this.#input.placeholder = this.#text("search");
+    this.#input.setAttribute("aria-label", this.#text("search"));
+    this.#panel.setAttribute("aria-label", this.#text("search"));
+    this.#none.textContent = this.#text("none");
+  }
+
+  #links(): HTMLAnchorElement[] {
+    return [...this.#panel.querySelectorAll<HTMLAnchorElement>("li a")];
+  }
+
+  #hidden(link: HTMLAnchorElement): boolean {
+    return link.closest<HTMLElement>("li")?.hidden === true;
+  }
+
+  #filter(query: string): void {
     const needle = query.trim().toLowerCase();
-    const sections = [
-      ...list.querySelectorAll<HTMLElement>(":scope > ul > li"),
-    ];
+    const links = this.#links();
 
-    sections.forEach((section) => {
-      const entries = [...section.querySelectorAll<HTMLElement>("ul > li")];
+    links.forEach((link) => {
+      const item = link.closest<HTMLElement>("li");
 
-      entries.forEach((entry) => {
-        entry.hidden = !(entry.querySelector("a span")?.textContent ?? "")
-          .toLowerCase()
-          .includes(needle);
-      });
-      section.hidden = entries.every((entry) => entry.hidden);
+      if (item !== null) {
+        item.hidden = !(link.textContent ?? "").toLowerCase().includes(needle);
+      }
     });
-    none.hidden = sections.some((section) => !section.hidden);
+    this.#panel
+      .querySelectorAll<HTMLElement>("li:has(li a)")
+      .forEach((section) => {
+        section.hidden = [
+          ...section.querySelectorAll<HTMLElement>("li:has(> a)"),
+        ].every((item) => item.hidden);
+      });
+    this.#none.hidden = links.some((link) => !this.#hidden(link));
   }
 }

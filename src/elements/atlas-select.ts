@@ -37,13 +37,7 @@ const texts = {
 
 type Text = keyof typeof texts;
 
-const transferred = [
-  "id",
-  "aria-label",
-  "aria-labelledby",
-  "aria-describedby",
-  "aria-invalid",
-] as const;
+const mirrored = ["aria-label", "aria-describedby", "aria-invalid"] as const;
 
 let count = 0;
 
@@ -62,19 +56,25 @@ function element<K extends keyof HTMLElementTagNameMap>(
   return created;
 }
 
-function optionsOf(select: HTMLSelectElement): SelectOption[] {
-  return [...select.options]
-    .filter((option) => option.value !== "")
-    .map((option) => {
-      const hint = option.dataset["hint"];
+function optionOf(option: HTMLOptionElement): SelectOption {
+  const hint = option.dataset["hint"];
 
-      return hint === undefined
-        ? { value: option.value, label: option.label }
-        : { value: option.value, label: option.label, hint };
-    });
+  return hint === undefined
+    ? { value: option.value, label: option.label }
+    : { value: option.value, label: option.label, hint };
 }
 
-async function searchUrl(
+function isOption(candidate: unknown): candidate is SelectOption {
+  const { value, label, hint } = (candidate ?? {}) as Record<string, unknown>;
+
+  return (
+    typeof value === "string" &&
+    typeof label === "string" &&
+    (hint === undefined || typeof hint === "string")
+  );
+}
+
+export async function searchUrl(
   url: string,
   text: string,
   signal: AbortSignal,
@@ -92,21 +92,33 @@ async function searchUrl(
     throw new Error(`option search answered ${String(response.status)}`);
   }
 
-  const { options } = (await response.json()) as { options: SelectOption[] };
+  const { options } = ((await response.json()) ?? {}) as { options?: unknown };
+
+  if (!Array.isArray(options) || !options.every(isOption)) {
+    throw new Error("option search answered without a list of options");
+  }
 
   return options;
 }
 
 export class AtlasSelect extends HTMLElement {
+  static readonly observedAttributes = [
+    "placeholder",
+    "clearable",
+    ...Object.keys(texts).map((name) => `text-${name}`),
+  ];
+
   searchOptions: SearchOptions | undefined;
 
-  #select!: HTMLSelectElement;
-  #trigger!: HTMLButtonElement;
-  #summary!: HTMLSpanElement;
-  #search!: HTMLInputElement;
-  #list!: HTMLUListElement;
-  #note!: HTMLParagraphElement;
-  #popover!: Popover;
+  #select: HTMLSelectElement | undefined;
+  #trigger = element("button", {});
+  #summary = element("span", {});
+  #search = element("input", {});
+  #list = element("ul", {});
+  #note = element("p", {});
+  #panel = element("div", {});
+  #done = element("button", {});
+  #popover: Popover | undefined;
   #options: readonly SelectOption[] = [];
   #known: readonly SelectOption[] = [];
   #selected: string[] = [];
@@ -116,31 +128,38 @@ export class AtlasSelect extends HTMLElement {
   #unsaved = false;
   #timer: ReturnType<typeof setTimeout> | undefined;
   #request: AbortController | undefined;
+  #host = new MutationObserver(() => this.#sync());
+  #content = new MutationObserver(() => this.#sync());
+  #reset = () => queueMicrotask(() => this.#sync());
+  #focusTrigger = () => this.#trigger.focus();
+  #outside = (event: Event) => {
+    if (!(event instanceof CustomEvent)) {
+      this.#sync();
+    }
+  };
 
   connectedCallback(): void {
-    const select = this.querySelector("select");
-
-    if (select === null || this.#select !== undefined) {
-      return;
-    }
-
-    this.#select = select;
-    this.#options = optionsOf(select);
-    this.#known = this.#options;
-    this.#selected = initialSelection(
-      [...select.selectedOptions]
-        .map((option) => option.value)
-        .filter((value) => value !== ""),
-      this.#options,
-      this.#mode(),
-    );
-    this.#build();
-    this.#commitSelection(this.#selected);
-    this.#render();
+    this.#host.observe(this, { childList: true });
+    this.#sync();
   }
 
   disconnectedCallback(): void {
     this.#cancel();
+    this.#host.disconnect();
+    this.#content.disconnect();
+    this.#select?.form?.removeEventListener("reset", this.#reset);
+
+    if (this.#unsaved) {
+      this.#unsaved = false;
+      this.#select?.form?.requestSubmit();
+    }
+  }
+
+  attributeChangedCallback(): void {
+    if (this.#select !== undefined) {
+      this.#label();
+      this.#render();
+    }
   }
 
   #text(name: Text): string {
@@ -149,7 +168,7 @@ export class AtlasSelect extends HTMLElement {
 
   #mode(): SelectionMode {
     return {
-      multiple: this.#select.multiple,
+      multiple: this.#select?.multiple === true,
       clearable: this.hasAttribute("clearable"),
     };
   }
@@ -165,9 +184,99 @@ export class AtlasSelect extends HTMLElement {
     );
   }
 
+  #quietly(change: () => void): void {
+    change();
+    this.#host.takeRecords();
+    this.#content.takeRecords();
+  }
+
+  #sync(): void {
+    const select = this.querySelector<HTMLSelectElement>(":scope > select");
+
+    if (select === null) {
+      return;
+    }
+
+    this.#quietly(() => {
+      if (select !== this.#select || !this.contains(this.#trigger)) {
+        this.#attach(select);
+      }
+
+      const options = [...select.options].filter(
+        (option) => option.value !== "",
+      );
+      const enabled = options
+        .filter((option) => !option.disabled)
+        .map(optionOf);
+
+      if (this.#server() === undefined) {
+        this.#options = enabled;
+      }
+
+      this.#known = [
+        ...options.map(optionOf),
+        ...this.#known.filter(
+          (option) => !options.some((native) => native.value === option.value),
+        ),
+      ];
+      this.#selected = initialSelection(
+        [...select.selectedOptions]
+          .map((option) => option.value)
+          .filter((value) => value !== ""),
+        enabled,
+        this.#mode(),
+      );
+      select.classList.add("ui-select-native");
+      select.tabIndex = -1;
+      select.setAttribute("aria-hidden", "true");
+      this.#trigger.disabled = select.disabled;
+      this.#trigger.toggleAttribute("aria-required", select.required);
+      this.#label();
+      this.#render();
+    });
+  }
+
+  #attach(select: HTMLSelectElement): void {
+    this.#select?.form?.removeEventListener("reset", this.#reset);
+    this.#select?.removeEventListener("change", this.#outside);
+    this.querySelectorAll(
+      ":scope > .ui-select-trigger, :scope > .ui-select-popover",
+    ).forEach((stale) => stale.remove());
+    this.#select = select;
+    this.#build();
+    this.#content.disconnect();
+    this.#content.observe(select, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: [
+        "selected",
+        "disabled",
+        "required",
+        "value",
+        "label",
+        "multiple",
+        "class",
+        "tabindex",
+        "aria-hidden",
+        ...mirrored,
+      ],
+    });
+    select.form?.addEventListener("reset", this.#reset);
+    select.addEventListener("change", this.#outside);
+    select.addEventListener("focus", this.#focusTrigger);
+  }
+
   #build(): void {
+    const select = this.#select;
+
+    if (select === undefined) {
+      return;
+    }
+
     const id = `atlas-select-${String((count += 1))}`;
     const listId = `${id}-list`;
+    const previousTestId = this.#trigger.dataset["testid"];
 
     this.#summary = element("span", {});
     this.#trigger = element(
@@ -184,93 +293,127 @@ export class AtlasSelect extends HTMLElement {
       this.#summary,
     );
     this.#trigger.insertAdjacentHTML("beforeend", icons.chevronsUpDown);
-    transferred.forEach((name) => {
-      const value = this.#select.getAttribute(name);
 
-      if (value !== null) {
-        this.#trigger.setAttribute(name, value);
-        this.#select.removeAttribute(name);
-      }
-    });
-
-    const testId = this.dataset["testid"];
+    const testId = this.dataset["testid"] ?? previousTestId;
 
     if (testId !== undefined) {
       this.#trigger.dataset["testid"] = testId;
       this.removeAttribute("data-testid");
     }
 
-    this.#trigger.disabled = this.#select.disabled;
     this.#search = element("input", {
       type: "text",
       role: "searchbox",
       "data-testid": "select-search",
-      "aria-label": this.#text("search"),
       "aria-controls": listId,
-      placeholder: this.#text("type-to-search"),
     });
     this.#list = element("ul", {
       id: listId,
       role: "listbox",
       class: "ui-listbox",
-      "aria-multiselectable": String(this.#select.multiple),
     });
-
-    const name = this.#trigger.getAttribute("aria-label");
-    const labelledBy = this.#trigger.getAttribute("aria-labelledby");
-
-    if (labelledBy !== null) {
-      this.#list.setAttribute("aria-labelledby", labelledBy);
-    } else {
-      this.#list.setAttribute("aria-label", name ?? this.#text("search"));
-    }
-
     this.#note = element("p", {
       role: "status",
       class: "ui-select-note",
       "data-testid": "select-note",
     });
-
-    const panel = element(
+    this.#done = element("button", {
+      type: "button",
+      class: "ui-select-done",
+      "data-testid": "select-done",
+    });
+    this.#panel = element(
       "div",
-      {
-        id,
-        popover: "auto",
-        class: "ui-select-popover",
-        role: "dialog",
-        "aria-label": this.#text("search"),
-      },
+      { id, popover: "auto", class: "ui-select-popover", role: "dialog" },
       this.#search,
       this.#list,
       this.#note,
     );
 
-    if (this.#select.multiple) {
-      const done = element(
-        "button",
-        {
-          type: "button",
-          class: "ui-select-done",
-          "data-testid": "select-done",
-        },
-        this.#text("done"),
-      );
-
-      done.addEventListener("click", () => this.#popover.hide());
-      panel.append(done);
+    if (select.multiple) {
+      this.#panel.append(this.#done);
     }
 
-    this.#select.hidden = true;
-    this.append(this.#trigger, panel);
-    this.#popover = new Popover(panel, this.#trigger, {
+    this.append(this.#trigger, this.#panel);
+    this.#popover = new Popover(this.#panel, this.#trigger, {
       changing: (open) => (open ? this.#opened() : this.#closed()),
       shown: () => this.#search.focus(),
     });
+    this.#done.addEventListener("click", () => this.#popover?.hide());
     this.#search.addEventListener("input", () =>
       this.#typed(this.#search.value),
     );
     this.#search.addEventListener("keydown", (event) => this.#key(event));
     this.#list.addEventListener("mousedown", (event) => event.preventDefault());
+    this.#list.addEventListener("mousemove", (event) => {
+      const item =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[role=option]")
+          : null;
+      const position = Number(item?.dataset["position"]);
+
+      if (item !== null && position !== this.#active) {
+        this.#active = position;
+        this.#highlight();
+      }
+    });
+    this.#list.addEventListener("click", (event) => {
+      const item =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[role=option]")
+          : null;
+      const value = item?.dataset["value"];
+
+      if (value === "") {
+        this.#clear();
+      } else if (value !== undefined) {
+        this.#choose(value);
+      }
+    });
+  }
+
+  #label(): void {
+    const select = this.#select;
+
+    if (select === undefined) {
+      return;
+    }
+
+    const labelIds = [...select.labels].map((label) => {
+      label.id ||= `atlas-select-label-${String((count += 1))}`;
+
+      return label.id;
+    });
+    const labelledBy = [select.getAttribute("aria-labelledby"), ...labelIds]
+      .filter(Boolean)
+      .join(" ");
+
+    mirrored.forEach((name) => {
+      const value = select.getAttribute(name);
+
+      if (value === null) {
+        this.#trigger.removeAttribute(name);
+      } else {
+        this.#trigger.setAttribute(name, value);
+      }
+    });
+
+    if (labelledBy === "") {
+      this.#trigger.removeAttribute("aria-labelledby");
+      this.#list.setAttribute(
+        "aria-label",
+        select.getAttribute("aria-label") ?? this.#text("search"),
+      );
+    } else {
+      this.#trigger.setAttribute("aria-labelledby", labelledBy);
+      this.#list.setAttribute("aria-labelledby", labelledBy);
+    }
+
+    this.#list.setAttribute("aria-multiselectable", String(select.multiple));
+    this.#search.setAttribute("aria-label", this.#text("search"));
+    this.#search.placeholder = this.#text("type-to-search");
+    this.#panel.setAttribute("aria-label", this.#text("search"));
+    this.#done.textContent = this.#text("done");
   }
 
   #shown(): { matches: readonly SelectOption[]; status: SearchStatus } {
@@ -298,10 +441,12 @@ export class AtlasSelect extends HTMLElement {
   #render(): void {
     const { matches, status } = this.#shown();
     const showClear = clearShown(this.#mode(), this.#query);
-    const highlighted = this.#highlighted();
     const first = firstOptionIndex(showClear);
-    const listId = this.#list.id;
     const note = listNote(status, matches.length);
+    const open = this.#popover?.open === true;
+    const none = showClear
+      ? [this.#option({ value: "", label: this.#text("none") }, 0)]
+      : [];
 
     this.#summary.textContent = summarize(
       this.#known,
@@ -310,60 +455,46 @@ export class AtlasSelect extends HTMLElement {
     );
     this.#trigger.dataset["value"] = this.#selected.join(",");
     this.#trigger.dataset["empty"] = String(this.#selected.length === 0);
-    this.#trigger.dataset["open"] = String(this.#popover.open);
-    this.#trigger.setAttribute("aria-expanded", String(this.#popover.open));
-
-    const none = showClear
-      ? [
-          this.#option(
-            `${listId}-0`,
-            { value: "", label: this.#text("none") },
-            highlighted === 0,
-            this.#selected.length === 0,
-            0,
-          ),
-        ]
-      : [];
-    const items = matches.map((option, index) =>
-      this.#option(
-        `${listId}-${String(index + first)}`,
-        option,
-        index + first === highlighted,
-        this.#selected.includes(option.value),
-        index + first,
-      ),
+    this.#trigger.dataset["open"] = String(open);
+    this.#trigger.setAttribute("aria-expanded", String(open));
+    this.#list.replaceChildren(
+      ...none,
+      ...matches.map((option, index) => this.#option(option, index + first)),
     );
-
-    this.#list.replaceChildren(...none, ...items);
-
-    if (this.#entries()[highlighted] === undefined) {
-      this.#search.removeAttribute("aria-activedescendant");
-    } else {
-      this.#search.setAttribute(
-        "aria-activedescendant",
-        `${listId}-${String(highlighted)}`,
-      );
-    }
-
     this.#note.dataset["note"] = note;
     this.#note.textContent = note === ListNote.None ? "" : this.#text(note);
+    this.#highlight();
   }
 
-  #option(
-    id: string,
-    option: SelectOption,
-    active: boolean,
-    selected: boolean,
-    position: number,
-  ): HTMLLIElement {
+  #highlight(): void {
+    const highlighted = this.#highlighted();
+    const active = this.#list.children.item(highlighted);
+
+    [...this.#list.children].forEach((item, position) => {
+      item.setAttribute("data-active", String(position === highlighted));
+    });
+
+    if (active === null) {
+      this.#search.removeAttribute("aria-activedescendant");
+    } else {
+      this.#search.setAttribute("aria-activedescendant", active.id);
+    }
+  }
+
+  #option(option: SelectOption, position: number): HTMLLIElement {
     const clear = option.value === "";
     const item = element("li", {
-      id,
+      id: `${this.#list.id}-${String(position)}`,
       role: "option",
       class: "ui-option",
       "data-testid": clear ? "option-none" : `option-${option.value}`,
-      "data-active": String(active),
-      "aria-selected": String(selected),
+      "data-value": option.value,
+      "data-position": String(position),
+      "aria-selected": String(
+        clear
+          ? this.#selected.length === 0
+          : this.#selected.includes(option.value),
+      ),
     });
 
     if (clear) {
@@ -376,16 +507,6 @@ export class AtlasSelect extends HTMLElement {
     if (option.hint !== undefined) {
       item.append(element("span", { class: "ui-option-hint" }, option.hint));
     }
-
-    item.addEventListener("mousemove", () => {
-      if (this.#active !== position) {
-        this.#active = position;
-        this.#render();
-      }
-    });
-    item.addEventListener("click", () =>
-      clear ? this.#clear() : this.#choose(option.value),
-    );
 
     return item;
   }
@@ -400,7 +521,6 @@ export class AtlasSelect extends HTMLElement {
     this.#startOver();
 
     if (this.#server() !== undefined) {
-      this.#query = "";
       this.#lookUp("");
     }
 
@@ -439,7 +559,7 @@ export class AtlasSelect extends HTMLElement {
         event.key === "ArrowDown" ? 1 : -1,
         entries.length,
       );
-      this.#render();
+      this.#highlight();
     } else if (event.key === "Enter" && !event.isComposing) {
       event.preventDefault();
 
@@ -454,55 +574,67 @@ export class AtlasSelect extends HTMLElement {
   }
 
   #choose(value: string): void {
-    this.#commit(toggleValue(this.#selected, value, this.#select.multiple));
+    this.#commit(toggleValue(this.#selected, value, this.#mode().multiple));
 
-    if (!this.#select.multiple) {
-      this.#popover.hide();
+    if (!this.#mode().multiple) {
+      this.#popover?.hide();
     }
   }
 
   #clear(): void {
     this.#commit([]);
-    this.#popover.hide();
+    this.#popover?.hide();
   }
 
   #commit(values: string[]): void {
-    this.#commitSelection(values);
-    this.#select.dispatchEvent(new Event("input", { bubbles: true }));
-    this.#select.dispatchEvent(new Event("change", { bubbles: true }));
+    const select = this.#select;
+
+    if (select === undefined) {
+      return;
+    }
+
+    this.#quietly(() => {
+      this.#selected = values;
+
+      if (
+        values.length === 0 &&
+        !select.multiple &&
+        ![...select.options].some((option) => option.value === "")
+      ) {
+        select.add(new Option("", ""), 0);
+      }
+
+      values
+        .filter(
+          (value) =>
+            ![...select.options].some((option) => option.value === value),
+        )
+        .forEach((value) => {
+          const known = this.#known.find((option) => option.value === value);
+
+          select.add(new Option(known?.label ?? value, value));
+        });
+      [...select.options].forEach((option) => {
+        option.selected =
+          values.includes(option.value) ||
+          (values.length === 0 && option.value === "");
+      });
+    });
+    select.dispatchEvent(new CustomEvent("input", { bubbles: true }));
+    select.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 
     const submitting = this.hasAttribute("submit-on-change");
 
-    if (submitting && !this.#select.multiple) {
+    if (submitting && !select.multiple) {
       this.#submit();
     }
 
-    this.#unsaved = submitting && this.#select.multiple;
+    this.#unsaved = submitting && select.multiple;
     this.#render();
   }
 
-  #commitSelection(values: string[]): void {
-    this.#selected = values;
-
-    values
-      .filter(
-        (value) =>
-          ![...this.#select.options].some((option) => option.value === value),
-      )
-      .forEach((value) => {
-        const known = this.#known.find((option) => option.value === value);
-
-        this.#select.add(new Option(known?.label ?? value, value));
-      });
-    [...this.#select.options].forEach((option) => {
-      option.selected =
-        values.includes(option.value) ||
-        (values.length === 0 && option.value === "");
-    });
-  }
-
   #submit(): void {
-    requestAnimationFrame(() => this.#select.form?.requestSubmit());
+    this.#select?.form?.requestSubmit();
   }
 
   #cancel(): void {
@@ -532,12 +664,19 @@ export class AtlasSelect extends HTMLElement {
     }
 
     const request = new AbortController();
+    const failed = () => {
+      if (!request.signal.aborted) {
+        this.#status = SearchStatus.Failed;
+        this.#render();
+      }
+    };
 
     this.#request = request;
     this.#status = SearchStatus.Searching;
     this.#render();
-    search(text, request.signal).then(
-      (options) => {
+
+    try {
+      search(text, request.signal).then((options) => {
         if (request.signal.aborted) {
           return;
         }
@@ -552,13 +691,9 @@ export class AtlasSelect extends HTMLElement {
         ];
         this.#status = SearchStatus.Ready;
         this.#render();
-      },
-      () => {
-        if (!request.signal.aborted) {
-          this.#status = SearchStatus.Failed;
-          this.#render();
-        }
-      },
-    );
+      }, failed);
+    } catch {
+      failed();
+    }
   }
 }

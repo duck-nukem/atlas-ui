@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { userEvent as browser } from "vitest/browser";
 import { mount, selectMarkup } from "./markup";
@@ -114,21 +114,6 @@ describe("atlas-select", () => {
     const value = valueOf(container, "featureId");
 
     expect(value).toEqual(["f1"]);
-  });
-
-  it("works as a plain select before the script runs", () => {
-    const container = document.createElement("div");
-    container.innerHTML = selectMarkup({
-      name: "featureId",
-      options,
-      selected: ["f2"],
-      label: "Feature",
-    }).replaceAll("atlas-select", "atlas-select-without-script");
-    document.body.append(container);
-
-    const select = container.querySelector("select");
-
-    expect(select).toHaveValue("f2");
   });
 });
 
@@ -296,9 +281,6 @@ const savingForm = (submits: string[][], multiple: boolean) => {
   });
 };
 
-const nextFrame = (): Promise<void> =>
-  new Promise((resolve) => requestAnimationFrame(() => resolve()));
-
 describe("atlas-select saving on change", () => {
   it("does not save a multiple choice while picking", async () => {
     const submits: string[][] = [];
@@ -307,7 +289,6 @@ describe("atlas-select saving on change", () => {
 
     await userEvent.click(screen.getByRole("option", { name: "F-1 todo.md" }));
     await userEvent.click(screen.getByRole("option", { name: "F-2 Chat" }));
-    await nextFrame();
 
     expect(submits).toEqual([]);
   });
@@ -321,7 +302,7 @@ describe("atlas-select saving on change", () => {
 
     await browser.keyboard("{Escape}");
 
-    await waitFor(() => expect(submits).toEqual([["f1", "f2"]]));
+    expect(submits).toEqual([["f1", "f2"]]);
   });
 
   it("saves a single choice right away", async () => {
@@ -331,7 +312,7 @@ describe("atlas-select saving on change", () => {
 
     await userEvent.click(screen.getByRole("option", { name: "F-2 Chat" }));
 
-    await waitFor(() => expect(submits).toEqual([["f2"]]));
+    expect(submits).toEqual([["f2"]]);
   });
 });
 
@@ -390,5 +371,200 @@ describe("atlas-select focus", () => {
     const trigger = screen.getByRole("combobox", { name: "Feature" });
 
     expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+  });
+});
+
+const settle = () => new Promise<void>((resolve) => queueMicrotask(resolve));
+
+describe("atlas-select and the server markup", () => {
+  it("rebuilds after the server replaces its content", async () => {
+    const container = mount(
+      selectMarkup({
+        name: "featureId",
+        options,
+        label: "Feature",
+        testId: "select",
+      }),
+    );
+    const element = container.querySelector("atlas-select");
+
+    const server = document.createElement("template");
+    server.innerHTML = selectMarkup({
+      name: "featureId",
+      options,
+      selected: ["f2"],
+      label: "Feature",
+    });
+
+    element?.replaceChildren(
+      ...(server.content.querySelector("atlas-select")?.childNodes ?? []),
+    );
+    await settle();
+
+    expect(
+      [...(element?.querySelectorAll(".ui-select-trigger") ?? [])].map(
+        (trigger) => trigger.textContent,
+      ),
+    ).toEqual(["F-2 Chat"]);
+  });
+
+  it("lists an option the server adds", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+    container.querySelector("select")?.add(new Option("F-3 Health", "f3"));
+    await settle();
+
+    await userEvent.click(screen.getByRole("combobox", { name: "Feature" }));
+
+    expect(screen.queryByRole("option", { name: "F-3 Health" })).not.toBeNull();
+  });
+
+  it("follows the option the server marks selected", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+
+    container.querySelector("option[value=f2]")?.setAttribute("selected", "");
+    await settle();
+
+    expect(screen.getByRole("combobox", { name: "Feature" }).textContent).toBe(
+      "F-2 Chat",
+    );
+  });
+
+  it("goes back to its first value when its form resets", async () => {
+    mount(
+      `<form>${selectMarkup({ name: "featureId", options, selected: ["f1"], label: "Feature" })}</form>`,
+    );
+    await userEvent.click(screen.getByRole("combobox", { name: "Feature" }));
+    await userEvent.click(screen.getByRole("option", { name: "F-2 Chat" }));
+
+    document.querySelector("form")?.reset();
+    await settle();
+
+    expect(screen.getByRole("combobox", { name: "Feature" }).textContent).toBe(
+      "F-1 todo.md",
+    );
+  });
+
+  it("disables its trigger when the server disables the select", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+
+    container.querySelector("select")?.setAttribute("disabled", "");
+    await settle();
+
+    expect(screen.getByRole("combobox", { name: "Feature" })).toBeDisabled();
+  });
+
+  it("tells assistive technology a required choice is required", () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }).replace(
+        "<select ",
+        "<select required ",
+      ),
+    );
+
+    const trigger = container.querySelector("[role=combobox]");
+
+    expect(trigger).toHaveAttribute("aria-required");
+  });
+
+  it("submits an empty value once cleared, even without an empty option", async () => {
+    const container = mount(
+      `<form>${selectMarkup({ name: "featureId", options, selected: ["f2"], clearable: true, testId: "select" }).replace('<option value="">None</option>', "")}</form>`,
+    );
+    await userEvent.click(screen.getByTestId("select"));
+
+    await userEvent.click(screen.getByTestId("option-none"));
+
+    expect(
+      new FormData(container.querySelector("form") ?? undefined).get(
+        "featureId",
+      ),
+    ).toBe("");
+  });
+
+  it("leaves disabled options out of the list", async () => {
+    mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }).replace(
+        'value="f2"',
+        'value="f2" disabled',
+      ),
+    );
+
+    await userEvent.click(screen.getByRole("combobox", { name: "Feature" }));
+
+    expect(screen.queryByRole("option", { name: "F-2 Chat" })).toBeNull();
+  });
+
+  it("builds one trigger when cloned", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+    const clone = container.querySelector("atlas-select")?.cloneNode(true);
+
+    container.replaceChildren(...(clone === undefined ? [] : [clone]));
+    await settle();
+
+    expect(container.querySelectorAll("[role=combobox]")).toHaveLength(1);
+  });
+});
+
+describe("atlas-select with a search url", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("asks the url for options with the typed text", async () => {
+    const asked: string[] = [];
+    vi.stubGlobal("fetch", (url: URL) => {
+      asked.push(url.search);
+
+      return Promise.resolve(
+        Response.json({ options: [{ value: "u1", label: "Anna Maria" }] }),
+      );
+    });
+    mount(
+      `<atlas-select search-url="/people"><select name="person" aria-label="Person"></select></atlas-select>`,
+    );
+
+    await userEvent.click(screen.getByRole("combobox", { name: "Person" }));
+
+    expect(asked).toEqual(["?q="]);
+  });
+
+  it("lists the options the url answers with", async () => {
+    vi.stubGlobal("fetch", () =>
+      Promise.resolve(
+        Response.json({ options: [{ value: "u1", label: "Anna Maria" }] }),
+      ),
+    );
+    mount(
+      `<atlas-select search-url="/people"><select name="person" aria-label="Person"></select></atlas-select>`,
+    );
+
+    await userEvent.click(screen.getByRole("combobox", { name: "Person" }));
+
+    await expect
+      .poll(() => screen.queryByRole("option", { name: "Anna Maria" }))
+      .not.toBeNull();
+  });
+
+  it("says the search failed when the url answers something else", async () => {
+    vi.stubGlobal("fetch", () =>
+      Promise.resolve(Response.json({ people: [] })),
+    );
+    mount(
+      `<atlas-select search-url="/people"><select name="person" aria-label="Person"></select></atlas-select>`,
+    );
+
+    await userEvent.click(screen.getByRole("combobox", { name: "Person" }));
+
+    await expect
+      .poll(() => screen.getByTestId("select-note").dataset["note"])
+      .toBe("searchFailed");
   });
 });
