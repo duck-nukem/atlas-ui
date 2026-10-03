@@ -8,15 +8,20 @@
   }
 
   .ui-label {
-    @apply flex items-center gap-2 text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
+    @apply flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
   }
 
   .ui-field {
     @apply grid gap-1.5;
 
-    & > .ui-label {
+    & > .ui-label,
+    & > .ui-field-label-row > .ui-label {
       @apply text-xs font-medium text-muted-foreground;
     }
+  }
+
+  .ui-field-label-row {
+    @apply flex items-center gap-1.5;
   }
 
   .ui-feedback {

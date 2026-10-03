@@ -9,13 +9,15 @@
     &:checked::before {
       @apply translate-x-5;
     }
+  }
+}
 
-    @media (forced-colors: active) {
-      @apply border-[CanvasText];
+@layer components {
+  .ui-switch-row {
+    @apply flex items-center gap-3;
 
-      &::before {
-        @apply bg-[CanvasText];
-      }
+    & > label {
+      @apply text-sm;
     }
   }
 }

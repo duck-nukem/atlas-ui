@@ -13,7 +13,7 @@ const avatars = `
 </div>`;
 
 const stack = `
-<button class="ui-button" data-variant="ghost" style="padding:0;height:auto;border-radius:9999px" type="button" aria-label="Ada Lovelace, Grace Hopper, Alan Turing and 2 more">
+<button class="ui-avatar-stack" type="button" aria-label="Ada Lovelace, Grace Hopper, Alan Turing and 2 more">
   <span class="ui-avatar-group">
     ${avatar("AL", 0, "sm")}${avatar("GH", 6, "sm")}${avatar("AT", 3, "sm")}
     <span class="ui-avatar-group-count">+2</span>
@@ -30,6 +30,6 @@ export const Stack = {
 };
 
 export const Mobile = {
-  ...mobile(avatars + stack),
-  parameters: { ...mobile(avatars + stack).parameters, ...productionContrast },
+  ...mobile(stack),
+  parameters: { ...mobile(stack).parameters, ...productionContrast },
 };

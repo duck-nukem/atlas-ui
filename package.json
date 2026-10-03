@@ -25,7 +25,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint --max-warnings 0 --report-unused-disable-directives && stylelint 'src/css/**/*.css'",
+    "lint": "oxlint --max-warnings 0 --report-unused-disable-directives && stylelint 'src/css/**/*.css' && node scripts/check-css-literals.ts",
     "test": "vitest run",
     "format": "prettier --write .",
     "check": "npm run typecheck && npm run lint && npm run test && prettier --check ."

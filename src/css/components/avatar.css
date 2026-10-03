@@ -19,3 +19,9 @@
     }
   }
 }
+
+@layer components {
+  .ui-avatar-stack {
+    @apply shrink-0 rounded-full;
+  }
+}
