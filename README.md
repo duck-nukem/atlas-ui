@@ -37,7 +37,7 @@ Components are written as Tailwind `@apply` lists copied from the app's class st
 
 ## Contrast
 
-Three production colours were darkened to meet WCAG AA: muted text (`--muted-foreground` #6c707e to #666a78), the light chart yellow (#e0a100 to #a87900) and the tone text on avatars (65% tone instead of 80%). Every story passes axe in light and dark mode.
+Three production colours were darkened to meet WCAG AA: muted text (`--muted-foreground` #6c707e to #666a78), the light chart yellow (#e0a100 to #a87900) and the tone text on avatars (65% tone instead of 80%). Text on the Flow status tiles sits over the bar fill, which axe cannot see, so the fill strength (`--status-fill`, 22% in dark) and the median text (`--status-median`) are tuned for 4.5:1 and checked by a story test. Every story passes axe in light and dark mode.
 
 ## Develop
 

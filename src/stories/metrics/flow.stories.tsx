@@ -53,7 +53,6 @@ export default {
     bottleneck: 4,
     alarm: "error",
   },
-  parameters: {},
 } satisfies Meta<TilesArgs>;
 
 export const Default: Story<TilesArgs> = {};

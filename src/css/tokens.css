@@ -106,6 +106,12 @@
   --tone-5: #d9531e;
   --tone-6: #d6245c;
   --tone-7: #8e44d8;
+  --status-fill: 45%;
+  --status-median: color-mix(
+    in oklch,
+    var(--muted-foreground) 50%,
+    var(--foreground)
+  );
 }
 
 .dark {
@@ -123,4 +129,10 @@
   --tone-5: #fab387;
   --tone-6: #f38ba8;
   --tone-7: #cba6f7;
+  --status-fill: 22%;
+  --status-median: color-mix(
+    in oklch,
+    var(--muted-foreground) 20%,
+    var(--foreground)
+  );
 }

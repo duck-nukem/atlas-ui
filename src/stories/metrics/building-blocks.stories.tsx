@@ -119,7 +119,56 @@ export const StatusTiles: Story<TilesArgs> = {
     alarm: "error",
   },
   argTypes: { alarm: select(["", "warning", "error"]) },
-  parameters: { ...html(tiles).parameters },
+};
+
+const contrast = (foreground: string, background: string) => {
+  const canvas = document
+    .createElement("canvas")
+    .getContext("2d", { willReadFrequently: true })!;
+  const luminance = (color: string) => {
+    canvas.fillStyle = color;
+    canvas.fillRect(0, 0, 1, 1);
+
+    return [...canvas.getImageData(0, 0, 1, 1).data]
+      .slice(0, 3)
+      .map((value) => value / 255)
+      .map((value) =>
+        value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
+      )
+      .reduce(
+        (sum, value, index) =>
+          sum + value * ([0.2126, 0.7152, 0.0722][index] ?? 0),
+        0,
+      );
+  };
+  const [light, dark] = [luminance(foreground), luminance(background)].sort(
+    (a, b) => b - a,
+  );
+
+  return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05);
+};
+
+export const StatusTilesOverFullBars: Story<TilesArgs> = {
+  ...html(tiles),
+  args: {
+    tiles:
+      "Step 0, 0, 100, 1d; Step 1, 1, 100, 1d; Step 2, 2, 100, 1d; Step 3, 3, 100, 1d; Step 4, 4, 100, 1d; Step 5, 5, 100, 1d; Step 6, 6, 100, 1d; Step 7, 7, 100, 1d",
+    bottleneck: 7,
+    alarm: "error",
+  },
+  play: async ({ canvasElement }) => {
+    const ratios = [
+      ...canvasElement.querySelectorAll<HTMLElement>(".ui-status-tiles > li"),
+    ].flatMap((tile) => {
+      const fill = getComputedStyle(tile, "::before").backgroundColor;
+
+      return [...tile.querySelectorAll("span")].map((text) =>
+        contrast(getComputedStyle(text).color, fill),
+      );
+    });
+
+    await expect(Math.min(...ratios)).toBeGreaterThanOrEqual(4.5);
+  },
 };
 
 export const PullRequestCards: Story<CardsArgs> = {

@@ -137,7 +137,11 @@
         @apply absolute inset-x-0 bottom-0 content-[''];
 
         height: var(--ui-share);
-        background: color-mix(in oklch, var(--ui-status) 45%, var(--muted));
+        background: color-mix(
+          in oklch,
+          var(--ui-status) var(--status-fill),
+          var(--muted)
+        );
         forced-color-adjust: none;
       }
 
@@ -150,7 +154,7 @@
       }
 
       & > span:nth-child(3) {
-        @apply text-muted-foreground tabular-nums;
+        @apply text-(--status-median) tabular-nums;
       }
 
       &[data-bottleneck] > span:first-child {
