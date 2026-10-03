@@ -1,0 +1,57 @@
+@layer ui.components {
+  .ui-menu {
+    min-inline-size: 11rem;
+    padding: var(--ui-space-1);
+
+    & ul {
+      display: grid;
+      gap: 2px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    & hr {
+      margin: var(--ui-space-1) calc(var(--ui-space-1) * -1);
+      border: 0;
+      border-block-start: 1px solid var(--ui-color-border);
+    }
+  }
+
+  .ui-menu-item {
+    display: flex;
+    gap: var(--ui-space-2);
+    align-items: center;
+    inline-size: 100%;
+    padding: var(--ui-space-2);
+    border: 0;
+    border-radius: var(--ui-radius-sm);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--ui-color-muted);
+    }
+
+    &[data-variant="danger"] {
+      color: var(--ui-color-danger);
+    }
+  }
+
+  .ui-hovercard {
+    inline-size: 20rem;
+
+    & > :first-child {
+      margin-block-start: 0;
+    }
+
+    & > :last-child {
+      margin-block-end: 0;
+    }
+  }
+}
