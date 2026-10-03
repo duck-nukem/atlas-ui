@@ -1,0 +1,92 @@
+@layer ui.tokens {
+  :root {
+    color-scheme: light dark;
+
+    --ui-font-sans: system-ui, sans-serif;
+    --ui-font-mono: ui-monospace, "SF Mono", menlo, monospace;
+    --ui-font-size-xs: 0.75rem;
+    --ui-font-size-sm: 0.875rem;
+    --ui-font-size-md: 1rem;
+    --ui-font-size-lg: 1.125rem;
+    --ui-font-size-xl: 1.5rem;
+    --ui-font-size-2xl: 2rem;
+    --ui-line-height: 1.5;
+
+    --ui-space-1: 0.25rem;
+    --ui-space-2: 0.5rem;
+    --ui-space-3: 0.75rem;
+    --ui-space-4: 1rem;
+    --ui-space-6: 1.5rem;
+    --ui-space-8: 2rem;
+
+    --ui-radius: 0.375rem;
+    --ui-radius-sm: calc(var(--ui-radius) * 0.6);
+    --ui-radius-lg: calc(var(--ui-radius) * 1.4);
+    --ui-radius-full: 9999px;
+
+    --ui-control-height-xs: 1.5rem;
+    --ui-control-height-sm: 1.75rem;
+    --ui-control-height: 2rem;
+    --ui-control-height-lg: 2.25rem;
+
+    --ui-sidebar-width: 15rem;
+    --ui-content-width: 72rem;
+    --ui-duration: 150ms;
+
+    --ui-color-bg: light-dark(#fff, #1e1e2e);
+    --ui-color-fg: light-dark(#1e1f22, #cdd6f4);
+    --ui-color-surface: light-dark(#fff, #1e1e2e);
+    --ui-color-surface-fg: var(--ui-color-fg);
+    --ui-color-primary: light-dark(#2f6ae0, #89b4fa);
+    --ui-color-primary-fg: light-dark(#fff, #11111b);
+    --ui-color-secondary: light-dark(#ebecf0, #313244);
+    --ui-color-secondary-fg: var(--ui-color-fg);
+    --ui-color-muted: light-dark(#f2f3f5, #313244);
+    --ui-color-muted-fg: light-dark(#6c707e, #a6adc8);
+    --ui-color-accent: light-dark(#edf3ff, #313244);
+    --ui-color-accent-fg: var(--ui-color-fg);
+    --ui-color-danger: light-dark(#c7303f, #f38ba8);
+    --ui-color-border: light-dark(#dfe1e5, #393b50);
+    --ui-color-input: light-dark(#c9ccd6, #45475a);
+    --ui-color-ring: light-dark(#3574f0, #b4befe);
+    --ui-color-glow: light-dark(#e56d17, #fab387);
+    --ui-color-sidebar: light-dark(#f7f8fa, #181825);
+    --ui-color-sidebar-fg: light-dark(#1e1f22, #bac2de);
+    --ui-color-sidebar-accent: light-dark(#ebecf0, #313244);
+    --ui-color-sidebar-border: light-dark(#ebecf0, #181825);
+    --ui-color-title-start: light-dark(#3574f0, #89b4fa);
+    --ui-color-title-end: light-dark(#834df0, #cba6f7);
+
+    --ui-chart-neutral: light-dark(#818594, #7f849c);
+    --ui-chart-neutral-soft: light-dark(#dfe1e5, #585b70);
+    --ui-chart-blue: light-dark(#3574f0, #89b4fa);
+    --ui-chart-yellow: light-dark(#e0a100, #f9e2af);
+    --ui-chart-green: light-dark(#208a3c, #a6e3a1);
+    --ui-chart-red: light-dark(#db3b4b, #f38ba8);
+    --ui-chart-track: var(--ui-color-muted);
+
+    --ui-tone-0: light-dark(#2c6bed, #89b4fa);
+    --ui-tone-1: light-dark(#0a8fc7, #74c7ec);
+    --ui-tone-2: light-dark(#0e8a75, #94e2d5);
+    --ui-tone-3: light-dark(#3f9a22, #a6e3a1);
+    --ui-tone-4: light-dark(#b07d00, #f9e2af);
+    --ui-tone-5: light-dark(#d9531e, #fab387);
+    --ui-tone-6: light-dark(#d6245c, #f38ba8);
+    --ui-tone-7: light-dark(#8e44d8, #cba6f7);
+
+    --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 8%);
+    --ui-shadow-lg: 0 8px 24px rgb(0 0 0 / 16%);
+    --ui-focus-ring: 0 0 0 3px
+      color-mix(in oklch, var(--ui-color-ring) 50%, transparent);
+  }
+
+  :root.light,
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  :root.dark,
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+}
