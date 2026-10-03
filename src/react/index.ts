@@ -11,3 +11,10 @@ export {
   type ServerSearchSelectProps,
 } from "./select/server-search-select";
 export { type SelectTexts, selectTexts } from "./select/texts";
+export {
+  ChannelPicker,
+  type ChannelPickerProps,
+  type ChannelPickerTexts,
+  channelPickerTexts,
+} from "./chat/channel-picker";
+export { type ChannelEntry } from "./chat/entries";
