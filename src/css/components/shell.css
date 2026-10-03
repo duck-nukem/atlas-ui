@@ -82,8 +82,12 @@
       @apply truncate;
     }
 
+    & > svg.ui-icon:not([data-size]) {
+      @apply size-4;
+    }
+
     & > svg:last-child {
-      @apply ml-auto size-4 shrink-0;
+      @apply ml-auto shrink-0;
     }
   }
 
