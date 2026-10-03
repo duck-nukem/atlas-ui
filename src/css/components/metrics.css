@@ -138,7 +138,7 @@
 
         height: var(--ui-share);
         background: color-mix(
-          in oklch,
+          in oklab,
           var(--ui-status) var(--status-fill),
           var(--muted)
         );
@@ -567,35 +567,35 @@
     }
 
     & > li[data-step="0"] {
-      --ui-status: color-mix(in oklch, var(--chart-red) 55%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-red) 55%, var(--muted));
     }
 
     & > li[data-step="1"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 39%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 39%, var(--muted));
     }
 
     & > li[data-step="2"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 47%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 47%, var(--muted));
     }
 
     & > li[data-step="3"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 56%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 56%, var(--muted));
     }
 
     & > li[data-step="4"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 64%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 64%, var(--muted));
     }
 
     & > li[data-step="5"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 73%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 73%, var(--muted));
     }
 
     & > li[data-step="6"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 81%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 81%, var(--muted));
     }
 
     & > li[data-step="7"] {
-      --ui-status: color-mix(in oklch, var(--chart-green) 90%, var(--muted));
+      --ui-status: color-mix(in oklab, var(--chart-green) 90%, var(--muted));
     }
 
     & > li[data-alarm="warning"] {

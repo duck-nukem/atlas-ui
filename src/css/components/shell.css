@@ -20,7 +20,7 @@
 
     background-image: linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--title-start) 14%, var(--background)),
+      color-mix(in oklab, var(--title-start) 14%, var(--background)),
       var(--sidebar)
     );
     border-image: linear-gradient(

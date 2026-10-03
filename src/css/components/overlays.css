@@ -111,6 +111,6 @@
   }
 
   .ui-age {
-    @apply inline-flex shrink-0 items-center gap-1 text-xs whitespace-nowrap text-[color-mix(in_oklch,var(--chart-yellow)_75%,var(--foreground))] tabular-nums;
+    @apply inline-flex shrink-0 items-center gap-1 text-xs whitespace-nowrap text-[color-mix(in_oklab,var(--chart-yellow)_75%,var(--foreground))] tabular-nums;
   }
 }

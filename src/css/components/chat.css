@@ -130,7 +130,7 @@
   }
 
   .ui-presence-line {
-    @apply px-2 py-0.5 text-xs break-words text-[color-mix(in_oklch,var(--chart-green)_85%,var(--foreground))];
+    @apply px-2 py-0.5 text-xs break-words text-[color-mix(in_oklab,var(--chart-green)_85%,var(--foreground))];
   }
 
   .ui-chat-line {

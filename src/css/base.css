@@ -39,8 +39,8 @@
 
 @layer components {
   [data-tone] {
-    --tone-surface: color-mix(in oklch, var(--tone) 16%, var(--card));
-    --tone-text: color-mix(in oklch, var(--tone) 65%, var(--foreground));
+    --tone-surface: color-mix(in oklab, var(--tone) 16%, var(--card));
+    --tone-text: color-mix(in oklab, var(--tone) 65%, var(--foreground));
   }
   [data-tone="0"] {
     --tone: var(--tone-0);

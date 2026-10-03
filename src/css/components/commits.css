@@ -53,11 +53,11 @@
 
   .ui-line-counts {
     & > :first-child {
-      @apply text-[color-mix(in_oklch,var(--chart-green)_85%,var(--foreground))];
+      @apply text-[color-mix(in_oklab,var(--chart-green)_85%,var(--foreground))];
     }
 
     & > :last-child {
-      @apply text-[color-mix(in_oklch,var(--chart-red)_85%,var(--foreground))];
+      @apply text-[color-mix(in_oklab,var(--chart-red)_85%,var(--foreground))];
     }
   }
 
