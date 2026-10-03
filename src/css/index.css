@@ -26,3 +26,4 @@
 @plugin "@tailwindcss/typography";
 @import "./components/markdown.css";
 @import "./components/timeline.css";
+@import "./components/departments.css";

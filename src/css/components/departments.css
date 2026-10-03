@@ -1,0 +1,68 @@
+@layer components {
+  .ui-goal-departments {
+    @apply grid content-start gap-2;
+
+    & > h2 {
+      @apply font-medium;
+    }
+
+    & > p {
+      @apply text-xs text-muted-foreground;
+    }
+
+    & > dl {
+      @apply grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3;
+    }
+
+    & > dl > div {
+      @apply -mb-px grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 border-y py-2;
+    }
+
+    & dt {
+      @apply min-w-0 truncate text-sm font-medium;
+    }
+
+    & dd:first-of-type {
+      @apply row-span-2;
+
+      & > :is(button, span) {
+        @apply flex items-center gap-1.5 text-sm;
+      }
+
+      & > button {
+        @apply font-medium tabular-nums;
+      }
+
+      & > span {
+        @apply text-muted-foreground;
+      }
+    }
+
+    & dd:last-of-type {
+      @apply text-xs text-muted-foreground tabular-nums;
+    }
+
+    & .ui-popover {
+      @apply w-auto max-w-xs text-sm;
+    }
+  }
+
+  .ui-ring {
+    @apply size-5 shrink-0 -rotate-90;
+
+    & > circle {
+      fill: none;
+      stroke: var(--chart-track);
+      stroke-width: 3;
+    }
+
+    & > circle + circle {
+      stroke: var(--chart-green);
+    }
+
+    &[data-empty] > circle {
+      stroke: var(--chart-neutral);
+      stroke-dasharray: 2 2;
+    }
+  }
+}
