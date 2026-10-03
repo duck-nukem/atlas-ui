@@ -1,6 +1,6 @@
 @layer components {
   .ui-icon {
-    @apply size-4 shrink-0;
+    @apply size-4 shrink-0 fill-none;
 
     &[data-size="3"] {
       @apply size-3;
