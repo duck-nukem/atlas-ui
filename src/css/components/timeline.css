@@ -27,108 +27,85 @@
     }
   }
 
-  .ui-timeline {
-    @apply w-full min-w-0 text-xs;
+  atlas-gantt {
+    @apply block w-full min-w-0 text-xs;
 
-    & > div {
-      @apply overflow-auto rounded-lg;
+    --g-arrow-color: var(--muted-foreground);
+    --g-bar-color: var(--muted);
+    --g-bar-border: transparent;
+    --g-tick-color-thick: var(--border);
+    --g-tick-color: var(--border);
+    --g-actions-background: var(--muted);
+    --g-border-color: var(--border);
+    --g-text-muted: var(--foreground);
+    --g-text-light: var(--primary-foreground);
+    --g-text-dark: var(--foreground);
+    --g-progress-color: var(--muted);
+    --g-handle-color: var(--muted-foreground);
+    --g-weekend-label-color: var(--muted);
+    --g-expected-progress: var(--muted);
+    --g-header-background: var(--background);
+    --g-row-color: var(--background);
+    --g-row-border-color: var(--border);
+    --g-today-highlight: var(--primary);
+    --g-popup-actions: var(--muted);
+    --g-weekend-highlight-color: var(--muted);
+
+    & > ul {
+      @apply grid gap-1;
     }
 
-    & svg {
-      @apply block max-w-none;
-    }
-  }
-
-  .ui-timeline-header {
-    & > rect {
-      fill: var(--background);
+    &:state(ready) > ul {
+      @apply mt-3;
     }
 
-    & > line {
-      stroke: var(--border);
+    &:state(ready) > ul:not(:focus-within) {
+      @apply sr-only;
     }
 
-    & text {
-      @apply fill-foreground;
-
-      dominant-baseline: central;
-    }
-
-    & > g:first-of-type > text {
-      @apply text-sm font-medium;
-    }
-
-    & > g:last-of-type > text {
-      @apply text-xs;
-
-      text-anchor: middle;
-    }
-
-    & > g:last-of-type > rect {
-      fill: var(--primary);
-    }
-
-    & > g:last-of-type > rect + text {
-      fill: var(--primary-foreground);
+    & [class~="bar-label"] {
+      @apply text-xs [font-family:inherit];
     }
   }
 
-  .ui-timeline-grid {
-    & > rect {
-      fill: var(--background);
-    }
-
-    & > line {
-      stroke: var(--border);
-    }
-
-    & > path {
-      stroke: var(--border);
-      stroke-width: 0.4;
-
-      &[data-thick] {
-        stroke-width: 0.7;
-      }
-    }
+  .ui-gantt-draft {
+    --ui-goal: var(--chart-neutral-soft);
   }
 
-  .ui-timeline-now {
-    fill: var(--primary);
-
-    & > line {
-      stroke: var(--primary);
-    }
+  .ui-gantt-active {
+    --ui-goal: var(--chart-blue);
   }
 
-  .ui-timeline-bars {
-    & > a {
-      @apply cursor-pointer outline-none;
+  .ui-gantt-pending-review {
+    --ui-goal: var(--chart-yellow);
+  }
 
-      &:focus-visible > rect:first-child {
-        @apply stroke-ring;
+  .ui-gantt-succeeded {
+    --ui-goal: var(--chart-green);
+  }
 
-        stroke-width: 2;
-      }
-    }
+  .ui-gantt-cancelled {
+    --ui-goal: var(--chart-neutral);
+  }
 
-    & rect:first-child {
-      fill: color-mix(in srgb, var(--ui-goal) 16%, var(--card));
-      outline: 1px solid var(--border);
-    }
+  .ui-gantt-failed {
+    --ui-goal: var(--chart-red);
+  }
 
-    & rect + rect {
-      fill: color-mix(in srgb, var(--ui-goal) var(--goal-fill), var(--card));
-    }
-
-    & text {
-      @apply fill-foreground text-[0.8125rem];
-
-      dominant-baseline: central;
-
-      &[data-inside] {
-        text-anchor: middle;
-      }
-    }
+  :is(
+    .ui-gantt-draft,
+    .ui-gantt-active,
+    .ui-gantt-pending-review,
+    .ui-gantt-succeeded,
+    .ui-gantt-cancelled,
+    .ui-gantt-failed
+  ) {
+    --g-bar-color: color-mix(in srgb, var(--ui-goal) 16%, var(--card));
+    --g-progress-color: color-mix(
+      in srgb,
+      var(--ui-goal) var(--goal-fill),
+      var(--card)
+    );
   }
 
   .ui-timeline-legend {

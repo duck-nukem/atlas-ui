@@ -1,6 +1,6 @@
 # atlas-ui
 
-The Atlas app's look as plain HTML and CSS, so any server can render it. Two widgets that need state, the searchable select and the channel picker, are custom elements that upgrade server-rendered HTML and keep working without JavaScript.
+The Atlas app's look as plain HTML and CSS, so any server can render it. Three widgets that need JavaScript, the searchable select, the channel picker and the goal timeline, are custom elements that upgrade server-rendered HTML and keep working without it.
 
 ## Use
 
@@ -20,7 +20,7 @@ npm install "git+https://<host>/atlas-ui.git#<commit>"
 
 Copy `dist/` into your static files, or import the same paths from the npm package. There is nothing to compile in the app.
 
-`<atlas-select>` wraps a server-rendered `<select>`; without JavaScript it is that select, with `elements.js` it becomes the searchable dropdown and keeps the select as its value, so forms and Datastar see a normal select. Add `search-url` to search on the server; it is asked `?q=<text>` and answers `{"options":[{"value","label","hint"}]}`. `<atlas-channel-picker>` wraps a `.ui-channel-list` of `li > a` channel links and turns it into a searchable popover. Both elements rebuild themselves when the server patches or morphs their content, so Datastar can update them like any other HTML. Two caveats: a value set by Datastar's `data-bind` (which fires no event) shows once the select is focused or opened, and with `search-url` the server should render the chosen option inside the select, because the options the search found exist only in the browser. Storybook shows the markup for both.
+`<atlas-select>` wraps a server-rendered `<select>`; without JavaScript it is that select, with `elements.js` it becomes the searchable dropdown and keeps the select as its value, so forms and Datastar see a normal select. Add `search-url` to search on the server; it is asked `?q=<text>` and answers `{"options":[{"value","label","hint"}]}`. `<atlas-channel-picker>` wraps a `.ui-channel-list` of `li > a` channel links and turns it into a searchable popover. The elements rebuild themselves when the server patches or morphs their content, so Datastar can update them like any other HTML. Two caveats: a value set by Datastar's `data-bind` (which fires no event) shows once the select is focused or opened, and with `search-url` the server should render the chosen option inside the select, because the options the search found exist only in the browser. `<atlas-gantt>` wraps a list of goals, one `li` per goal with `data-status`, `data-start`, `data-end`, `data-progress` and an `a` to the goal; it draws them with frappe-gantt and keeps the list for screen readers. frappe's script loads only when a timeline is on the page; its CSS is always part of `atlas-ui.css`. The server gives the element `role="figure"` and an `aria-label`. Its styles are set from script, never as style attributes, so it works under `style-src-attr 'none'`. Storybook shows the markup for all three.
 
 `interest.js` makes hover popovers open on hover in browsers without `interestfor` (Safari, Firefox).
 
