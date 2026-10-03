@@ -1,151 +1,58 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect } from "storybook/test";
-import { html, mobile } from "../html";
-import { card, rated, Rating, row } from "./metrics";
+import type { Meta } from "@storybook/react-vite";
+import { html, type Story } from "../html";
+import {
+  type CardsArgs,
+  fourBands,
+  inline,
+  jumbo,
+  type PanelArgs,
+  staleCards,
+} from "./metrics";
 
-const health = `
-<section class="ui-section" data-gap="4">
-  <div class="ui-section-heading">
-    <h2>Application health</h2>
-    <p>Rated on the releases of the last 30 days. <a href="#releases" class="ui-link">See releases</a></p>
-  </div>
-  <dl class="ui-metrics">
-    ${card({
-      label: "Release cadence",
-      rating: Rating.Elite,
-      value: "7.5",
-      unit: "releases a week on average",
-      trend: { amount: "+2.8", up: true, progress: "improved" },
-      note: rated(
-        "cadence",
-        "Release cadence",
-        Rating.Elite,
-        "Releases per week",
-        [
-          [Rating.Elite, "> 7"],
-          [Rating.Good, "≥ 1"],
-          [Rating.Warning, "≥ 0.25"],
-          [Rating.Error, "< 0.25"],
-        ],
-      ),
-    })}
-    ${card({
-      label: "Stability",
-      rating: Rating.Error,
-      value: "56%",
-      unit: "of releases shipped without breaking anything",
-      trend: { amount: "−14%", up: false, progress: "worsened" },
-      note: rated(
-        "stability",
-        "Stability",
-        Rating.Error,
-        "% of releases that weren't marked broken",
-        [
-          [Rating.Elite, "> 85%"],
-          [Rating.Good, "> 80%"],
-          [Rating.Warning, "≥ 70%"],
-          [Rating.Error, "< 70%"],
-        ],
-      ),
-    })}
-  </dl>
-  <dl class="ui-metric-rows">
-    ${row({
-      label: "Recovery",
-      rating: Rating.Warning,
-      value: "3.8d",
-      unit: "on average to fix a broken release",
-      trend: { amount: "+28.9h", up: true, progress: "unchanged" },
-      note: rated(
-        "recovery",
-        "Recovery",
-        Rating.Warning,
-        "Average time to fix a broken release",
-        [
-          [Rating.Elite, "< 1h"],
-          [Rating.Good, "< 24h"],
-          [Rating.Warning, "≤ 7d"],
-          [Rating.Error, "> 7d"],
-        ],
-      ),
-    })}
-    ${row({
-      label: "Rework",
-      rating: Rating.Elite,
-      value: "0%",
-      unit: "of releases shipped nothing but unplanned work",
-      trend: { amount: "−5%", up: false, progress: "improved" },
-      note: rated(
-        "rework",
-        "Rework",
-        Rating.Elite,
-        "Releases with only fixes or other unplanned work",
-        [
-          [Rating.Elite, "< 2%"],
-          [Rating.Good, "< 8%"],
-          [Rating.Warning, "≤ 16%"],
-          [Rating.Error, "> 16%"],
-        ],
-      ),
-    })}
-    ${row({
-      label: "Unplanned work",
-      rating: Rating.Good,
-      value: "25%",
-      unit: "of released tasks were unplanned",
-      trend: { amount: "−9%", up: false, progress: "improved" },
-      note: rated(
-        "unplanned",
-        "Unplanned work",
-        Rating.Good,
-        "Released tasks that were fixes or other unplanned work",
-        [
-          [Rating.Elite, "< 10%"],
-          [Rating.Good, "< 25%"],
-          [Rating.Warning, "≤ 40%"],
-          [Rating.Error, "> 40%"],
-        ],
-      ),
-    })}
-    ${row({
-      label: "Time to merge",
-      rating: Rating.Elite,
-      value: "10.7h",
-      unit: "or less for 85% of merged pull requests",
-      trend: "unchanged",
-      note: rated(
-        "merge",
-        "Time to merge",
-        Rating.Elite,
-        "Time within which 85% of pull requests were merged",
-        [
-          [Rating.Elite, "< 24h"],
-          [Rating.Good, "< 2d"],
-          [Rating.Warning, "≤ 3d"],
-          [Rating.Error, "> 3d"],
-        ],
-      ),
-    })}
-  </dl>
-</section>`;
+const metric = (overrides: Partial<PanelArgs>): PanelArgs => ({
+  label: "",
+  rating: "",
+  value: "",
+  valueIsText: false,
+  unit: "",
+  amount: "",
+  direction: "up",
+  progress: "unchanged",
+  note: "",
+  scale: "",
+  bands: "",
+  current: 0,
+  ...overrides,
+});
+
+type Args = CardsArgs;
 
 export default {
   title: "Metrics/Health",
-} satisfies Meta;
-
-export const Default = html(health);
-
-export const Thresholds: StoryObj = {
-  ...html(health),
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(
-      canvas.getByRole("button", {
-        name: "Release cadence: Excellent, show thresholds",
-      }),
-    );
-
-    await expect(canvas.getByText("Releases per week")).toBeVisible();
+  ...html<Args>(
+    (cards) => `<section class="ui-section" data-gap="4">
+  <div class="ui-section-heading">
+    <h2>Application health</h2>
+    <p>Rated on the releases of the last 30 days. <a class="ui-link" href="#releases">See releases</a></p>
+  </div>
+  <dl class="ui-metrics">
+    ${jumbo(metric({ label: "Release cadence", rating: "elite", value: "7.5", unit: "releases a week on average", amount: "+2.8", direction: "up", progress: "improved", scale: "Releases per week", bands: fourBands("> 7", "≥ 1", "≥ 0.25", "< 0.25") }))}
+    ${jumbo(metric({ label: "Stability", rating: "error", value: "56%", unit: "of releases shipped without breaking anything", amount: "−14%", direction: "down", progress: "worsened", scale: "% of releases that weren't marked broken", bands: fourBands("> 85%", "> 80%", "≥ 70%", "< 70%"), current: 3 }))}
+  </dl>
+  <dl class="ui-metric-rows">
+    ${inline(metric({ label: "Recovery", rating: "warning", value: "3.8d", unit: "on average to fix a broken release", amount: "+28.9h", direction: "up", scale: "Average time to fix a broken release", bands: fourBands("< 1h", "< 24h", "≤ 7d", "> 7d"), current: 2 }))}
+    ${inline(metric({ label: "Rework", rating: "elite", value: "0%", unit: "of releases shipped nothing but unplanned work", amount: "−5%", direction: "down", progress: "improved", scale: "Releases with only fixes or other unplanned work", bands: fourBands("< 2%", "< 8%", "≤ 16%", "> 16%") }))}
+    ${inline(metric({ label: "Unplanned work", rating: "good", value: "25%", unit: "of released tasks were unplanned", amount: "−9%", direction: "down", progress: "improved", scale: "Released tasks that were fixes or other unplanned work", bands: fourBands("< 10%", "< 25%", "≤ 40%", "> 40%"), current: 1 }))}
+    ${inline(metric({ label: "Time to merge", rating: "elite", value: "10.7h", unit: "or less for 85% of merged pull requests", direction: "none", scale: "Time within which 85% of pull requests were merged", bands: fourBands("< 24h", "< 2d", "≤ 3d", "> 3d") }), staleCards(cards))}
+  </dl>
+</section>`,
+  ),
+  args: {
+    count: 1,
+    title: "test pr",
+    repository: "Space Clone",
+    openFor: "15d",
   },
-};
+} satisfies Meta<Args>;
 
-export const Mobile = mobile(health);
+export const Default: Story<Args> = {};

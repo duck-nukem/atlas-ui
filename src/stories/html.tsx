@@ -1,18 +1,21 @@
-import type { StoryObj } from "@storybook/react-vite";
+import type { Args, Meta, StoryObj } from "@storybook/react-vite";
 
-export const html = (markup: string): StoryObj => ({
-  render: () => (
+export const html = <A extends Args>(markup: (args: A) => string) => ({
+  render: (args: A) => (
     <div
       style={{ display: "contents" }}
-      dangerouslySetInnerHTML={{ __html: markup }}
+      dangerouslySetInnerHTML={{ __html: markup(args) }}
     />
   ),
-  parameters: { docs: { source: { code: markup.trim(), language: "html" } } },
-});
-
-export const mobile = (markup: string): StoryObj => ({
-  ...html(markup),
-  globals: { viewport: { value: "mobile", isRotated: false } },
+  parameters: {
+    docs: {
+      source: {
+        language: "html",
+        transform: (_: string, context: { args: Args }) =>
+          markup(context.args as A).trim(),
+      },
+    },
+  },
 });
 
 export const icon = (name: string, size?: "3" | "3.5" | "5") =>
@@ -20,7 +23,9 @@ export const icon = (name: string, size?: "3" | "3.5" | "5") =>
 
 export const productionContrast = { a11y: { test: "todo" } } as const;
 
-export const withProductionContrast = (story: StoryObj): StoryObj => ({
-  ...story,
-  parameters: { ...story.parameters, ...productionContrast },
+export const select = <T extends string>(options: readonly T[]) => ({
+  control: "select" as const,
+  options,
 });
+
+export type Story<A extends Args> = StoryObj<Meta<A>>;

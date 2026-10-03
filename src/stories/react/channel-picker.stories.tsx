@@ -72,8 +72,3 @@ export const NothingWaiting: Story = {
     label: "#general",
   },
 };
-
-export const Mobile: Story = {
-  ...Open,
-  globals: { viewport: { value: "mobile", isRotated: false } },
-};

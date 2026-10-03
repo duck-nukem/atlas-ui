@@ -1,24 +1,52 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { html, mobile } from "../html";
-import { shell } from "./shell";
+import { html, select, type Story } from "../html";
+import { shell, type ShellArgs } from "./shell";
 
-const page = shell(`
-<div class="ui-page">
-  <div class="ui-page-header">
-    <div class="ui-page-title"><div class="ui-page-title-row"><h1>Tasks</h1><div class="ui-page-actions"><a class="ui-button" href="#new">New task</a></div></div></div>
-  </div>
-</div>`);
+const pages = [
+  "My desk",
+  "Goals",
+  "Features",
+  "Flow",
+  "Housekeeping",
+  "Chat",
+  "Tasks",
+  "Repositories",
+  "Releases",
+  "Health",
+  "Applications",
+  "Organization",
+] as const;
 
 export default {
   title: "Layout/App shell",
+  ...html<ShellArgs>((args) =>
+    shell(
+      args,
+      `<div class="ui-page"><div class="ui-page-header"><div class="ui-page-title"><h1>${args.current}</h1></div></div></div>`,
+    ),
+  ),
+  args: {
+    organization: "Test org",
+    current: "Tasks",
+    unread: 0,
+    mentioned: false,
+    application: "All applications",
+  },
+  argTypes: {
+    current: select(pages),
+    application: select(["All applications", "Webapp", "Back office"]),
+  },
   parameters: { layout: "fullscreen" },
-} satisfies Meta;
+} satisfies Meta<ShellArgs>;
 
-export const Desktop = html(page);
+export const Default: Story<ShellArgs> = {};
 
-export const AccountMenu: StoryObj = {
-  ...html(page),
+export const Unread: Story<ShellArgs> = {
+  args: { unread: 3, mentioned: true },
+};
+
+export const AccountMenu: Story<ShellArgs> = {
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Account menu" }));
 
@@ -26,10 +54,8 @@ export const AccountMenu: StoryObj = {
   },
 };
 
-export const Mobile = mobile(page);
-
-export const MobileNavigation: StoryObj = {
-  ...mobile(page),
+export const Navigation: Story<ShellArgs> = {
+  globals: { viewport: { value: "mobile", isRotated: false } },
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(
       canvas.getByRole("button", { name: "Open navigation" }),

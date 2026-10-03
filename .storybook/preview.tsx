@@ -1,16 +1,31 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import "../src/css/fonts.css";
 import "../src/css/index.css";
+import { installInterest } from "../src/interest";
+
+installInterest(navigator.webdriver);
+
+document.addEventListener(
+  "click",
+  (event) => {
+    if (
+      event.target instanceof Element &&
+      event.target.closest("a[href]") !== null
+    ) {
+      event.preventDefault();
+    }
+  },
+  true,
+);
+document.addEventListener("submit", (event) => event.preventDefault(), true);
 
 const withTheme: Decorator = (Story, context) => {
-  document.documentElement.classList.toggle(
-    "dark",
-    context.globals["theme"] === "dark",
-  );
-  document.documentElement.classList.toggle(
-    "light",
-    context.globals["theme"] === "light",
-  );
+  const theme = context.globals["theme"];
+  const dark =
+    theme === "dark" ||
+    (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+
+  document.documentElement.classList.toggle("dark", dark);
 
   return <Story />;
 };
@@ -32,8 +47,10 @@ const preview: Preview = {
     },
   },
   initialGlobals: { theme: import.meta.env["VITE_UI_THEME"] ?? "system" },
+  tags: ["autodocs"],
   parameters: {
     layout: "padded",
+    docs: { codePanel: true, canvas: { sourceState: "shown" } },
     a11y: { test: "error" },
     viewport: {
       options: {

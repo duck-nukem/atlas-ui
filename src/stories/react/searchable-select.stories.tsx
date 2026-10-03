@@ -84,8 +84,3 @@ export const ServerSearch: Story = {
       />,
     ),
 };
-
-export const Mobile: Story = {
-  ...Multiple,
-  globals: { viewport: { value: "mobile", isRotated: false } },
-};

@@ -1,37 +1,103 @@
 import type { Meta } from "@storybook/react-vite";
-import { html, icon, mobile } from "../html";
+import { icons } from "../../icons/names";
+import { html, icon, select, type Story } from "../html";
 
-const buttons = `
-<div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center">
-  <a class="ui-button" href="#new">New task</a>
-  <button class="ui-button" data-variant="outline" type="button">Cancel</button>
-  <button class="ui-button" data-variant="secondary" type="button">Cancel</button>
-  <button class="ui-button" data-variant="ghost" type="button">Cancel</button>
-  <button class="ui-button" data-variant="destructive" type="button">Delete task</button>
-  <button class="ui-button" data-variant="link" type="button">Account</button>
-</div>`;
+const variants = [
+  "default",
+  "outline",
+  "secondary",
+  "ghost",
+  "destructive",
+  "link",
+] as const;
+const sizes = ["default", "sm", "icon", "icon-sm"] as const;
 
-export default { title: "Primitives/Button" } satisfies Meta;
+type Args = {
+  label: string;
+  variant: (typeof variants)[number];
+  size: (typeof sizes)[number];
+  icon: string;
+  link: boolean;
+  disabled: boolean;
+};
 
-export const Variants = html(buttons);
+export const button = ({
+  label,
+  variant,
+  size,
+  icon: name,
+  link,
+  disabled,
+}: Args) => {
+  const iconOnly = size.startsWith("icon");
+  const attributes = [
+    'class="ui-button"',
+    variant === "default" ? "" : `data-variant="${variant}"`,
+    size === "default" ? "" : `data-size="${size}"`,
+    iconOnly ? `aria-label="${label}"` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const content = `${name === "" ? "" : icon(name)}${iconOnly ? "" : label}`;
 
-export const Small = html(`
-<div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center">
-  <button class="ui-button" data-size="sm" type="button">New task</button>
-  <button class="ui-button" data-variant="outline" data-size="sm" type="button">Cancel</button>
-  <button class="ui-button" data-variant="ghost" data-size="sm" type="button">Cancel</button>
-</div>`);
+  return link
+    ? `<a ${attributes} href="#${label.toLowerCase().replaceAll(" ", "-")}"${disabled ? ' aria-disabled="true"' : ""}>${content}</a>`
+    : `<button ${attributes} type="button"${disabled ? " disabled" : ""}>${content}</button>`;
+};
 
-export const Icons = html(`
-<div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center">
-  <button class="ui-button" data-variant="ghost" data-size="icon" type="button" aria-label="Open navigation">${icon("menu", "5")}</button>
-  <a class="ui-button" data-variant="ghost" data-size="icon" href="#notifications" aria-label="Notifications">${icon("bell")}</a>
-  <button class="ui-button" data-variant="ghost" data-size="icon" type="button" aria-label="Toggle light or dark mode">${icon("sun-moon")}</button>
-  <button class="ui-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Close">${icon("x")}</button>
-</div>`);
+export default {
+  title: "Primitives/Button",
+  ...html(button),
+  args: {
+    label: "New task",
+    variant: "default",
+    size: "default",
+    icon: "",
+    link: false,
+    disabled: false,
+  },
+  argTypes: {
+    variant: select(variants),
+    size: select(sizes),
+    icon: select(["", ...icons]),
+  },
+} satisfies Meta<Args>;
 
-export const Pending = html(
-  `<button class="ui-button" type="submit" disabled>New task</button>`,
-);
+export const Default: Story<Args> = {};
 
-export const Mobile = mobile(buttons);
+export const Outline: Story<Args> = {
+  args: { label: "Cancel", variant: "outline" },
+};
+
+export const Secondary: Story<Args> = {
+  args: { label: "Cancel", variant: "secondary" },
+};
+
+export const Ghost: Story<Args> = {
+  args: { label: "Cancel", variant: "ghost" },
+};
+
+export const Destructive: Story<Args> = {
+  args: { label: "Delete task", variant: "destructive" },
+};
+
+export const Link: Story<Args> = {
+  args: { label: "Account", variant: "link" },
+};
+
+export const Small: Story<Args> = { args: { label: "Apply", size: "sm" } };
+
+export const WithIcon: Story<Args> = {
+  args: { label: "Add", variant: "outline", icon: "plus" },
+};
+
+export const IconOnly: Story<Args> = {
+  args: {
+    label: "Notifications",
+    variant: "ghost",
+    size: "icon",
+    icon: "bell",
+  },
+};
+
+export const Pending: Story<Args> = { args: { disabled: true } };

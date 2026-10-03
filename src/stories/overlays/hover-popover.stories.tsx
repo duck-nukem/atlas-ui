@@ -1,39 +1,46 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect } from "storybook/test";
-import { html, icon, mobile, productionContrast } from "../html";
+import type { Meta } from "@storybook/react-vite";
+import { expect, waitFor } from "storybook/test";
+import { html, icon, productionContrast, type Story } from "../html";
 
-const age = `
-<p>T-331 Ask customers
-  <button class="ui-age" type="button" popovertarget="age-hint" interestfor="age-hint" aria-label="Hasn't moved in 4 days">${icon("clock-alert", "3.5")}4d</button>
-</p>
-<div class="ui-popover" data-size="hint" id="age-hint" popover><p>Hasn't moved in 4 days</p></div>`;
+type Args = { label: string; hint: string };
 
 export default {
   title: "Overlays/Hover popover",
+  ...html<Args>(
+    ({
+      label,
+      hint,
+    }) => `<button class="ui-age" type="button" popovertarget="hint" interestfor="hint" aria-label="${hint}">${icon("clock-alert", "3.5")}${label}</button>
+<div class="ui-popover" data-size="hint" id="hint" popover><p>${hint}</p></div>`,
+  ),
+  args: { label: "4d", hint: "Hasn't moved in 4 days" },
   parameters: {
     ...productionContrast,
     docs: {
       description: {
         component:
-          "Opens on hover after 150 ms where the browser supports interestfor, and on click everywhere through popovertarget.",
+          "Opens 150 ms after the pointer rests on it and pins on click. Browsers without interestfor get the same through atlas-ui/interest.js.",
       },
     },
   },
-} satisfies Meta;
+} satisfies Meta<Args>;
 
-export const Closed = html(age);
+export const Closed: Story<Args> = {};
 
-export const Pinned: StoryObj = {
-  ...html(age),
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Hasn't moved in 4 days" }),
+export const OnHover: Story<Args> = {
+  play: async ({ canvas, userEvent, args }) => {
+    await userEvent.hover(canvas.getByRole("button", { name: args.hint }));
+
+    await waitFor(() =>
+      expect(canvas.getByText(args.hint, { selector: "p" })).toBeVisible(),
     );
-
-    await expect(
-      canvas.getByText("Hasn't moved in 4 days", { selector: "p" }),
-    ).toBeVisible();
   },
 };
 
-export const Mobile = mobile(age);
+export const Pinned: Story<Args> = {
+  play: async ({ canvas, userEvent, args }) => {
+    await userEvent.click(canvas.getByRole("button", { name: args.hint }));
+
+    await expect(canvas.getByText(args.hint, { selector: "p" })).toBeVisible();
+  },
+};

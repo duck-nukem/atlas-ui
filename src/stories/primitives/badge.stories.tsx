@@ -1,16 +1,30 @@
 import type { Meta } from "@storybook/react-vite";
-import { html, mobile } from "../html";
+import { html, select, type Story } from "../html";
 
-const badges = `
-<div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center">
-  <span class="ui-badge">Active</span>
-  <span class="ui-badge" data-variant="secondary">Evaluating</span>
-  <span class="ui-badge" data-variant="outline">Draft</span>
-  <span class="ui-badge" data-variant="destructive">Failed</span>
-</div>`;
+const variants = ["default", "secondary", "outline", "destructive"] as const;
 
-export default { title: "Primitives/Badge" } satisfies Meta;
+type Args = { label: string; variant: (typeof variants)[number] };
 
-export const GoalStatuses = html(badges);
+export default {
+  title: "Primitives/Badge",
+  ...html<Args>(
+    ({ label, variant }) =>
+      `<span class="ui-badge"${variant === "default" ? "" : ` data-variant="${variant}"`}>${label}</span>`,
+  ),
+  args: { label: "Active", variant: "default" },
+  argTypes: { variant: select(variants) },
+} satisfies Meta<Args>;
 
-export const Mobile = mobile(badges);
+export const Active: Story<Args> = {};
+
+export const Evaluating: Story<Args> = {
+  args: { label: "Evaluating", variant: "secondary" },
+};
+
+export const Draft: Story<Args> = {
+  args: { label: "Draft", variant: "outline" },
+};
+
+export const Failed: Story<Args> = {
+  args: { label: "Failed", variant: "destructive" },
+};

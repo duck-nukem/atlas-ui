@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { html, icon, mobile, withProductionContrast } from "../html";
+import { html, icon, productionContrast, select, type Story } from "../html";
 
 const rows = [
   [
@@ -19,67 +19,85 @@ const rows = [
   ["T-335", "Finalize the whole thing thanks", "Planned", "30 Sept 2026"],
 ] as const;
 
-const filter = (id: string, label: string, active = false) => `
-<button class="ui-column-filter" type="button"${active ? " data-active" : ""} popovertarget="${id}" aria-label="Filter ${label}">${icon("funnel")}</button>
-<div class="ui-popover" data-size="filter" id="${id}" popover>
+type TableArgs = {
+  rows: number;
+  sortedBy: "Key" | "Updated";
+  descending: boolean;
+  filtered: boolean;
+  page: number;
+  pages: number;
+  total: number;
+};
+
+const sortHeader = (label: string, args: TableArgs) =>
+  `<a class="ui-sort" href="#sort-${label}">${label}${args.sortedBy === label ? icon(args.descending ? "arrow-down" : "arrow-up") : ""}</a>`;
+
+const filterButton = (
+  label: string,
+  active: boolean,
+) => `<button class="ui-column-filter" type="button"${active ? " data-active" : ""} popovertarget="filter-${label}" aria-label="Filter ${label}">${icon("funnel")}</button>
+<div class="ui-popover" data-size="filter" id="filter-${label}" popover>
   <form class="ui-filter-form" method="get" action="#tasks">
     <input class="ui-input" name="q" aria-label="Filter text" autofocus>
     <button class="ui-button" data-size="sm" type="submit">Apply</button>
   </form>
 </div>`;
 
-const table = `
-<div style="display:grid;gap:.75rem">
-  <div class="ui-filter-bar">
-    <span class="ui-filter-chip">
-      <button type="button" popovertarget="edit-status" aria-label="Edit filter Status ≠ Done"><span>Status</span><span><span title="≠ Done">≠ Done</span></span></button>
-      <a href="#tasks" aria-label="Remove filter Status ≠ Done">${icon("x")}</a>
-    </span>
-    <div class="ui-popover" data-size="filter" id="edit-status" popover>
-      <form class="ui-filter-form" method="get" action="#tasks">
-        <div class="ui-negation"><button type="button" aria-pressed="false">Show</button><button type="button" aria-pressed="true">Hide</button></div>
-        <input class="ui-input" name="values" aria-label="Values" value="Done">
-        <button class="ui-button" data-size="sm" type="submit">Apply</button>
-        <a href="#tasks" aria-label="Clear">${icon("x")}</a>
-      </form>
-    </div>
-    <button class="ui-button" data-variant="outline" data-size="sm" data-phones-only type="button" popovertarget="add-filter">Add filter</button>
-    <div class="ui-popover" data-size="filter" id="add-filter" popover>
-      <select aria-label="Column"><option>Task</option><option>Type</option><option>Status</option></select>
-      <form class="ui-filter-form" method="get" action="#tasks">
-        <input class="ui-input" name="q" aria-label="Filter text">
-        <button class="ui-button" data-size="sm" type="submit">Apply</button>
-      </form>
-    </div>
-    <a href="#tasks">Clear all</a>
-  </div>
-  <div class="ui-table-scroll">
-    <table class="ui-table">
-      <thead>
-        <tr>
-          <th><span class="ui-th"><a class="ui-sort" href="#sort-key">Key</a></span></th>
-          <th><span class="ui-th">Task ${filter("filter-task", "Task")}</span></th>
-          <th><span class="ui-th">Type ${filter("filter-type", "Type")}</span></th>
-          <th><span class="ui-th"><a class="ui-sort" href="#sort-updated">Updated${icon("arrow-down")}</a></span></th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(([key, title, type, updated]) => `<tr><td><span class="ui-key">${key}</span></td><td>${title}</td><td>${type}</td><td>${updated}</td></tr>`).join("")}
-      </tbody>
-    </table>
-  </div>
-  <nav class="ui-pagination" aria-label="Pagination">
-    <span>Page 2 of 5 (87 total)</span>
-    <div><a href="#page-1">Previous</a><a href="#page-3">Next</a></div>
-  </nav>
-</div>`;
+const table = (args: TableArgs) => `<div class="ui-table-scroll">
+  <table class="ui-table">
+    <thead>
+      <tr>
+        <th><span class="ui-th">${sortHeader("Key", args)}</span></th>
+        <th><span class="ui-th">Task ${filterButton("Task", args.filtered)}</span></th>
+        <th><span class="ui-th">Type ${filterButton("Type", false)}</span></th>
+        <th><span class="ui-th">${sortHeader("Updated", args)}</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      ${
+        args.rows === 0
+          ? '<tr><td class="ui-table-empty" colspan="4">No tasks match these filters</td></tr>'
+          : rows
+              .slice(0, args.rows)
+              .map(
+                ([key, title, type, updated]) =>
+                  `<tr><td><span class="ui-key">${key}</span></td><td>${title}</td><td>${type}</td><td>${updated}</td></tr>`,
+              )
+              .join("\n      ")
+      }
+    </tbody>
+  </table>
+</div>
+<nav class="ui-pagination" aria-label="Pagination">
+  <span>Page ${args.page} of ${args.pages} (${args.total} total)</span>
+  <div>${args.page > 1 ? '<a href="#previous">Previous</a>' : ""}${args.page < args.pages ? '<a href="#next">Next</a>' : ""}</div>
+</nav>`;
 
-export default { title: "Data/Table" } satisfies Meta;
-
-export const Default = html(table);
-
-export const FilterOpen: StoryObj = {
+export default {
+  title: "Data/Table",
   ...html(table),
+  args: {
+    rows: 4,
+    sortedBy: "Updated",
+    descending: true,
+    filtered: false,
+    page: 2,
+    pages: 5,
+    total: 87,
+  },
+  argTypes: {
+    rows: { control: { type: "range", min: 0, max: 4 } },
+    sortedBy: select(["Key", "Updated"]),
+  },
+} satisfies Meta<TableArgs>;
+
+export const Default: Story<TableArgs> = {};
+
+export const Empty: Story<TableArgs> = {
+  args: { rows: 0, page: 1, pages: 1, total: 0 },
+};
+
+export const ColumnFilterOpen: Story<TableArgs> = {
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Filter Task" }));
 
@@ -89,37 +107,51 @@ export const FilterOpen: StoryObj = {
   },
 };
 
-export const ValuesFilter: StoryObj = withProductionContrast(
-  html(`
-<div class="ui-popover" data-size="filter" style="position:static;display:block">
-  <form class="ui-filter-form" method="get" action="#tasks">
-    <div class="ui-negation">
-      <button type="button" aria-pressed="true">Show</button>
-      <button type="button" aria-pressed="false">Hide</button>
-    </div>
-    <input class="ui-input" name="values" aria-label="Values" placeholder="Pick values">
-    <button class="ui-button" data-size="sm" type="submit">Apply</button>
-    <a href="#tasks" aria-label="Clear">${icon("x")}</a>
-  </form>
-</div>`),
-);
+type FilterArgs = { field: string; value: string; hide: boolean };
 
-export const DateFilter = html(`
-<div class="ui-popover" data-size="filter" style="position:static;display:block">
-  <form class="ui-filter-form" method="get" action="#tasks">
-    <input class="ui-input" type="date" name="from" aria-label="From">
-    <span class="ui-dash">–</span>
-    <input class="ui-input" type="date" name="to" aria-label="To">
-    <button class="ui-button" data-size="sm" type="submit">Apply</button>
-  </form>
-</div>`);
+export const FilterBar: Story<FilterArgs> = {
+  ...html<FilterArgs>(
+    ({ field, value, hide }) => `<div class="ui-filter-bar">
+  <span class="ui-filter-chip">
+    <button type="button" popovertarget="edit-filter" aria-label="Edit filter ${field} ${hide ? "≠" : ""} ${value}"><span>${field}</span><span><span title="${hide ? "≠ " : ""}${value}">${hide ? "≠ " : ""}${value}</span></span></button>
+    <a href="#remove" aria-label="Remove filter ${field} ${value}">${icon("x")}</a>
+  </span>
+  <div class="ui-popover" data-size="filter" id="edit-filter" popover>
+    <form class="ui-filter-form" method="get" action="#tasks">
+      <div class="ui-negation"><button type="button" aria-pressed="${!hide}">Show</button><button type="button" aria-pressed="${hide}">Hide</button></div>
+      <input class="ui-input" name="values" aria-label="Values" value="${value}">
+      <button class="ui-button" data-size="sm" type="submit">Apply</button>
+      <a href="#clear" aria-label="Clear">${icon("x")}</a>
+    </form>
+  </div>
+  <button class="ui-button" data-variant="outline" data-size="sm" type="button" popovertarget="add-filter">Add filter</button>
+  <div class="ui-popover" data-size="filter" id="add-filter" popover>
+    <select aria-label="Column"><option>Task</option><option>Type</option><option>Status</option></select>
+    <form class="ui-filter-form" method="get" action="#tasks">
+      <input class="ui-input" name="q" aria-label="Filter text">
+      <button class="ui-button" data-size="sm" type="submit">Apply</button>
+    </form>
+  </div>
+  <a href="#clear-all">Clear all</a>
+</div>`,
+  ),
+  args: { field: "Status", value: "Done", hide: true },
+  parameters: { ...productionContrast },
+};
 
-export const Empty = html(`
-<div class="ui-table-scroll">
-  <table class="ui-table">
-    <thead><tr><th>Key</th><th>Task</th></tr></thead>
-    <tbody><tr><td class="ui-table-empty" colspan="2">No tasks match these filters</td></tr></tbody>
-  </table>
-</div>`);
+type DateArgs = { from: string; to: string };
 
-export const Mobile = mobile(table);
+export const DateFilter: Story<DateArgs> = {
+  ...html<DateArgs>(
+    ({
+      from,
+      to,
+    }) => `<form class="ui-filter-form" method="get" action="#tasks" style="max-width:26rem">
+  <input class="ui-input" type="date" name="from" aria-label="From" value="${from}">
+  <span class="ui-dash">–</span>
+  <input class="ui-input" type="date" name="to" aria-label="To" value="${to}">
+  <button class="ui-button" data-size="sm" type="submit">Apply</button>
+</form>`,
+  ),
+  args: { from: "2026-09-01", to: "2026-09-30" },
+};
