@@ -37,12 +37,14 @@ type ExtraParameters = {
   docs?: { description?: { component: string } };
 };
 
+let renders = 0;
+
 export const html = <A extends Args>(
   markup: (args: A) => string,
   extra: ExtraParameters = {},
 ) => ({
   render: (args: A, context: { id: string }) =>
-    scoped(markup(escaped(args)), context.id),
+    scoped(markup(escaped(args)), `${context.id}-${String((renders += 1))}`),
   parameters: {
     ...extra,
     docs: {

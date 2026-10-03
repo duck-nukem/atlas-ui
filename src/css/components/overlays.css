@@ -34,7 +34,7 @@
   }
 
   .ui-popover {
-    @apply w-72 max-w-[calc(100vw-1rem)] rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+    @apply w-72 max-w-[calc(100vw-1rem)] rounded-md border bg-popover p-4 text-start font-normal text-popover-foreground shadow-md outline-hidden;
 
     margin: 0;
     position-area: block-end span-inline-end;
