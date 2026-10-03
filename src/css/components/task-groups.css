@@ -1,0 +1,181 @@
+@layer components {
+  .ui-goal-groups {
+    @apply grid min-w-0;
+
+    & > * + * {
+      @apply mt-8;
+    }
+
+    &
+      > .ui-goal:not(:has(> .ui-goal-toggle :checked))
+      + .ui-goal:not(:has(> .ui-goal-toggle :checked)) {
+      @apply -mt-px;
+    }
+  }
+
+  .ui-goal {
+    @apply grid min-w-0 grid-cols-[--spacing(8)_minmax(0,1fr)] grid-rows-[auto_1fr] border-y;
+
+    &::before {
+      @apply col-start-1 row-span-full row-start-1 bg-muted content-[''];
+    }
+
+    & > .ui-goal-toggle {
+      @apply col-start-1 row-start-1 mt-2 cursor-pointer justify-self-center rounded p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground has-focus-visible:ring-3 has-focus-visible:ring-ring/50;
+
+      & > input {
+        @apply sr-only;
+      }
+
+      & > svg {
+        @apply size-4;
+      }
+
+      &:has(:checked) > svg:last-of-type,
+      &:not(:has(:checked)) > svg:first-of-type {
+        @apply hidden;
+      }
+    }
+
+    & > .ui-goal-title {
+      @apply col-start-1 row-start-2 my-2 rotate-180 justify-self-center truncate text-center text-xs text-muted-foreground [contain:inline-size] [writing-mode:vertical-rl];
+    }
+
+    & > a.ui-goal-title {
+      @apply hover:underline;
+    }
+
+    & > .ui-goal-count {
+      @apply hidden;
+    }
+
+    & > .ui-goal-body {
+      @apply col-start-2 row-span-full row-start-1 min-w-0 [&>*:first-child]:border-t-0 [&>div:first-child>ul>li:first-child]:border-t-0;
+    }
+
+    &:not(:has(> .ui-goal-toggle :checked)) {
+      @apply grid-cols-[--spacing(8)_minmax(0,max-content)_auto_1fr] grid-rows-1 items-baseline bg-muted;
+
+      & > .ui-goal-title {
+        @apply col-start-2 row-start-1 my-0 rotate-0 justify-self-start px-2 py-2 text-left text-sm [contain:none] [writing-mode:horizontal-tb];
+      }
+
+      & > .ui-goal-toggle {
+        @apply self-start;
+      }
+
+      & > .ui-goal-count {
+        @apply col-start-3 row-start-1 block text-xs whitespace-nowrap text-muted-foreground;
+      }
+
+      & > .ui-goal-body {
+        @apply hidden;
+      }
+    }
+  }
+
+  .ui-task-section {
+    @apply min-w-0;
+  }
+
+  .ui-section-header {
+    @apply relative flex items-center gap-2 px-4 py-2 text-sm font-medium;
+
+    & > a,
+    & > button,
+    & > .ui-section-people > button {
+      @apply relative;
+    }
+
+    & > a {
+      @apply hover:underline;
+    }
+
+    & > .ui-age {
+      @apply font-normal;
+    }
+
+    & > .ui-section-people {
+      @apply ml-auto;
+    }
+  }
+
+  .ui-section-toggle {
+    @apply cursor-pointer rounded after:absolute after:inset-0 has-focus-visible:ring-3 has-focus-visible:ring-ring/50;
+
+    & > input {
+      @apply sr-only;
+    }
+
+    & > svg {
+      @apply size-4 shrink-0 text-muted-foreground transition-transform duration-200;
+    }
+
+    &:has(:checked) > svg {
+      @apply rotate-90;
+    }
+  }
+
+  .ui-task-section:has(> .ui-section-header) {
+    @apply border-t;
+  }
+
+  .ui-task-section:has(
+      > .ui-section-header > .ui-section-toggle > input:not(:checked)
+    )
+    > .ui-task-rows {
+    @apply hidden;
+  }
+
+  .ui-task-rows > li {
+    @apply flex items-center gap-3 border-t py-2 pl-4 text-sm hover:bg-muted/50 sm:pl-8;
+
+    & > .ui-age {
+      @apply font-medium;
+    }
+
+    & > .ui-keyed-title {
+      @apply flex-1 truncate;
+    }
+
+    & > .ui-task-row-status {
+      @apply hidden shrink-0 sm:block;
+    }
+  }
+
+  .ui-keyed-title {
+    @apply min-w-0 text-sm hover:underline;
+
+    & > span:last-child {
+      @apply font-medium;
+    }
+  }
+
+  .ui-feature-progress {
+    @apply flex items-center gap-2 text-xs font-normal text-muted-foreground;
+
+    & > :last-child {
+      @apply tabular-nums;
+    }
+  }
+
+  .ui-feature-segments {
+    @apply flex h-2 w-24 overflow-hidden rounded-full bg-muted;
+
+    & > span {
+      @apply flex-1;
+    }
+
+    & > [data-state="done"] {
+      background: var(--task-done);
+    }
+
+    & > [data-state="started"] {
+      background: var(--task-implementing);
+    }
+
+    & > [data-state="waiting"] {
+      background: var(--task-ready);
+    }
+  }
+}
