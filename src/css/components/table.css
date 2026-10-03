@@ -1,4 +1,8 @@
 @layer components {
+  .ui-data-table {
+    @apply grid gap-3;
+  }
+
   .ui-table-scroll {
     @apply relative w-full min-w-0 overflow-x-auto;
   }

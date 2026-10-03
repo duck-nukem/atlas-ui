@@ -43,7 +43,8 @@ const filterButton = (
   </form>
 </div>`;
 
-const table = (args: TableArgs) => `<div class="ui-table-scroll">
+const table = (args: TableArgs) => `<div class="ui-data-table">
+<div class="ui-table-scroll">
   <table class="ui-table">
     <thead>
       <tr>
@@ -71,7 +72,8 @@ const table = (args: TableArgs) => `<div class="ui-table-scroll">
 <nav class="ui-pagination" aria-label="Pagination">
   <span>Page ${args.page} of ${args.pages} (${args.total} total)</span>
   <div>${args.page > 1 ? '<a href="#previous">Previous</a>' : ""}${args.page < args.pages ? '<a href="#next">Next</a>' : ""}</div>
-</nav>`;
+</nav>
+</div>`;
 
 export default {
   title: "Data/Table",
