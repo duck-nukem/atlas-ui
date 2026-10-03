@@ -1,0 +1,17 @@
+@layer components {
+  .ui-tabs {
+    @apply flex min-w-0 gap-1 overflow-x-auto overflow-y-hidden border-b;
+  }
+
+  .ui-tab {
+    @apply -mb-px flex items-center gap-2 border-b-2 border-transparent px-3 py-2 text-sm whitespace-nowrap text-muted-foreground hover:text-foreground;
+
+    &[aria-current="page"] {
+      @apply border-primary font-medium text-foreground;
+    }
+
+    &[aria-disabled="true"] {
+      @apply cursor-default opacity-50 hover:text-muted-foreground;
+    }
+  }
+}

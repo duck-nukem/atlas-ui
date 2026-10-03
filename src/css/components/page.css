@@ -1,0 +1,75 @@
+@layer components {
+  .ui-page {
+    @apply grid grid-cols-1 gap-6;
+  }
+
+  .ui-page-header {
+    @apply sticky top-0 z-20 -mx-4 grid grid-cols-1 gap-4 border-b bg-background/95 px-4 pt-2 pb-3 backdrop-blur lg:-mx-6 lg:px-6;
+  }
+
+  .ui-page-title {
+    @apply grid gap-1;
+
+    & h1 {
+      @apply text-2xl font-semibold tracking-tight;
+    }
+
+    & > p {
+      @apply text-sm text-muted-foreground;
+    }
+  }
+
+  .ui-page-title-row {
+    @apply flex flex-wrap items-center justify-between gap-2;
+  }
+
+  .ui-page-actions {
+    @apply ml-auto flex items-center gap-2;
+  }
+
+  .ui-page-split {
+    @apply grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem];
+
+    & > :first-child {
+      @apply grid min-w-0 grid-cols-1 content-start gap-6;
+    }
+
+    & > aside {
+      @apply grid content-start gap-6 lg:sticky lg:self-start;
+
+      top: calc(var(--page-header-height, 0px) + 1.5rem);
+    }
+  }
+
+  .ui-section-heading {
+    @apply grid gap-1;
+
+    & h2 {
+      @apply font-medium;
+    }
+
+    & > p {
+      @apply text-sm text-muted-foreground;
+    }
+  }
+
+  .ui-item-list {
+    @apply divide-y rounded-md border;
+
+    &[data-variant="ruled"] {
+      @apply rounded-none border-x-0 border-y;
+    }
+
+    &[data-variant="plain"] {
+      @apply rounded-none border-0;
+    }
+
+    & > li {
+      @apply px-3 py-2;
+    }
+  }
+
+  .ui-empty {
+    @apply text-sm text-muted-foreground;
+  }
+}

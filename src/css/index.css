@@ -12,3 +12,7 @@
 @import "./components/switch.css";
 @import "./components/form.css";
 @import "./components/confirm.css";
+@import "./components/shell.css";
+@import "./components/page.css";
+@import "./components/tabs.css";
+@import "./components/overlays.css";

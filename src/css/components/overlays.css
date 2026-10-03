@@ -1,0 +1,81 @@
+@layer components {
+  .ui-menu {
+    @apply min-w-32 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10;
+
+    margin: 0;
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block, flip-inline;
+    margin-block: --spacing(1);
+  }
+
+  .ui-menu-item {
+    @apply relative flex w-full cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-left text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-']):not([data-size])]:size-4;
+
+    &[data-variant="destructive"] {
+      @apply text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive dark:hover:bg-destructive/20 dark:focus:bg-destructive/20;
+    }
+  }
+
+  .ui-menu-label {
+    @apply px-1.5 py-1 text-xs font-medium text-muted-foreground;
+  }
+
+  .ui-menu-separator {
+    @apply -mx-1 my-1 h-px border-0 bg-border;
+  }
+
+  .ui-popover {
+    @apply w-72 max-w-[calc(100vw-1rem)] rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+
+    margin: 0;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline;
+    margin-block: --spacing(1);
+  }
+
+  .ui-dialog {
+    @apply m-auto grid w-full max-w-[calc(100%-2rem)] gap-4 overflow-visible rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 outline-none before:absolute before:inset-x-0 before:top-0 before:h-1 before:rounded-t-xl before:bg-linear-to-r before:from-title-start before:to-title-end sm:max-w-sm;
+    @apply backdrop:bg-black/10 backdrop:backdrop-blur-xs;
+
+    &:not([open]) {
+      @apply hidden;
+    }
+
+    & > .ui-dialog-close {
+      @apply absolute top-2 right-2;
+    }
+  }
+
+  .ui-dialog-header {
+    @apply flex flex-col gap-2;
+
+    & h2 {
+      @apply text-base leading-none font-medium;
+    }
+
+    & p {
+      @apply text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground;
+    }
+  }
+
+  .ui-dialog-footer {
+    @apply -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end;
+  }
+
+  .ui-sheet {
+    @apply m-0 flex h-full max-h-none w-3/4 flex-col gap-4 border-0 border-r bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg sm:max-w-sm;
+    @apply backdrop:bg-black/10 backdrop:backdrop-blur-xs;
+
+    &:not([open]) {
+      @apply hidden;
+    }
+
+    & > .ui-dialog-close {
+      @apply absolute top-3 right-3;
+    }
+
+    & > h2 {
+      @apply text-base font-medium text-foreground;
+    }
+  }
+}
