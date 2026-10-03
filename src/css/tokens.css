@@ -42,7 +42,7 @@
     --ui-color-secondary: light-dark(#ebecf0, #313244);
     --ui-color-secondary-fg: var(--ui-color-fg);
     --ui-color-muted: light-dark(#f2f3f5, #313244);
-    --ui-color-muted-fg: light-dark(#6c707e, #a6adc8);
+    --ui-color-muted-fg: light-dark(#626674, #a6adc8);
     --ui-color-accent: light-dark(#edf3ff, #313244);
     --ui-color-accent-fg: var(--ui-color-fg);
     --ui-color-danger: light-dark(#c7303f, #f38ba8);
