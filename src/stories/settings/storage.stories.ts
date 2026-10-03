@@ -89,6 +89,12 @@ export const ManyRepositories: Story<Args> = {
     largest:
       "Space Clone, 671088640, 1073741824 | Marketing site, 402653184, 1073741824 | A repository with a name long enough to truncate on a phone screen, 214748364, 1073741824",
   },
+  globals: { viewport: { value: "mobile" } },
+  play: async ({ canvas }) => {
+    const section = canvas.getByTestId("storage-usage");
+
+    await expect(section.scrollWidth).toBeLessThanOrEqual(section.clientWidth);
+  },
 };
 
 export const Empty: Story<Args> = {
