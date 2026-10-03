@@ -48,7 +48,7 @@ export const rated = (
   current = bands.findIndex(([band]) => band === rating),
 ) => `
 <button class="ui-rating-link" type="button" popovertarget="${id}" aria-label="${label}: ${ratingNames[rating]}, show thresholds">${ratingNames[rating]}</button>
-<div class="ui-popover ui-thresholds" data-size="hint" id="${id}" popover>
+<div class="ui-popover ui-thresholds" data-size="thresholds" id="${id}" popover>
   <p>${scale}</p>
   <dl>
     ${bands

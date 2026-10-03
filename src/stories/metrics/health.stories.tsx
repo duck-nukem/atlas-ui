@@ -4,10 +4,10 @@ import { html, mobile } from "../html";
 import { card, rated, Rating, row } from "./metrics";
 
 const health = `
-<section class="ui-section" style="gap:1rem">
+<section class="ui-section" data-gap="4">
   <div class="ui-section-heading">
     <h2>Application health</h2>
-    <p>Rated on the releases of the last 30 days. <a href="#releases" style="text-decoration:underline">See releases</a></p>
+    <p>Rated on the releases of the last 30 days. <a href="#releases" class="ui-link">See releases</a></p>
   </div>
   <dl class="ui-metrics">
     ${card({
@@ -55,7 +55,7 @@ const health = `
       rating: Rating.Warning,
       value: "3.8d",
       unit: "on average to fix a broken release",
-      trend: { amount: "+28.9h", up: true, progress: "worsened" },
+      trend: { amount: "+28.9h", up: true, progress: "unchanged" },
       note: rated(
         "recovery",
         "Recovery",

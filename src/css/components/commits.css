@@ -19,6 +19,14 @@
     }
   }
 
+  .ui-mark-space {
+    @apply w-3;
+  }
+
+  .ui-approved {
+    @apply w-3 font-mono text-xs text-emerald-600;
+  }
+
   .ui-mark {
     @apply w-3 font-mono text-xs text-emerald-600;
 

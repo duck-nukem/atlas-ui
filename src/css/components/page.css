@@ -48,6 +48,14 @@
     @apply grid gap-2;
   }
 
+  .ui-section[data-gap="4"] {
+    @apply gap-4;
+  }
+
+  .ui-link {
+    @apply underline;
+  }
+
   .ui-section-row {
     @apply flex items-center justify-between gap-2;
   }

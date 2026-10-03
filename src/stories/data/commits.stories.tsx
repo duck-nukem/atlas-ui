@@ -39,6 +39,7 @@ const list = `
         <dt>Outcome</dt><dd>${outcome === "passed" ? "Passed" : "Failed"}</dd>
         <dt>Finished</dt><dd>${date}, 09:41</dd>
         <dt>Command</dt><dd class="ui-mono">npm run check</dd>
+        ${outcome === "failed" ? "<dt>Summary</dt><dd>2 tests failed</dd>" : ""}
       </dl>
     </div>
     <a class="ui-commit-sha" href="#${sha}">${sha}</a>
@@ -64,6 +65,26 @@ export const CheckDetails: StoryObj = {
     await expect(canvas.getAllByText("npm run check")[1]!).toBeVisible();
   },
 };
+
+export const Review = html(`
+<ol class="ui-item-list">
+  <li class="ui-commit">
+    <span class="ui-mark-space" aria-hidden="true"></span>
+    <span class="ui-approved" role="img" aria-label="Reviewed by Grace Hopper" title="Reviewed by Grace Hopper">✓</span>
+    <a class="ui-commit-sha" href="#931da0f">931da0f</a>
+    <span class="ui-commit-subject"><a href="#review-931da0f">Show chat join and leave lines small and in the chart green</a></span>
+    <span class="ui-commit-author">alex szabo</span>
+    <time datetime="2026-10-03">3 Oct 2026</time>
+  </li>
+  <li class="ui-commit">
+    <span class="ui-mark-space" aria-hidden="true"></span>
+    <span class="ui-mark-space" aria-hidden="true"></span>
+    <a class="ui-commit-sha" href="#be979e5">be979e5</a>
+    <span class="ui-commit-subject"><a href="#review-be979e5">Parse task, goal and feature keys before looking them up</a></span>
+    <span class="ui-commit-author">alex szabo</span>
+    <time datetime="2026-10-03">3 Oct 2026</time>
+  </li>
+</ol>`);
 
 export const Empty = html(`<p class="ui-empty">No commits.</p>`);
 

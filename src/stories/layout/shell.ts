@@ -4,7 +4,7 @@ const link = (name: string, label: string, current = false, dot = false) =>
   `<a class="ui-nav-link" href="#${label.toLowerCase().replaceAll(" ", "-")}"${current ? ' aria-current="page"' : ""}>${icon(name)}${label}${dot ? '<span class="ui-dot" role="status" aria-label="Someone mentioned you"></span>' : ""}</a>`;
 
 export const applicationSelector = (id: string) => `
-<button class="ui-button ui-selector" data-variant="outline" data-size="sm" type="button" popovertarget="${id}" aria-haspopup="menu">
+<button class="ui-button ui-selector" data-variant="outline" data-size="sm" type="button" popovertarget="${id}">
   ${icon("app-window")}<span>All applications</span>${icon("chevron-down")}
 </button>
 <div class="ui-menu" data-align="end" id="${id}" popover>
@@ -31,7 +31,7 @@ export const nav = (id: string) => `
 </nav>`;
 
 export const userMenu = `
-<button class="ui-button ui-account" data-variant="ghost" data-size="icon" type="button" popovertarget="account-menu" aria-haspopup="menu" aria-label="Account menu">
+<button class="ui-button ui-account" data-variant="ghost" data-size="icon" type="button" popovertarget="account-menu" aria-label="Account menu">
   <span class="ui-avatar"><span data-tone="4">A</span></span>
 </button>
 <div class="ui-menu" data-align="end" id="account-menu" popover>

@@ -11,7 +11,8 @@ const tiles = [
 ] as const;
 
 const flow = `
-<section class="ui-section" style="gap:1rem" aria-labelledby="status-time-heading">
+<div class="ui-page">
+<section class="ui-section" data-gap="4" aria-labelledby="status-time-heading">
   <div class="ui-section-heading">
     <h2 id="status-time-heading">Where time is spent</h2>
     <p>How long the 224 tasks finished in the last 30 days stayed in each status, from the moment work on them started until they were released.</p>
@@ -49,6 +50,7 @@ const flow = `
       )
       .join("")}
   </ol>
+</section>
   <dl class="ui-metric-rows">
     ${row({
       label: "Batch size",
@@ -71,10 +73,10 @@ const flow = `
         1,
       ),
     })}
-    ${row({ label: "Work in progress", rating: undefined, value: "5", unit: "in progress", note: '<a href="#limit" style="text-decoration:underline">Set a limit</a>' })}
-    ${row({ label: "Aged tasks", rating: Rating.Warning, value: "9", unit: "tasks have stayed in their status longer than usual", note: '<a href="#aged" style="text-decoration:underline">See which ones</a>' })}
+    ${row({ label: "Work in progress", rating: undefined, value: "5", unit: "in progress", note: '<a href="#limit" class="ui-link">Set a limit</a>' })}
+    ${row({ label: "Aged tasks", rating: Rating.Warning, value: "9", unit: "tasks have stayed in their status longer than usual", note: '<a href="#aged" class="ui-link">See which ones</a>' })}
   </dl>
-</section>`;
+</div>`;
 
 export default {
   title: "Metrics/Flow",

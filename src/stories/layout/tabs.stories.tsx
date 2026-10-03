@@ -12,10 +12,12 @@ export default { title: "Layout/Tabs" } satisfies Meta;
 export const Links = html(tabs);
 
 export const Disabled = html(`
-<nav class="ui-tabs" aria-label="Repository sections">
-  <a class="ui-tab" href="#conversation" aria-current="page">Conversation</a>
-  <button class="ui-tab" type="button" aria-disabled="true">Commits</button>
-</nav>`);
+<nav class="ui-tabs" aria-label="Delivery sections">
+  <a class="ui-tab" href="#metrics" aria-current="page">Metrics</a>
+  <button class="ui-tab" type="button" aria-disabled="true" popovertarget="nothing-found" interestfor="nothing-found">Suggestions</button>
+</nav>
+<div class="ui-popover" data-size="hint" id="nothing-found" popover data-text="sm">No larger problem stands out right now. If a single metric slips, the Metrics tab and the Flow page suggest what helps with it.</div>
+`);
 
 export const Mobile = mobile(tabs);
 

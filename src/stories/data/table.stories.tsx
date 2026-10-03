@@ -23,7 +23,7 @@ const filter = (id: string, label: string, active = false) => `
 <button class="ui-column-filter" type="button"${active ? " data-active" : ""} popovertarget="${id}" aria-label="Filter ${label}">${icon("funnel")}</button>
 <div class="ui-popover" data-size="filter" id="${id}" popover>
   <form class="ui-filter-form" method="get" action="#tasks">
-    <input class="ui-input" name="q" aria-label="Filter text">
+    <input class="ui-input" name="q" aria-label="Filter text" autofocus>
     <button class="ui-button" data-size="sm" type="submit">Apply</button>
   </form>
 </div>`;
@@ -32,9 +32,26 @@ const table = `
 <div style="display:grid;gap:.75rem">
   <div class="ui-filter-bar">
     <span class="ui-filter-chip">
-      <button type="button" aria-label="Edit filter Status ≠ Done"><span>Status</span><span>≠ Done</span></button>
+      <button type="button" popovertarget="edit-status" aria-label="Edit filter Status ≠ Done"><span>Status</span><span><span title="≠ Done">≠ Done</span></span></button>
       <a href="#tasks" aria-label="Remove filter Status ≠ Done">${icon("x")}</a>
     </span>
+    <div class="ui-popover" data-size="filter" id="edit-status" popover>
+      <form class="ui-filter-form" method="get" action="#tasks">
+        <div class="ui-negation"><button type="button" aria-pressed="false">Show</button><button type="button" aria-pressed="true">Hide</button></div>
+        <input class="ui-input" name="values" aria-label="Values" value="Done">
+        <button class="ui-button" data-size="sm" type="submit">Apply</button>
+        <a href="#tasks" aria-label="Clear">${icon("x")}</a>
+      </form>
+    </div>
+    <button class="ui-button" data-variant="outline" data-size="sm" data-phones-only type="button" popovertarget="add-filter">Add filter</button>
+    <div class="ui-popover" data-size="filter" id="add-filter" popover>
+      <select aria-label="Column"><option>Task</option><option>Type</option><option>Status</option></select>
+      <form class="ui-filter-form" method="get" action="#tasks">
+        <input class="ui-input" name="q" aria-label="Filter text">
+        <button class="ui-button" data-size="sm" type="submit">Apply</button>
+      </form>
+    </div>
+    <a href="#tasks">Clear all</a>
   </div>
   <div class="ui-table-scroll">
     <table class="ui-table">

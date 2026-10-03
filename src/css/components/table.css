@@ -74,7 +74,15 @@
       }
 
       & > span:last-child {
-        @apply flex min-w-0 gap-1 truncate py-1 pr-1 pl-2;
+        @apply flex min-w-0 gap-1 py-1 pr-1 pl-2;
+
+        & > span:first-child {
+          @apply truncate;
+        }
+
+        & > span + span {
+          @apply shrink-0;
+        }
       }
     }
 
@@ -85,6 +93,22 @@
 
   .ui-popover[data-size="filter"] {
     @apply w-[26rem];
+
+    &:has(> select) {
+      @apply grid-cols-1 gap-3;
+
+      &:popover-open {
+        @apply grid;
+      }
+    }
+
+    & > select {
+      @apply h-8 rounded-md border bg-background px-2 text-xs;
+    }
+  }
+
+  .ui-filter-bar > .ui-button[data-phones-only] {
+    @apply md:hidden;
   }
 
   .ui-filter-form {

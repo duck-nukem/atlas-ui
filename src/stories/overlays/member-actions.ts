@@ -1,7 +1,7 @@
 import { icon } from "../html";
 
 export const memberActions = `
-<button class="ui-button" data-variant="ghost" data-size="icon-sm" type="button" popovertarget="member-actions" aria-haspopup="menu" aria-label="Actions for Ada Lovelace">${icon("ellipsis")}</button>
+<button class="ui-button" data-variant="ghost" data-size="icon-sm" type="button" popovertarget="member-actions" aria-label="Actions for Ada Lovelace">${icon("ellipsis")}</button>
 <div class="ui-menu" data-align="end" id="member-actions" popover>
   <a class="ui-menu-item" href="#profile" autofocus>View profile</a>
   <form method="post" action="#role"><button class="ui-menu-item" type="submit">Make admin</button></form>

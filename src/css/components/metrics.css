@@ -66,6 +66,10 @@
     & > .ui-trend {
       @apply sm:col-start-2;
     }
+
+    & > .ui-metric-details {
+      @apply pt-2 sm:col-span-3;
+    }
   }
 
   .ui-rating-icon {
