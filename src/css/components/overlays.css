@@ -2,6 +2,7 @@
   .ui-menu {
     @apply min-w-32 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10;
 
+    width: anchor-size(width);
     margin: 0;
     position-area: block-end span-inline-start;
     position-try-fallbacks: flip-block, flip-inline;
@@ -77,5 +78,19 @@
     & > h2 {
       @apply text-base font-medium text-foreground;
     }
+  }
+}
+
+@layer components {
+  .ui-popover[data-size="hint"] {
+    @apply w-auto max-w-xs p-3 text-xs;
+  }
+
+  [interestfor] {
+    interest-delay: 150ms;
+  }
+
+  .ui-age {
+    @apply inline-flex shrink-0 items-center gap-1 text-xs whitespace-nowrap text-(--chart-yellow) tabular-nums;
   }
 }
