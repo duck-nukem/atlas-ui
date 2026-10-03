@@ -14,3 +14,6 @@ export const mobile = (markup: string): StoryObj => ({
   ...html(markup),
   globals: { viewport: { value: "mobile", isRotated: false } },
 });
+
+export const icon = (name: string, size?: "sm" | "lg") =>
+  `<svg class="ui-icon"${size ? ` data-size="${size}"` : ""} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;

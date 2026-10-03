@@ -74,6 +74,7 @@
     --ui-tone-6: light-dark(#d6245c, #f38ba8);
     --ui-tone-7: light-dark(#8e44d8, #cba6f7);
 
+    --ui-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 8%);
     --ui-shadow-lg: 0 8px 24px rgb(0 0 0 / 16%);
     --ui-focus-ring: 0 0 0 3px

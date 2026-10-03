@@ -1,0 +1,75 @@
+@layer ui.components {
+  .ui-badge {
+    --ui-badge-bg: var(--ui-color-primary);
+    --ui-badge-fg: var(--ui-color-primary-fg);
+    --ui-icon-size: 0.75rem;
+
+    display: inline-flex;
+    gap: var(--ui-space-1);
+    align-items: center;
+    block-size: 1.25rem;
+    padding-inline: var(--ui-space-2);
+    border: 1px solid var(--ui-badge-border, transparent);
+    border-radius: var(--ui-radius-full);
+    background: var(--ui-badge-bg);
+    color: var(--ui-badge-fg);
+    font-size: var(--ui-font-size-xs);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &[data-variant="secondary"] {
+      --ui-badge-bg: var(--ui-color-secondary);
+      --ui-badge-fg: var(--ui-color-secondary-fg);
+    }
+
+    &[data-variant="outline"] {
+      --ui-badge-bg: transparent;
+      --ui-badge-fg: var(--ui-color-fg);
+      --ui-badge-border: var(--ui-color-border);
+    }
+
+    &[data-variant="danger"] {
+      --ui-badge-bg: color-mix(
+        in oklch,
+        var(--ui-color-danger) 12%,
+        var(--ui-color-bg)
+      );
+      --ui-badge-fg: var(--ui-color-danger);
+    }
+
+    &[data-tone] {
+      --ui-badge-bg: color-mix(
+        in oklch,
+        var(--ui-tone) 16%,
+        var(--ui-color-surface)
+      );
+      --ui-badge-fg: color-mix(
+        in oklch,
+        var(--ui-tone) 70%,
+        var(--ui-color-fg)
+      );
+    }
+
+    & .ui-badge-remove {
+      display: inline-grid;
+      place-items: center;
+      margin-inline-end: calc(var(--ui-space-1) * -1);
+      padding: 0;
+      border: 0;
+      border-radius: var(--ui-radius-full);
+      background: none;
+      color: inherit;
+      cursor: pointer;
+
+      &:hover {
+        background: color-mix(in oklch, currentcolor 15%, transparent);
+      }
+    }
+  }
+
+  a.ui-badge:hover {
+    background: color-mix(in oklch, var(--ui-badge-bg) 80%, var(--ui-color-fg));
+  }
+}

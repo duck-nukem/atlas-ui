@@ -1,0 +1,53 @@
+@layer ui.components {
+  .ui-avatar {
+    --ui-avatar-size: 2rem;
+
+    position: relative;
+    display: inline-grid;
+    flex-shrink: 0;
+    place-items: center;
+    inline-size: var(--ui-avatar-size);
+    block-size: var(--ui-avatar-size);
+    overflow: hidden;
+    border-radius: var(--ui-radius-full);
+    background: color-mix(
+      in oklch,
+      var(--ui-tone, var(--ui-color-muted)) 25%,
+      var(--ui-color-surface)
+    );
+    color: var(--ui-color-fg);
+    font-size: calc(var(--ui-avatar-size) * 0.4);
+    font-weight: 600;
+    line-height: 1;
+    user-select: none;
+    box-shadow: inset 0 0 0 1px var(--ui-color-border);
+
+    & img {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+    }
+
+    &[data-size="sm"] {
+      --ui-avatar-size: 1.5rem;
+    }
+
+    &[data-size="lg"] {
+      --ui-avatar-size: 2.5rem;
+    }
+
+    &[data-size="xl"] {
+      --ui-avatar-size: 4rem;
+    }
+  }
+
+  .ui-avatar-stack {
+    display: inline-flex;
+    padding-inline-start: var(--ui-space-2);
+
+    & > .ui-avatar {
+      margin-inline-start: calc(var(--ui-space-2) * -1);
+      box-shadow: 0 0 0 2px var(--ui-color-bg);
+    }
+  }
+}

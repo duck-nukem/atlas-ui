@@ -20,6 +20,38 @@
     outline-offset: 2px;
   }
 
+  [data-tone="0"] {
+    --ui-tone: var(--ui-tone-0);
+  }
+
+  [data-tone="1"] {
+    --ui-tone: var(--ui-tone-1);
+  }
+
+  [data-tone="2"] {
+    --ui-tone: var(--ui-tone-2);
+  }
+
+  [data-tone="3"] {
+    --ui-tone: var(--ui-tone-3);
+  }
+
+  [data-tone="4"] {
+    --ui-tone: var(--ui-tone-4);
+  }
+
+  [data-tone="5"] {
+    --ui-tone: var(--ui-tone-5);
+  }
+
+  [data-tone="6"] {
+    --ui-tone: var(--ui-tone-6);
+  }
+
+  [data-tone="7"] {
+    --ui-tone: var(--ui-tone-7);
+  }
+
   a {
     color: var(--ui-color-primary);
   }
