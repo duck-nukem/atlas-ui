@@ -26,6 +26,7 @@
 
   .ui-select-popover {
     min-inline-size: 14rem;
+    max-inline-size: calc(100vw - 2 * var(--ui-space-4));
     padding: var(--ui-space-1);
 
     &:popover-open {
@@ -37,6 +38,7 @@
   @supports (position-area: block-end) {
     .ui-select-popover {
       inline-size: anchor-size(inline);
+      margin-inline: 0;
     }
   }
 
@@ -97,7 +99,7 @@
     color: var(--ui-color-muted-fg);
 
     &:empty {
-      display: none;
+      padding: 0;
     }
 
     &[data-note="searchFailed"] {

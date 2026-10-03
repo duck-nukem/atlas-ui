@@ -18,7 +18,7 @@ const people = [
 
 const field = (label: string, control: React.ReactNode) => (
   <div className="ui-field" style={{ maxInlineSize: "20rem" }}>
-    <span className="ui-label" id="select-label">
+    <span className="ui-label" id={`${label}-label`}>
       {label}
     </span>
     {control}
@@ -28,7 +28,11 @@ const field = (label: string, control: React.ReactNode) => (
 const meta = {
   title: "React/Searchable select",
   component: SearchableSelect,
-  args: { name: "featureId", options: features, "aria-label": "Feature" },
+  args: {
+    name: "featureId",
+    options: features,
+    "aria-labelledby": "Feature-label",
+  },
   render: (args) => field("Feature", <SearchableSelect {...args} />),
 } satisfies Meta<typeof SearchableSelect>;
 
@@ -64,7 +68,7 @@ export const ServerSearch: Story = {
       "Reviewer",
       <ServerSearchSelect
         name="reviewerId"
-        aria-label="Reviewer"
+        aria-labelledby="Reviewer-label"
         chosen={[]}
         searchOptions={async (text) => {
           await new Promise((resolve) => setTimeout(resolve, 400));

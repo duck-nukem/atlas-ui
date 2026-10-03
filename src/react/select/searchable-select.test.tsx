@@ -371,3 +371,74 @@ describe("SearchableSelect saving on change", () => {
     });
   });
 });
+
+describe("SearchableSelect focus", () => {
+  it("moves focus to the search box when opened", async () => {
+    render(
+      <SearchableSelect
+        name="featureId"
+        options={options}
+        data-testid="select"
+      />,
+    );
+
+    await browser.click(screen.getByTestId("select"));
+
+    await expect
+      .poll(() => document.activeElement)
+      .toBe(screen.getByTestId("select-search"));
+  });
+
+  it("gives focus back to the trigger on Escape", async () => {
+    render(
+      <SearchableSelect
+        name="featureId"
+        options={options}
+        data-testid="select"
+      />,
+    );
+    await browser.click(screen.getByTestId("select"));
+    await expect
+      .poll(() => document.activeElement)
+      .toBe(screen.getByTestId("select-search"));
+
+    await browser.keyboard("{Escape}");
+
+    expect(document.activeElement).toBe(screen.getByTestId("select"));
+  });
+
+  it("gives focus back to the trigger after an option is clicked", async () => {
+    render(
+      <SearchableSelect
+        name="featureId"
+        options={options}
+        data-testid="select"
+      />,
+    );
+    await browser.click(screen.getByTestId("select"));
+    await expect
+      .poll(() => document.activeElement)
+      .toBe(screen.getByTestId("select-search"));
+
+    await browser.click(screen.getByRole("option", { name: "F-2 Chat" }));
+
+    expect(document.activeElement).toBe(screen.getByTestId("select"));
+  });
+
+  it("names the trigger by the label it points to", () => {
+    render(
+      <>
+        <span id="feature-label">Feature</span>
+        <SearchableSelect
+          name="featureId"
+          options={options}
+          aria-labelledby="feature-label"
+        />
+      </>,
+    );
+
+    const trigger = screen.getByRole("combobox", { name: "Feature" });
+
+    expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
+  });
+});

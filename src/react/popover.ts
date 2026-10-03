@@ -6,27 +6,39 @@ export type Popover = {
   hide: () => void;
 };
 
-export function usePopover(onChange: (open: boolean) => void): Popover {
+export function usePopover(
+  onChange: (open: boolean) => void,
+  onShown: () => void,
+): Popover {
   const ref = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
-  const changed = useRef(onChange);
+  const handlers = useRef({ onChange, onShown });
 
   useLayoutEffect(() => {
-    changed.current = onChange;
+    handlers.current = { onChange, onShown };
   });
 
   useLayoutEffect(() => {
     const element = ref.current;
-    const toggled = (event: Event): void => {
+    const changing = (event: Event): void => {
       const next = (event as ToggleEvent).newState === "open";
 
       setOpen(next);
-      changed.current(next);
+      handlers.current.onChange(next);
+    };
+    const toggled = (event: Event): void => {
+      if ((event as ToggleEvent).newState === "open") {
+        handlers.current.onShown();
+      }
     };
 
-    element?.addEventListener("beforetoggle", toggled);
+    element?.addEventListener("beforetoggle", changing);
+    element?.addEventListener("toggle", toggled);
 
-    return () => element?.removeEventListener("beforetoggle", toggled);
+    return () => {
+      element?.removeEventListener("beforetoggle", changing);
+      element?.removeEventListener("toggle", toggled);
+    };
   }, []);
 
   return { ref, open, hide: () => ref.current?.hidePopover() };

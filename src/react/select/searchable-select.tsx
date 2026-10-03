@@ -2,7 +2,6 @@ import {
   type KeyboardEvent,
   type ReactElement,
   type RefObject,
-  useLayoutEffect,
   useId,
   useRef,
   useState,
@@ -44,12 +43,13 @@ export type SearchableSelectProps = {
   submitOnChange?: boolean;
   onChange?: (values: string[]) => void;
   "aria-label"?: string;
+  "aria-labelledby"?: string;
   "data-testid"?: string;
   id?: string;
   disabled?: boolean;
   invalid?: boolean;
   search?: ServerSearch;
-  texts?: SelectTexts;
+  texts?: Partial<SelectTexts>;
 };
 
 function shown(
@@ -108,9 +108,10 @@ export function SearchableSelect({
   disabled = false,
   invalid,
   search,
-  texts = selectTexts,
+  texts: overrides,
   ...rest
 }: SearchableSelectProps): ReactElement {
+  const texts = { ...selectTexts, ...overrides };
   const listId = useId();
   const popoverId = useId();
   const mode = { multiple, clearable };
@@ -124,19 +125,16 @@ export function SearchableSelect({
   const anchor = useRef<HTMLInputElement | null>(null);
   const searchBox = useRef<HTMLInputElement | null>(null);
   const unsaved = useRef(false);
-  const popover = usePopover((open) => (open ? opened() : closed()));
+  const popover = usePopover(
+    (open) => (open ? opened() : closed()),
+    () => searchBox.current?.focus(),
+  );
   const { matches, labels, status } = shown(options, query, search);
   const showClear = clearShown(mode, query);
   const entries = listEntries(matches, showClear);
   const note = listNote(status, matches.length);
   const highlighted =
     active < entries.length ? active : firstOptionIndex(showClear);
-
-  useLayoutEffect(() => {
-    if (popover.open) {
-      searchBox.current?.focus();
-    }
-  }, [popover.open]);
 
   function submit(): void {
     requestAnimationFrame(() => anchor.current?.form?.requestSubmit());
@@ -225,6 +223,8 @@ export function SearchableSelect({
         aria-expanded={popover.open}
         aria-controls={listId}
         aria-label={rest["aria-label"]}
+        aria-labelledby={rest["aria-labelledby"]}
+        aria-haspopup="listbox"
         aria-invalid={invalid}
         aria-describedby={errorReference(id, invalid)}
         disabled={disabled}
@@ -236,97 +236,98 @@ export function SearchableSelect({
         id={popoverId}
         popover="auto"
         className="ui-popover ui-select-popover"
+        role="dialog"
+        aria-label={texts.search}
       >
-        {popover.open ? (
-          <>
-            <input
-              ref={searchBox}
-              type="text"
-              role="searchbox"
-              className="ui-input"
-              data-testid="select-search"
-              aria-label={texts.search}
-              aria-controls={listId}
-              {...(entries[highlighted] === undefined
-                ? {}
-                : {
-                    "aria-activedescendant": `${listId}-${String(highlighted)}`,
-                  })}
-              value={query}
-              placeholder={texts.typeToSearch}
-              onChange={(event) => {
-                const text = event.currentTarget.value;
+        <>
+          <input
+            ref={searchBox}
+            type="text"
+            role="searchbox"
+            className="ui-input"
+            data-testid="select-search"
+            aria-label={texts.search}
+            aria-controls={listId}
+            {...(entries[highlighted] === undefined
+              ? {}
+              : {
+                  "aria-activedescendant": `${listId}-${String(highlighted)}`,
+                })}
+            value={query}
+            placeholder={texts.typeToSearch}
+            onChange={(event) => {
+              const text = event.currentTarget.value;
 
-                setQuery(text);
-                search?.onQuery(text);
-                setActive(firstOptionIndex(clearShown(mode, text)));
-              }}
-              onKeyDown={onKeyDown}
-            />
-            <ul
-              id={listId}
-              role="listbox"
-              aria-multiselectable={multiple}
-              className="ui-listbox"
-            >
-              {showClear ? (
+              setQuery(text);
+              search?.onQuery(text);
+              setActive(firstOptionIndex(clearShown(mode, text)));
+            }}
+            onKeyDown={onKeyDown}
+          />
+          <ul
+            id={listId}
+            role="listbox"
+            aria-multiselectable={multiple}
+            className="ui-listbox"
+            onMouseDown={(event) => event.preventDefault()}
+          >
+            {showClear ? (
+              <li
+                id={`${listId}-0`}
+                role="option"
+                className="ui-option"
+                data-testid="option-none"
+                data-active={highlighted === 0}
+                aria-selected={selected.length === 0}
+                onMouseMove={() => setActive(0)}
+                onClick={clear}
+              >
+                {texts.none}
+              </li>
+            ) : null}
+            {matches.map((option, index) => {
+              const position = index + firstOptionIndex(showClear);
+
+              return (
                 <li
-                  id={`${listId}-0`}
+                  key={option.value}
+                  id={`${listId}-${String(position)}`}
                   role="option"
                   className="ui-option"
-                  data-testid="option-none"
-                  data-active={highlighted === 0}
-                  aria-selected={selected.length === 0}
-                  onMouseEnter={() => setActive(0)}
-                  onClick={clear}
+                  data-testid={`option-${option.value}`}
+                  data-active={position === highlighted}
+                  aria-selected={selected.includes(option.value)}
+                  onMouseMove={() => setActive(position)}
+                  onClick={() => choose(option.value)}
                 >
-                  {texts.none}
+                  <span>{option.label}</span>
+                  {option.hint === undefined ? null : (
+                    <span className="ui-option-hint">{option.hint}</span>
+                  )}
                 </li>
-              ) : null}
-              {matches.map((option, index) => {
-                const position = index + firstOptionIndex(showClear);
-
-                return (
-                  <li
-                    key={option.value}
-                    id={`${listId}-${String(position)}`}
-                    role="option"
-                    className="ui-option"
-                    data-testid={`option-${option.value}`}
-                    data-active={position === highlighted}
-                    aria-selected={selected.includes(option.value)}
-                    onMouseEnter={() => setActive(position)}
-                    onClick={() => choose(option.value)}
-                  >
-                    <span>{option.label}</span>
-                    {option.hint === undefined ? null : (
-                      <span className="ui-option-hint">{option.hint}</span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-            <p
-              role="status"
-              className="ui-select-note"
-              data-testid="select-note"
-              data-note={note}
+              );
+            })}
+          </ul>
+          <p
+            role="status"
+            className="ui-select-note"
+            data-testid="select-note"
+            data-note={note}
+          >
+            {note === ListNote.None ? "" : texts[note]}
+          </p>
+          {multiple ? (
+            <button
+              type="button"
+              className="ui-button ui-select-done"
+              data-variant="outline"
+              data-testid="select-done"
+              onClick={popover.hide}
             >
-              {note === ListNote.None ? "" : texts[note]}
-            </p>
-            {multiple ? (
-              <button
-                type="button"
-                className="ui-button ui-select-done"
-                data-variant="outline"
-                data-testid="select-done"
-                onClick={popover.hide}
-              >
-                {texts.done}
-              </button>
-            ) : null}
-          </>
-        ) : null}
+              {texts.done}
+            </button>
+          ) : null}
+        </>
       </div>
     </div>
   );
