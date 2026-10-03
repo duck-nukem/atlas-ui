@@ -201,7 +201,7 @@ export function SearchableSelect({
           entries.length,
         ),
       );
-    } else if (event.key === "Enter") {
+    } else if (event.key === "Enter" && !event.nativeEvent.isComposing) {
       event.preventDefault();
       pick(entries[highlighted]);
     }
@@ -221,10 +221,10 @@ export function SearchableSelect({
         data-open={popover.open}
         data-empty={selected.length === 0}
         aria-expanded={popover.open}
-        aria-controls={listId}
+        aria-controls={popoverId}
         aria-label={rest["aria-label"]}
         aria-labelledby={rest["aria-labelledby"]}
-        aria-haspopup="listbox"
+        aria-haspopup="dialog"
         aria-invalid={invalid}
         aria-describedby={errorReference(id, invalid)}
         disabled={disabled}
@@ -239,95 +239,98 @@ export function SearchableSelect({
         role="dialog"
         aria-label={texts.search}
       >
-        <>
-          <input
-            ref={searchBox}
-            type="text"
-            role="searchbox"
-            className="ui-input"
-            data-testid="select-search"
-            aria-label={texts.search}
-            aria-controls={listId}
-            {...(entries[highlighted] === undefined
-              ? {}
-              : {
-                  "aria-activedescendant": `${listId}-${String(highlighted)}`,
-                })}
-            value={query}
-            placeholder={texts.typeToSearch}
-            onChange={(event) => {
-              const text = event.currentTarget.value;
+        <input
+          ref={searchBox}
+          type="text"
+          role="searchbox"
+          className="ui-input"
+          data-testid="select-search"
+          aria-label={texts.search}
+          aria-controls={listId}
+          {...(entries[highlighted] === undefined
+            ? {}
+            : {
+                "aria-activedescendant": `${listId}-${String(highlighted)}`,
+              })}
+          value={query}
+          placeholder={texts.typeToSearch}
+          onChange={(event) => {
+            const text = event.currentTarget.value;
 
-              setQuery(text);
-              search?.onQuery(text);
-              setActive(firstOptionIndex(clearShown(mode, text)));
-            }}
-            onKeyDown={onKeyDown}
-          />
-          <ul
-            id={listId}
-            role="listbox"
-            aria-multiselectable={multiple}
-            className="ui-listbox"
-            onMouseDown={(event) => event.preventDefault()}
-          >
-            {showClear ? (
+            setQuery(text);
+            search?.onQuery(text);
+            setActive(firstOptionIndex(clearShown(mode, text)));
+          }}
+          onKeyDown={onKeyDown}
+        />
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label={
+            rest["aria-label"] ??
+            (rest["aria-labelledby"] === undefined ? texts.search : undefined)
+          }
+          aria-labelledby={rest["aria-labelledby"]}
+          aria-multiselectable={multiple}
+          className="ui-listbox"
+          onMouseDown={(event) => event.preventDefault()}
+        >
+          {showClear ? (
+            <li
+              id={`${listId}-0`}
+              role="option"
+              className="ui-option"
+              data-testid="option-none"
+              data-active={highlighted === 0}
+              aria-selected={selected.length === 0}
+              onMouseMove={() => setActive(0)}
+              onClick={clear}
+            >
+              {texts.none}
+            </li>
+          ) : null}
+          {matches.map((option, index) => {
+            const position = index + firstOptionIndex(showClear);
+
+            return (
               <li
-                id={`${listId}-0`}
+                key={option.value}
+                id={`${listId}-${String(position)}`}
                 role="option"
                 className="ui-option"
-                data-testid="option-none"
-                data-active={highlighted === 0}
-                aria-selected={selected.length === 0}
-                onMouseMove={() => setActive(0)}
-                onClick={clear}
+                data-testid={`option-${option.value}`}
+                data-active={position === highlighted}
+                aria-selected={selected.includes(option.value)}
+                onMouseMove={() => setActive(position)}
+                onClick={() => choose(option.value)}
               >
-                {texts.none}
+                <span>{option.label}</span>
+                {option.hint === undefined ? null : (
+                  <span className="ui-option-hint">{option.hint}</span>
+                )}
               </li>
-            ) : null}
-            {matches.map((option, index) => {
-              const position = index + firstOptionIndex(showClear);
-
-              return (
-                <li
-                  key={option.value}
-                  id={`${listId}-${String(position)}`}
-                  role="option"
-                  className="ui-option"
-                  data-testid={`option-${option.value}`}
-                  data-active={position === highlighted}
-                  aria-selected={selected.includes(option.value)}
-                  onMouseMove={() => setActive(position)}
-                  onClick={() => choose(option.value)}
-                >
-                  <span>{option.label}</span>
-                  {option.hint === undefined ? null : (
-                    <span className="ui-option-hint">{option.hint}</span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          <p
-            role="status"
-            className="ui-select-note"
-            data-testid="select-note"
-            data-note={note}
+            );
+          })}
+        </ul>
+        <p
+          role="status"
+          className="ui-select-note"
+          data-testid="select-note"
+          data-note={note}
+        >
+          {note === ListNote.None ? "" : texts[note]}
+        </p>
+        {multiple ? (
+          <button
+            type="button"
+            className="ui-button ui-select-done"
+            data-variant="outline"
+            data-testid="select-done"
+            onClick={popover.hide}
           >
-            {note === ListNote.None ? "" : texts[note]}
-          </p>
-          {multiple ? (
-            <button
-              type="button"
-              className="ui-button ui-select-done"
-              data-variant="outline"
-              data-testid="select-done"
-              onClick={popover.hide}
-            >
-              {texts.done}
-            </button>
-          ) : null}
-        </>
+            {texts.done}
+          </button>
+        ) : null}
       </div>
     </div>
   );

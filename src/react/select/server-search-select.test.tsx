@@ -248,9 +248,9 @@ describe("ServerSearchSelect", () => {
     const { user, trigger } = renderSelect(search);
     await user.click(trigger);
     await answer(search, 0, [anna, bob]);
-    await expect
-      .poll(() => document.activeElement)
-      .toBe(screen.getByTestId("select-search"));
+    await vi.waitUntil(
+      () => document.activeElement === screen.getByTestId("select-search"),
+    );
 
     await user.keyboard("{Enter}");
 

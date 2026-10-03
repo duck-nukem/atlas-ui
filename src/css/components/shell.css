@@ -103,6 +103,18 @@
     }
   }
 
+  .ui-nav-dot {
+    flex-shrink: 0;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--ui-radius-full);
+    background: var(--ui-color-danger);
+
+    @media (forced-colors: active) {
+      background: CanvasText;
+    }
+  }
+
   .ui-nav-heading {
     margin: 0 0 var(--ui-space-1);
     padding-inline: var(--ui-space-2);
@@ -134,15 +146,7 @@
     }
 
     & > .ui-nav-dot {
-      inline-size: 0.5rem;
-      block-size: 0.5rem;
       margin-inline-start: auto;
-      border-radius: var(--ui-radius-full);
-      background: var(--ui-color-danger);
-
-      @media (forced-colors: active) {
-        background: CanvasText;
-      }
     }
   }
 }

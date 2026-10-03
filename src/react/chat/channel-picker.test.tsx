@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "vitest/browser";
 import { ChannelPicker } from "./channel-picker";
 import type { ChannelEntry } from "./entries";
 
@@ -43,15 +43,11 @@ describe("ChannelPicker", () => {
   it("puts a dot on a channel that mentions the viewer", async () => {
     render(picker("random"));
 
-    await userEvent.click(screen.getByTestId("channel-picker"));
-
     expect(screen.getByTestId("attention-general")).toBeInTheDocument();
   });
 
-  it("lists channels and direct messages once opened", async () => {
+  it("lists channels and direct messages", async () => {
     render(picker("general"));
-
-    await userEvent.click(screen.getByTestId("channel-picker"));
 
     expect(screen.getByTestId("pick-dm-a-b")).toHaveAttribute(
       "href",
@@ -80,8 +76,6 @@ describe("ChannelPicker", () => {
   it("marks channels with unread messages", async () => {
     render(picker("random"));
 
-    await userEvent.click(screen.getByTestId("channel-picker"));
-
     expect(screen.getByTestId("pick-general")).toHaveAttribute(
       "data-unread",
       "true",
@@ -98,6 +92,29 @@ describe("ChannelPicker", () => {
       "aria-expanded",
       "false",
     );
+  });
+
+  it("moves focus to the search box when opened", async () => {
+    render(picker("general"));
+
+    await userEvent.click(screen.getByTestId("channel-picker"));
+
+    await expect
+      .poll(() => document.activeElement)
+      .toBe(screen.getByTestId("channel-search"));
+  });
+
+  it("follows the first match on Enter and gives focus back to the trigger", async () => {
+    render(picker("general"));
+    await userEvent.click(screen.getByTestId("channel-picker"));
+    await vi.waitUntil(
+      () => document.activeElement === screen.getByTestId("channel-search"),
+    );
+    await userEvent.type(screen.getByTestId("channel-search"), "ran");
+
+    await userEvent.keyboard("{Enter}");
+
+    expect(document.activeElement).toBe(screen.getByTestId("channel-picker"));
   });
 
   it("flags the picker when another channel wants attention", () => {

@@ -41,5 +41,14 @@ export function usePopover(
     };
   }, []);
 
-  return { ref, open, hide: () => ref.current?.hidePopover() };
+  function hide(): void {
+    const element = ref.current;
+
+    element?.hidePopover();
+    document
+      .querySelector<HTMLElement>(`[popovertarget="${element?.id ?? ""}"]`)
+      ?.focus();
+  }
+
+  return { ref, open, hide };
 }

@@ -25,13 +25,6 @@
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-
-    & > .ui-nav-dot {
-      inline-size: 0.5rem;
-      block-size: 0.5rem;
-      border-radius: var(--ui-radius-full);
-      background: var(--ui-color-danger);
-    }
   }
 
   .ui-channel-picker-popover {
@@ -42,6 +35,12 @@
       display: grid;
       gap: var(--ui-space-2);
     }
+  }
+
+  .ui-channel-picker-none {
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-2);
+    color: var(--ui-color-muted-fg);
   }
 
   .ui-channel-picker-list {

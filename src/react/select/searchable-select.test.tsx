@@ -372,6 +372,13 @@ describe("SearchableSelect saving on change", () => {
   });
 });
 
+async function openSelect(trigger: HTMLElement): Promise<void> {
+  await browser.click(trigger);
+  await vi.waitUntil(
+    () => document.activeElement === screen.getByTestId("select-search"),
+  );
+}
+
 describe("SearchableSelect focus", () => {
   it("moves focus to the search box when opened", async () => {
     render(
@@ -397,10 +404,7 @@ describe("SearchableSelect focus", () => {
         data-testid="select"
       />,
     );
-    await browser.click(screen.getByTestId("select"));
-    await expect
-      .poll(() => document.activeElement)
-      .toBe(screen.getByTestId("select-search"));
+    await openSelect(screen.getByTestId("select"));
 
     await browser.keyboard("{Escape}");
 
@@ -415,12 +419,25 @@ describe("SearchableSelect focus", () => {
         data-testid="select"
       />,
     );
-    await browser.click(screen.getByTestId("select"));
-    await expect
-      .poll(() => document.activeElement)
-      .toBe(screen.getByTestId("select-search"));
+    await openSelect(screen.getByTestId("select"));
 
     await browser.click(screen.getByRole("option", { name: "F-2 Chat" }));
+
+    expect(document.activeElement).toBe(screen.getByTestId("select"));
+  });
+
+  it("gives focus back to the trigger after done is pressed", async () => {
+    render(
+      <SearchableSelect
+        name="ids"
+        options={options}
+        multiple
+        data-testid="select"
+      />,
+    );
+    await openSelect(screen.getByTestId("select"));
+
+    await browser.click(screen.getByTestId("select-done"));
 
     expect(document.activeElement).toBe(screen.getByTestId("select"));
   });
@@ -439,6 +456,6 @@ describe("SearchableSelect focus", () => {
 
     const trigger = screen.getByRole("combobox", { name: "Feature" });
 
-    expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
+    expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   });
 });

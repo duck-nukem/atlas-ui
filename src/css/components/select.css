@@ -99,6 +99,7 @@
     color: var(--ui-color-muted-fg);
 
     &:empty {
+      margin-block-start: calc(var(--ui-space-1) * -1);
       padding: 0;
     }
 

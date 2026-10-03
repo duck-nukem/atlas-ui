@@ -13,6 +13,7 @@ export type ChannelPickerTexts = {
   none: string;
   new: string;
   attention: string;
+  unread: string;
 };
 
 export const channelPickerTexts: ChannelPickerTexts = {
@@ -22,6 +23,7 @@ export const channelPickerTexts: ChannelPickerTexts = {
   none: "Nothing matches",
   new: "New channel",
   attention: "Messages for you",
+  unread: "Unread",
 };
 
 export type ChannelPickerProps = {
@@ -76,6 +78,7 @@ export function ChannelPicker({
         data-testid="channel-picker"
         data-attention={attention}
         aria-expanded={popover.open}
+        aria-haspopup="dialog"
       >
         <span>{label}</span>
         {attention ? (
@@ -91,81 +94,85 @@ export function ChannelPicker({
         id={popoverId}
         popover="auto"
         className="ui-popover ui-channel-picker-popover"
+        role="dialog"
+        aria-label={texts.search}
       >
-        <>
-          <input
-            ref={searchBox}
-            type="search"
-            className="ui-input"
-            value={query}
-            placeholder={texts.search}
-            aria-label={texts.search}
-            data-testid="channel-search"
-            onChange={(event) => setQuery(event.currentTarget.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                list.current?.querySelector("a")?.click();
-              }
-            }}
-          />
-          <div ref={list} className="ui-channel-picker-list">
-            {sections.map((section) => (
-              <section
-                key={section.key}
-                aria-labelledby={`${popoverId}-${section.key}`}
-              >
-                <h2
-                  id={`${popoverId}-${section.key}`}
-                  className="ui-nav-heading"
-                >
-                  {section.title}
-                </h2>
-                <ul role="list">
-                  {section.items.map((entry) => (
-                    <li key={entry.id}>
-                      <a
-                        className="ui-nav-link"
-                        href={entry.href}
-                        data-testid={`pick-${entry.id}`}
-                        data-unread={entry.unread}
-                        data-direct={entry.direct}
-                        aria-current={
-                          entry.id === activeId ? "page" : undefined
-                        }
-                        onClick={popover.hide}
-                      >
-                        <span>{entry.label}</span>
-                        {entry.mentioned && entry.id !== activeId ? (
-                          <span
-                            className="ui-nav-dot"
-                            role="img"
-                            aria-label={texts.attention}
-                            data-testid={`attention-${entry.id}`}
-                          />
-                        ) : null}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
-            {sections.length === 0 ? (
-              <p className="ui-select-note" data-testid="no-channel-match">
-                {texts.none}
-              </p>
-            ) : null}
-          </div>
-          <a
-            className="ui-button"
-            data-variant="ghost"
-            data-size="sm"
-            href={newHref}
-            onClick={popover.hide}
-          >
-            {texts.new}
-          </a>
-        </>
+        <input
+          ref={searchBox}
+          type="search"
+          className="ui-input"
+          value={query}
+          placeholder={texts.search}
+          aria-label={texts.search}
+          data-testid="channel-search"
+          onChange={(event) => setQuery(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+              event.preventDefault();
+              list.current?.querySelector("a")?.click();
+            }
+          }}
+        />
+        <div ref={list} className="ui-channel-picker-list">
+          {sections.map((section) => (
+            <section
+              key={section.key}
+              aria-labelledby={`${popoverId}-${section.key}`}
+            >
+              <h2 id={`${popoverId}-${section.key}`} className="ui-nav-heading">
+                {section.title}
+              </h2>
+              {/* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- Safari drops list semantics when list-style is none */}
+              <ul role="list">
+                {section.items.map((entry) => (
+                  <li key={entry.id}>
+                    <a
+                      className="ui-nav-link"
+                      href={entry.href}
+                      data-testid={`pick-${entry.id}`}
+                      data-unread={entry.unread}
+                      data-direct={entry.direct}
+                      aria-current={entry.id === activeId ? "page" : undefined}
+                      onClick={popover.hide}
+                    >
+                      <span>{entry.label}</span>
+                      {entry.unread ? (
+                        <span className="ui-visually-hidden">
+                          , {texts.unread}
+                        </span>
+                      ) : null}
+                      {entry.mentioned && entry.id !== activeId ? (
+                        <span
+                          className="ui-nav-dot"
+                          role="img"
+                          aria-label={texts.attention}
+                          data-testid={`attention-${entry.id}`}
+                        />
+                      ) : null}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+          {sections.length === 0 ? (
+            <p
+              className="ui-channel-picker-none"
+              data-testid="no-channel-match"
+            >
+              {texts.none}
+            </p>
+          ) : null}
+        </div>
+        <a
+          className="ui-button"
+          data-variant="ghost"
+          data-size="sm"
+          href={newHref}
+          onClick={popover.hide}
+        >
+          {texts.new}
+        </a>
       </div>
     </div>
   );
