@@ -111,35 +111,35 @@
     }
 
     & > button:nth-child(1) {
-      --ui-segment: color-mix(in oklch, var(--chart-red) 55%, var(--muted));
+      --ui-segment: var(--task-paused);
     }
 
     & > button:nth-child(2) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 39%, var(--muted));
+      --ui-segment: var(--task-specifying);
     }
 
     & > button:nth-child(3) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 47%, var(--muted));
+      --ui-segment: var(--task-ready);
     }
 
     & > button:nth-child(4) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 56%, var(--muted));
+      --ui-segment: var(--task-implementing);
     }
 
     & > button:nth-child(5) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 64%, var(--muted));
+      --ui-segment: var(--task-in-review);
     }
 
     & > button:nth-child(6) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 73%, var(--muted));
+      --ui-segment: var(--task-testing);
     }
 
     & > button:nth-child(7) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 81%, var(--muted));
+      --ui-segment: var(--task-awaiting-deployment);
     }
 
     & > button:nth-child(8) {
-      --ui-segment: color-mix(in oklch, var(--chart-green) 90%, var(--muted));
+      --ui-segment: var(--task-done);
     }
   }
 

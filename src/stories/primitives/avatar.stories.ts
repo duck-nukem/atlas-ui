@@ -1,5 +1,6 @@
 import type { Meta } from "@storybook/html-vite";
 import { html, select, type Story } from "../html";
+import { avatar, peopleStack } from "./people";
 
 type Args = {
   names: string;
@@ -8,32 +9,11 @@ type Args = {
   shown: number;
 };
 
-const initials = (name: string) =>
-  name
-    .split(" ")
-    .map((part) => part[0] ?? "")
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-const avatar = (name: string, tone: number, size: string) =>
-  `<span class="ui-avatar"${size === "default" ? "" : ` data-size="${size}"`}><span data-tone="${tone}">${initials(name)}</span></span>`;
-
-const stack = ({ names, shown }: Args) => {
-  const people = names.split(",").map((name) => name.trim());
-  const more = people.length - shown;
-
-  return `<button class="ui-avatar-stack" type="button" aria-label="${people.join(", ")}">
-  <span class="ui-avatar-group">
-    ${people
-      .slice(0, shown)
-      .map((name, index) => avatar(name, index % 8, "sm"))
-      .join(
-        "",
-      )}${more > 0 ? `<span class="ui-avatar-group-count">+${more}</span>` : ""}
-  </span>
-</button>`;
-};
+const stack = ({ names, shown }: Args) =>
+  peopleStack(
+    names.split(",").map((name) => name.trim()),
+    shown,
+  );
 
 export default {
   title: "Primitives/Avatar",

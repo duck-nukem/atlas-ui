@@ -136,3 +136,23 @@
     var(--foreground)
   );
 }
+
+:root,
+.dark {
+  --task-paused: color-mix(in oklch, var(--chart-red) 55%, var(--muted));
+  --task-specifying: color-mix(in oklch, var(--chart-green) 39%, var(--muted));
+  --task-ready: color-mix(in oklch, var(--chart-green) 47%, var(--muted));
+  --task-implementing: color-mix(
+    in oklch,
+    var(--chart-green) 56%,
+    var(--muted)
+  );
+  --task-in-review: color-mix(in oklch, var(--chart-green) 64%, var(--muted));
+  --task-testing: color-mix(in oklch, var(--chart-green) 73%, var(--muted));
+  --task-awaiting-deployment: color-mix(
+    in oklch,
+    var(--chart-green) 81%,
+    var(--muted)
+  );
+  --task-done: color-mix(in oklch, var(--chart-green) 90%, var(--muted));
+}
