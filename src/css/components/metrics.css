@@ -1,0 +1,197 @@
+@layer components {
+  .ui-metrics {
+    @apply grid gap-6 sm:grid-cols-2;
+
+    &[data-order="lead-first"] {
+      @apply flex flex-col-reverse sm:grid;
+    }
+  }
+
+  .ui-metric {
+    @apply @container grid content-start gap-1 border-t-2 pt-3;
+
+    &[data-rating="elite"],
+    &[data-rating="good"] {
+      border-top-color: var(--chart-green);
+    }
+
+    &[data-rating="warning"] {
+      border-top-color: var(--chart-yellow);
+    }
+
+    &[data-rating="error"] {
+      border-top-color: var(--chart-red);
+    }
+
+    & > dt {
+      @apply flex items-center justify-between gap-2 text-sm font-medium [&_svg]:size-5 [&_svg]:shrink-0;
+    }
+  }
+
+  .ui-metric-value {
+    @apply text-5xl font-semibold tracking-tight tabular-nums;
+
+    &[data-text] {
+      @apply text-[clamp(2rem,9cqi,3rem)] leading-none text-balance;
+    }
+  }
+
+  .ui-metric-unit {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .ui-metric-note {
+    @apply text-sm font-medium;
+  }
+
+  .ui-metric-rows {
+    @apply grid border-b;
+  }
+
+  .ui-metric-row {
+    @apply grid gap-x-4 gap-y-1 border-t py-3 sm:grid-cols-[9rem_minmax(0,1fr)_auto] sm:items-baseline;
+
+    & > dt {
+      @apply flex items-center gap-2 text-sm font-medium [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:self-center;
+    }
+
+    & > .ui-metric-unit > span {
+      @apply font-semibold text-foreground tabular-nums;
+    }
+
+    & > .ui-metric-note {
+      @apply sm:col-start-3 sm:row-start-1 sm:text-right;
+    }
+
+    & > .ui-trend {
+      @apply sm:col-start-2;
+    }
+  }
+
+  .ui-rating-icon {
+    color: var(--chart-neutral);
+
+    &[data-rating="elite"],
+    &[data-rating="good"] {
+      color: var(--chart-green);
+    }
+
+    &[data-rating="warning"] {
+      color: var(--chart-yellow);
+    }
+
+    &[data-rating="error"] {
+      color: var(--chart-red);
+    }
+  }
+
+  .ui-trend {
+    @apply flex items-center gap-1 text-xs text-muted-foreground [&_svg]:size-4 [&_svg]:shrink-0;
+
+    &[data-progress="improved"] svg {
+      color: var(--chart-green);
+    }
+
+    &[data-progress="worsened"] svg {
+      color: var(--chart-red);
+    }
+  }
+
+  .ui-rating-link {
+    @apply inline-flex items-center gap-1 underline decoration-dotted underline-offset-4;
+  }
+
+  .ui-thresholds {
+    & > p {
+      @apply pb-1;
+    }
+
+    & > dl {
+      @apply grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1;
+    }
+
+    & dt {
+      @apply opacity-70;
+    }
+
+    & dd {
+      @apply tabular-nums;
+    }
+
+    & [aria-current] {
+      @apply font-semibold opacity-100;
+    }
+  }
+
+  .ui-status-tiles {
+    @apply grid grid-cols-2 gap-0.5 overflow-hidden rounded-lg sm:grid-cols-3 lg:grid-cols-5;
+
+    & > li {
+      @apply relative grid grid-rows-[1fr_auto_auto] gap-0.5 bg-muted p-3;
+
+      &::before {
+        @apply absolute inset-x-0 bottom-0 content-[''];
+
+        height: var(--ui-share);
+        background: color-mix(in oklch, var(--ui-status) 45%, var(--muted));
+        forced-color-adjust: none;
+      }
+
+      & > span {
+        @apply relative text-xs;
+      }
+
+      & > span:nth-child(2) {
+        @apply text-xl font-semibold tabular-nums;
+      }
+
+      & > span:nth-child(3) {
+        @apply text-muted-foreground tabular-nums;
+      }
+
+      &[data-bottleneck] > span:first-child {
+        @apply font-semibold;
+      }
+    }
+
+    & > li[data-step="0"] {
+      --ui-status: color-mix(in oklch, var(--chart-red) 55%, var(--muted));
+    }
+
+    & > li[data-step="1"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 39%, var(--muted));
+    }
+
+    & > li[data-step="2"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 47%, var(--muted));
+    }
+
+    & > li[data-step="3"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 56%, var(--muted));
+    }
+
+    & > li[data-step="4"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 64%, var(--muted));
+    }
+
+    & > li[data-step="5"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 73%, var(--muted));
+    }
+
+    & > li[data-step="6"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 81%, var(--muted));
+    }
+
+    & > li[data-step="7"] {
+      --ui-status: color-mix(in oklch, var(--chart-green) 90%, var(--muted));
+    }
+
+    & > li[data-alarm="warning"] {
+      --ui-status: var(--chart-yellow);
+    }
+
+    & > li[data-alarm="error"] {
+      --ui-status: var(--chart-red);
+    }
+  }
+}
