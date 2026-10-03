@@ -1,7 +1,9 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react", "jsx-a11y", "vitest"],
-  "categories": { "correctness": "error" },
+  "categories": {
+    "correctness": "error"
+  },
   "ignorePatterns": ["dist/**", "storybook-static/**"],
   "rules": {
     "jsx-a11y/alt-text": "error",
@@ -30,9 +32,6 @@
     "jsx-a11y/role-has-required-aria-props": "error",
     "jsx-a11y/role-supports-aria-props": "error",
     "jsx-a11y/scope": "error",
-    "jsx-a11y/tabindex-no-positive": "error",
-    "no-unused-vars": "error",
-    "react/jsx-key": "error",
-    "react/no-danger": "off"
+    "jsx-a11y/tabindex-no-positive": "error"
   }
 }

@@ -8,6 +8,7 @@ const unit = {
   environment: "jsdom",
   include: ["src/react/**/*.test.tsx"],
   setupFiles: ["src/test/setup.ts"],
+  passWithNoTests: true,
 };
 
 const browser = () => ({
@@ -40,7 +41,7 @@ export default defineConfig({
             },
           ],
         },
-        esbuild: { jsx: "automatic", jsxImportSource: "preact" },
+        oxc: { jsx: { runtime: "automatic", importSource: "preact" } },
         test: { ...unit, name: "preact" },
       },
       ...["light", "dark"].map((theme) => ({

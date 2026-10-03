@@ -22,6 +22,7 @@ Every token is a `--ui-*` custom property in `src/css/tokens.css`. Colours use `
 ## Develop
 
 ```sh
+npx playwright install chromium
 npm run storybook
 npm run check
 ```
