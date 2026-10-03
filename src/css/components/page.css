@@ -122,3 +122,37 @@
     }
   }
 }
+
+@layer components {
+  .ui-choose {
+    @apply flex flex-col items-center gap-4 rounded-lg border border-dashed px-8 py-16 text-center sm:px-16;
+
+    & > div {
+      @apply flex items-center gap-3 [&_svg]:size-10 [&_svg]:shrink-0 [&_svg]:text-muted-foreground;
+    }
+
+    & h2 {
+      @apply text-xl font-medium;
+    }
+
+    & > p {
+      @apply max-w-md text-sm text-muted-foreground;
+    }
+
+    & > ul {
+      @apply flex max-w-full flex-wrap justify-center gap-2;
+
+      & > li {
+        @apply max-w-full;
+
+        & > .ui-button {
+          @apply max-w-full;
+        }
+
+        & span {
+          @apply truncate;
+        }
+      }
+    }
+  }
+}

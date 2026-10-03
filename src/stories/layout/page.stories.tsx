@@ -91,6 +91,20 @@ export const WithBreadcrumbs = html(breadcrumbs);
 
 export const BreadcrumbsMobile = mobile(breadcrumbs);
 
+const choose = `
+<section class="ui-choose" aria-labelledby="choose-title">
+  <div>${icon("app-window")}<h2 id="choose-title">Choose an application</h2></div>
+  <p>Delivery metrics are calculated for each application you deploy, even across several repositories. Please select an application from the menu.</p>
+  <ul>
+    <li><a class="ui-button" data-variant="outline" data-size="sm" href="#back-office"><span>Back office</span></a></li>
+    <li><a class="ui-button" data-variant="outline" data-size="sm" href="#webapp"><span>Webapp</span></a></li>
+  </ul>
+</section>`;
+
+export const ChooseApplication = html(choose);
+
+export const ChooseApplicationMobile = mobile(choose);
+
 export const Empty = html(`<p class="ui-empty">No releases yet</p>`);
 
 export const Mobile = mobile(`<div class="ui-page">${header}${section}</div>`);
