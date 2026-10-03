@@ -6,6 +6,12 @@ export type Popover = {
   hide: () => void;
 };
 
+function invokerOf(element: HTMLElement | null): HTMLElement | null {
+  return document.querySelector<HTMLElement>(
+    `[popovertarget="${element?.id ?? ""}"]`,
+  );
+}
+
 export function usePopover(
   onChange: (open: boolean) => void,
   onShown: () => void,
@@ -20,15 +26,20 @@ export function usePopover(
 
   useLayoutEffect(() => {
     const element = ref.current;
+    let focusedInside = false;
     const changing = (event: Event): void => {
       const next = (event as ToggleEvent).newState === "open";
 
+      focusedInside =
+        !next && element?.contains(document.activeElement) === true;
       setOpen(next);
       handlers.current.onChange(next);
     };
     const toggled = (event: Event): void => {
       if ((event as ToggleEvent).newState === "open") {
         handlers.current.onShown();
+      } else if (focusedInside) {
+        invokerOf(element)?.focus();
       }
     };
 
@@ -42,12 +53,8 @@ export function usePopover(
   }, []);
 
   function hide(): void {
-    const element = ref.current;
-
-    element?.hidePopover();
-    document
-      .querySelector<HTMLElement>(`[popovertarget="${element?.id ?? ""}"]`)
-      ?.focus();
+    ref.current?.hidePopover();
+    invokerOf(ref.current)?.focus();
   }
 
   return { ref, open, hide };
