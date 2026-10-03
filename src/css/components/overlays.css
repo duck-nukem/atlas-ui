@@ -3,17 +3,26 @@
     @apply min-w-32 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10;
 
     width: anchor-size(width);
+    max-width: --spacing(72);
     margin: 0;
-    position-area: block-end span-inline-start;
+    position-area: block-end span-inline-end;
     position-try-fallbacks: flip-block, flip-inline;
     margin-block: --spacing(1);
+  }
+
+  .ui-menu[data-align="end"] {
+    position-area: block-end span-inline-start;
   }
 
   .ui-menu-item {
     @apply relative flex w-full cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-left text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-']):not([data-size])]:size-4;
 
+    &[aria-disabled="true"] {
+      @apply pointer-events-none opacity-50;
+    }
+
     &[data-variant="destructive"] {
-      @apply text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive dark:hover:bg-destructive/20 dark:focus:bg-destructive/20;
+      @apply text-destructive *:[svg]:text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive dark:hover:bg-destructive/20 dark:focus:bg-destructive/20;
     }
   }
 

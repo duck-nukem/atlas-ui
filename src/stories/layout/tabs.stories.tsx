@@ -2,9 +2,9 @@ import type { Meta } from "@storybook/react-vite";
 import { html, mobile } from "../html";
 
 const tabs = `
-<nav class="ui-tabs" aria-label="Health">
+<nav class="ui-tabs" aria-label="Delivery sections">
   <a class="ui-tab" href="#metrics" aria-current="page">Metrics</a>
-  <a class="ui-tab" href="#suggestions">Suggestions<span class="ui-dot" role="status" aria-label="Needs attention"></span></a>
+  <a class="ui-tab" href="#suggestions">Suggestions<span class="ui-tab-alert" role="img" aria-label="Something needs attention and nothing is adopted for it yet"></span></a>
 </nav>`;
 
 export default { title: "Layout/Tabs" } satisfies Meta;
@@ -12,7 +12,7 @@ export default { title: "Layout/Tabs" } satisfies Meta;
 export const Links = html(tabs);
 
 export const Disabled = html(`
-<nav class="ui-tabs" aria-label="Pull request">
+<nav class="ui-tabs" aria-label="Repository sections">
   <a class="ui-tab" href="#conversation" aria-current="page">Conversation</a>
   <button class="ui-tab" type="button" aria-disabled="true">Commits</button>
 </nav>`);

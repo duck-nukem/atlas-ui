@@ -37,8 +37,23 @@
     & > aside {
       @apply grid content-start gap-6 lg:sticky lg:self-start;
 
-      top: calc(var(--page-header-height, 0px) + 1.5rem);
+      top: min(
+        calc(var(--page-header-height, 0px) + 1.5rem),
+        calc(100vh - var(--aside-height, 0px) - 1.5rem)
+      );
     }
+  }
+
+  .ui-section {
+    @apply grid gap-2;
+  }
+
+  .ui-section-row {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  .ui-page-title-name {
+    @apply flex min-w-0 flex-wrap items-center gap-2;
   }
 
   .ui-section-heading {
@@ -56,11 +71,11 @@
   .ui-item-list {
     @apply divide-y rounded-md border;
 
-    &[data-variant="ruled"] {
+    &:where([data-variant="ruled"]) {
       @apply rounded-none border-x-0 border-y;
     }
 
-    &[data-variant="plain"] {
+    &:where([data-variant="plain"]) {
       @apply rounded-none border-0;
     }
 

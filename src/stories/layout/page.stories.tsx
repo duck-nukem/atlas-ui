@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react-vite";
 import { html, icon, mobile } from "../html";
 
 const header = `
-<div class="ui-page-header" style="position:static;margin:0">
+<div class="ui-page-header">
   <div class="ui-page-title">
     <h1>Flow</h1>
     <p>How work moves from started to released, where it waits, and what could help.</p>
@@ -10,24 +10,34 @@ const header = `
 </div>`;
 
 const withActions = `
-<div class="ui-page-header" style="position:static;margin:0">
+<div class="ui-page-header">
   <div class="ui-page-title">
     <div class="ui-page-title-row"><h1>Tasks</h1><div class="ui-page-actions"><a class="ui-button" href="#new">New task</a></div></div>
   </div>
 </div>`;
 
 const section = `
-<section class="ui-section-heading">
-  <h2>Where time is spent</h2>
-  <p>How long the 224 tasks finished in the last 30 days stayed in each status, from the moment work on them started until they were released.</p>
+<section class="ui-section">
+  <div class="ui-section-heading">
+    <h2>Where time is spent</h2>
+    <p>How long the 224 tasks finished in the last 30 days stayed in each status, from the moment work on them started until they were released.</p>
+  </div>
+</section>`;
+
+const sectionWithAction = `
+<section class="ui-section">
+  <div class="ui-section-heading">
+    <div class="ui-section-row"><h2>Application health</h2><a class="ui-button" data-variant="outline" data-size="sm" href="#releases">See releases</a></div>
+    <p>Rated on the releases of the last 30 days.</p>
+  </div>
 </section>`;
 
 const aside = `
 <div class="ui-page">
   ${withActions}
   <div class="ui-page-split">
-    <div><p>Teams want the cycle time chart as a file they can paste into a report.</p></div>
-    <aside aria-label="Details"><p class="ui-empty">No assignee</p></aside>
+    <div><p class="ui-empty">Pick an application in the menu to cut a release</p></div>
+    <aside aria-label="Details"><p class="ui-empty">No releases yet</p></aside>
   </div>
 </div>`;
 
@@ -41,6 +51,15 @@ export const SectionHeading = html(section);
 
 export const WithAside = html(aside);
 
+export const SectionWithAction = html(sectionWithAction);
+
+export const TitleWithBadge = html(`
+<div class="ui-page-header">
+  <div class="ui-page-title">
+    <div class="ui-page-title-name"><h1>G-7 Provide useful suggestions to our customers</h1><span class="ui-badge">Active</span></div>
+  </div>
+</div>`);
+
 export const ItemList = html(`
 <ul class="ui-item-list">
   <li>Webapp</li>
@@ -48,7 +67,7 @@ export const ItemList = html(`
 </ul>`);
 
 const breadcrumbs = `
-<div class="ui-page-header" style="position:static;margin:0">
+<div class="ui-page-header">
   <nav class="ui-breadcrumbs" aria-label="Breadcrumb">
     <a class="ui-back" data-mobile-only href="#space-clone">${icon("chevron-left")}Space Clone</a>
     <ol>

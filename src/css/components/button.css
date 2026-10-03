@@ -24,15 +24,29 @@
     }
 
     &:where([data-size="sm"]) {
-      @apply h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] [&_svg:not([class*='size-']):not([data-size])]:size-3.5;
+      @apply h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-']):not([data-size])]:size-3.5;
     }
 
     &:where([data-size="icon"]) {
-      @apply size-8 px-0;
+      @apply size-8 px-0 has-data-[icon]:px-0;
     }
 
     &:where([data-size="icon-sm"]) {
-      @apply size-7 rounded-[min(var(--radius-md),12px)] px-0;
+      @apply size-7 rounded-[min(var(--radius-md),12px)] px-0 has-data-[icon]:px-0;
+    }
+
+    &:has(> .ui-unread) {
+      @apply relative;
+    }
+
+    &:where([data-variant="outline"], [data-variant="ghost"]):has(
+        + :popover-open
+      ) {
+      @apply bg-muted text-foreground;
+    }
+
+    &:where([data-variant="secondary"]):has(+ :popover-open) {
+      @apply bg-secondary text-secondary-foreground;
     }
   }
 }

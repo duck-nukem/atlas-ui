@@ -5,7 +5,7 @@ import { shell } from "./shell";
 
 const page = shell(`
 <div class="ui-page">
-  <div class="ui-page-header" style="position:static">
+  <div class="ui-page-header">
     <div class="ui-page-title"><div class="ui-page-title-row"><h1>Tasks</h1><div class="ui-page-actions"><a class="ui-button" href="#new">New task</a></div></div></div>
   </div>
 </div>`);

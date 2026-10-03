@@ -1,11 +1,17 @@
-html {
-  @apply h-full antialiased;
-}
+@layer base {
+  html {
+    @apply h-full antialiased;
+  }
 
-body {
-  @apply flex min-h-full flex-col;
+  body {
+    @apply flex min-h-full flex-col;
 
-  font-family: var(--font-sans), system-ui, sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+
+  body:has(dialog:modal) {
+    @apply overflow-hidden;
+  }
 }
 
 @layer base {

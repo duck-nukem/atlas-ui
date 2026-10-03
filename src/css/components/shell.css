@@ -75,6 +75,38 @@
     }
   }
 
+  .ui-selector {
+    @apply w-full min-w-0 justify-start;
+
+    & > span {
+      @apply truncate;
+    }
+
+    & > svg:last-child {
+      @apply ml-auto size-4 shrink-0;
+    }
+  }
+
+  .ui-account .ui-avatar {
+    @apply size-7;
+  }
+
+  .ui-account-name {
+    @apply grid;
+
+    & > span + span {
+      @apply text-xs font-normal text-muted-foreground;
+    }
+  }
+
+  .ui-nav-sheet {
+    @apply w-64 p-3;
+
+    & > h2 {
+      @apply px-2 py-1 text-sm font-semibold;
+    }
+  }
+
   .ui-dot {
     @apply ml-auto size-2 shrink-0 rounded-full bg-destructive;
   }
