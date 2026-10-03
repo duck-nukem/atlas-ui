@@ -14,6 +14,8 @@ import "atlas-ui/atlas-ui.css";
 import { ChannelPicker, SearchableSelect } from "atlas-ui";
 ```
 
+Load `atlas-ui/interest.js` and call `installInterest()` once, so hover popovers open on hover in browsers without `interestfor` (Safari, Firefox).
+
 Serve `atlas-ui/icons.svg` and reference icons as `<svg class="ui-icon" aria-hidden="true"><use href="/icons.svg#bell"/></svg>`. Storybook shows the markup of every component.
 
 ## Theming
@@ -49,4 +51,4 @@ npm run storybook
 npm run check
 ```
 
-Every story is tested with axe in light and dark mode, in Chromium and WebKit, and every component has a Mobile story at 375px.
+Every story has controls, and its Code panel shows the HTML that story renders. Use the viewport picker for phone sizes. Storybook's Run tests button runs the stories with axe in Chromium. `npm test` runs every story in light and dark mode in Chromium and WebKit, plus the React components under React and Preact.
