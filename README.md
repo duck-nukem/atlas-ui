@@ -23,7 +23,7 @@ Every token is a `--ui-*` custom property in `src/css/tokens.css`. Colours use `
 
 The kit targets Chrome 135, Safari 26.2 and Firefox 144 or later, which open dialogs with `commandfor` and popovers with `popovertarget` without script. Hover popovers use `interestfor`; where it is missing they open on tap. Popovers sit next to their trigger where anchor positioning exists and in the centre of the screen elsewhere.
 
-The app shell scrolls its content area, not the window. A client-side router has to close the menu drawer after it navigates.
+The app shell scrolls its content area, not the window. `.ui-page` is a size container, so anything fixed inside it, like a toast, belongs in a popover instead. Buttons show a pressed state only in the outline and ghost variants. A client-side router has to close the menu drawer after it navigates.
 
 ## Develop
 

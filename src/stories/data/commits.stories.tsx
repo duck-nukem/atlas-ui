@@ -45,14 +45,14 @@ const list = `
       ([day, commits]) => `
   <div>
     <h3>${day}</h3>
-    <ol>
+    <ol role="list">
       ${commits
         .map(
           ([sha, message, author, initials, tone, when]) => `
       <li class="ui-commit">
         <span class="ui-avatar" data-size="sm" data-tone="${tone}" aria-hidden="true">${initials}</span>
         <a class="ui-commit-message" href="#${sha}">${message}</a>
-        <span class="ui-commit-meta">${author} committed ${when}</span>
+        <span class="ui-commit-meta">${author} committed <time datetime="2026-10-03">${when}</time></span>
         <a class="ui-badge ui-commit-sha" data-variant="outline" href="#${sha}" aria-label="Commit ${sha}">${sha}</a>
       </li>`,
         )

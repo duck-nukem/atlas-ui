@@ -4,6 +4,7 @@
     overflow-x: auto;
     border: 1px solid var(--ui-color-border);
     border-radius: var(--ui-radius-lg);
+    container-type: inline-size;
   }
 
   .ui-table {
@@ -41,8 +42,14 @@
       white-space: nowrap;
     }
 
-    & tbody tr:hover {
-      background: color-mix(in oklch, var(--ui-color-muted) 50%, transparent);
+    @media (hover: hover) {
+      & tbody tr:hover {
+        background: color-mix(in oklch, var(--ui-color-muted) 50%, transparent);
+      }
+    }
+
+    & [data-nowrap] {
+      white-space: nowrap;
     }
 
     & [data-align="end"] {
@@ -68,22 +75,22 @@
     }
 
     &::after {
-      content: "↕";
-      opacity: 0.5;
+      content: "↕" / "";
+      opacity: 0.7;
     }
 
     [aria-sort="ascending"] > &::after {
-      content: "↑";
+      content: "↑" / "";
       opacity: 1;
     }
 
     [aria-sort="descending"] > &::after {
-      content: "↓";
+      content: "↓" / "";
       opacity: 1;
     }
   }
 
-  @media (width < 640px) {
+  @container (width < 40rem) {
     .ui-table[data-stack] {
       & thead {
         position: absolute;
@@ -107,7 +114,7 @@
         text-align: start;
 
         &::before {
-          content: attr(data-label);
+          content: attr(data-label) / "";
           color: var(--ui-color-muted-fg);
           font-size: var(--ui-font-size-xs);
         }
@@ -150,6 +157,12 @@
     & a[aria-current="page"] {
       --ui-button-bg: var(--ui-color-accent);
       --ui-button-border: var(--ui-color-ring);
+
+      font-weight: 700;
+
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+      }
     }
   }
 }
