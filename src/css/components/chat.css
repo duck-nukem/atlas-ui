@@ -1,0 +1,283 @@
+@layer components {
+  .ui-chat {
+    @apply flex min-h-0 flex-1 flex-col gap-4;
+  }
+
+  .ui-channel-header {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-2 border-b pb-2;
+
+    & > h1 {
+      @apply sr-only;
+    }
+
+    & > atlas-channel-picker {
+      @apply mr-auto;
+    }
+
+    & > p {
+      @apply min-w-0 flex-1 truncate text-sm text-muted-foreground;
+    }
+  }
+
+  .ui-channel-actions {
+    @apply flex items-center gap-2;
+
+    & > [data-wide-only] {
+      @apply hidden items-center gap-2 sm:flex;
+    }
+
+    & > [data-phones-only] {
+      @apply sm:hidden;
+    }
+  }
+
+  .ui-channel-members {
+    @apply shrink-0 rounded-full;
+
+    & .ui-avatar-group-count {
+      @apply text-xs;
+    }
+  }
+
+  .ui-popover:is([data-size="members"], [data-size="reactions"]):popover-open {
+    @apply grid;
+  }
+
+  .ui-popover[data-size="members"] {
+    @apply w-64 gap-2 p-2;
+
+    position-area: block-end span-inline-start;
+
+    & > p {
+      @apply px-2 text-xs text-muted-foreground;
+    }
+
+    & > p:first-child {
+      @apply font-medium;
+    }
+
+    & > ul {
+      @apply grid max-h-80 gap-0.5 overflow-y-auto;
+    }
+  }
+
+  .ui-member {
+    @apply flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-sm enabled:hover:bg-accent;
+
+    & > span:nth-child(2) {
+      @apply truncate;
+    }
+
+    & > span:nth-child(3) {
+      @apply text-xs text-muted-foreground;
+    }
+  }
+
+  .ui-direct {
+    @apply contents;
+  }
+
+  .ui-chat-room {
+    @apply flex min-h-0 flex-1 flex-col gap-2;
+  }
+
+  .ui-chat-scroll {
+    @apply flex min-h-0 flex-1 flex-col-reverse overflow-y-auto;
+  }
+
+  .ui-chat-typing {
+    @apply min-h-4 text-xs text-muted-foreground;
+  }
+
+  .ui-chat-index {
+    @apply grid content-start gap-2;
+
+    & > h1 {
+      @apply sr-only;
+    }
+
+    & > div {
+      @apply border-b pb-2;
+    }
+  }
+
+  .ui-chat-none {
+    @apply text-sm text-muted-foreground;
+
+    & a {
+      @apply underline;
+    }
+  }
+
+  .ui-chat-empty {
+    @apply px-2 text-sm text-muted-foreground;
+  }
+
+  .ui-chat-lines {
+    @apply grid py-2 text-sm;
+
+    & time {
+      @apply mr-2 text-xs text-muted-foreground tabular-nums;
+    }
+  }
+
+  .ui-day-break {
+    @apply my-2 flex items-center gap-2 px-2 text-xs text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border;
+
+    & time {
+      @apply mr-0;
+    }
+  }
+
+  .ui-presence-line {
+    @apply px-2 py-0.5 text-xs break-words text-[color-mix(in_oklch,var(--chart-green)_85%,var(--foreground))];
+  }
+
+  .ui-chat-line {
+    @apply relative rounded px-2 py-0.5 break-words hover:bg-muted/50;
+  }
+
+  .ui-line-author {
+    @apply mr-2;
+
+    & > * {
+      @apply text-left font-semibold text-(--tone-text) enabled:hover:underline;
+    }
+  }
+
+  .ui-chat-body {
+    @apply contents;
+
+    & p {
+      @apply inline;
+    }
+
+    & p + p {
+      @apply before:block before:h-[1lh];
+    }
+  }
+
+  .ui-chat-text {
+    @apply contents prose prose-sm max-w-none dark:prose-invert prose-p:my-0 prose-a:underline prose-pre:my-1 prose-pre:border prose-pre:bg-muted/40 prose-pre:text-foreground;
+
+    & :where(code):not(:where([class~="not-prose"] *))::before,
+    & :where(code):not(:where([class~="not-prose"] *))::after {
+      content: none;
+    }
+
+    & :where(code):not(:where(pre *)) {
+      @apply rounded-sm bg-muted px-[0.3rem] py-[0.1rem] font-medium;
+    }
+  }
+
+  .ui-edited {
+    @apply ml-1 text-xs text-muted-foreground;
+  }
+
+  .ui-reactions {
+    @apply mt-0.5 flex flex-wrap gap-1;
+
+    & button {
+      @apply rounded-full border px-1.5 text-xs leading-5 hover:bg-accent aria-pressed:border-primary aria-pressed:bg-primary/10;
+    }
+  }
+
+  .ui-line-actions {
+    @apply absolute top-0 right-2 flex -translate-y-1/2 items-center rounded-md border bg-background shadow-sm;
+
+    .ui-chat-line:not(
+        :hover,
+        :focus-within,
+        [data-held="true"],
+        :has(:popover-open)
+      )
+      > & {
+      @apply opacity-0;
+    }
+
+    & > button,
+    & > form > button {
+      @apply rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground;
+    }
+
+    & > form > button[type="submit"] {
+      @apply hover:text-destructive;
+    }
+  }
+
+  .ui-popover[data-size="reactions"] {
+    @apply w-auto gap-2 p-2;
+
+    position-area: block-end span-inline-start;
+
+    & > div {
+      @apply flex gap-1;
+    }
+
+    & > div button {
+      @apply rounded px-1 text-lg hover:bg-accent;
+    }
+
+    & > form {
+      @apply grid gap-1;
+    }
+
+    & .ui-input {
+      @apply h-8;
+    }
+
+    & span {
+      @apply max-w-56 text-xs text-muted-foreground;
+    }
+  }
+
+  .ui-line-editor {
+    @apply grid gap-1;
+
+    & > .ui-textarea {
+      @apply max-h-40 min-h-8 resize-none overflow-y-auto py-1;
+    }
+
+    & > span {
+      @apply text-xs text-muted-foreground;
+    }
+  }
+
+  .ui-composer {
+    @apply grid gap-1;
+
+    & > div:first-child {
+      @apply flex items-end gap-2;
+    }
+
+    & > div:first-child > div {
+      @apply min-w-0 flex-1;
+    }
+
+    & .ui-textarea {
+      @apply max-h-40 min-h-9.5 resize-none overflow-y-auto py-1.5 md:min-h-9;
+    }
+
+    & .ui-button[type="submit"] {
+      @apply h-9.5 px-3 md:h-9;
+    }
+
+    & > div:last-child {
+      @apply flex flex-wrap items-center justify-between gap-x-4 gap-y-1;
+
+      & > span {
+        @apply text-xs text-muted-foreground;
+      }
+    }
+  }
+
+  .ui-lifetime {
+    @apply inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground;
+  }
+
+  .ui-popover[data-size="lifetime"] {
+    @apply text-sm;
+
+    position-area: block-start span-inline-end;
+  }
+}

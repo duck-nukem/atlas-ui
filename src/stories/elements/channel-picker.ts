@@ -6,12 +6,14 @@ export type PickerArgs = {
   people: string;
   unread: string;
   mentioned: string;
+  label?: string;
 };
 
 const list = (items: string, direct: boolean, args: PickerArgs) =>
   items
     .split(",")
     .map((name) => name.trim())
+    .filter((name) => name !== "")
     .map((name) => {
       const unread = args.unread
         .split(",")
@@ -27,27 +29,31 @@ const list = (items: string, direct: boolean, args: PickerArgs) =>
     })
     .join("\n          ");
 
+const section = (
+  title: string,
+  items: string,
+  direct: boolean,
+  args: PickerArgs,
+) =>
+  items.trim() === ""
+    ? ""
+    : `
+      <li>
+        <span>${title}</span>
+        <ul>
+          ${list(items, direct, args)}
+        </ul>
+      </li>`;
+
 export const picker = (args: PickerArgs) => {
   const attention = args.mentioned
     .split(",")
     .map((value) => value.trim())
     .some((name) => name !== "" && name !== args.current);
 
-  return `<atlas-channel-picker label="#${args.current}"${attention ? " attention" : ""}>
+  return `<atlas-channel-picker label="${args.label ?? `#${args.current}`}"${attention ? " attention" : ""}>
   <div class="ui-channel-list">
-    <ul>
-      <li>
-        <span>Channels</span>
-        <ul>
-          ${list(args.channels, false, args)}
-        </ul>
-      </li>
-      <li>
-        <span>Direct messages</span>
-        <ul>
-          ${list(args.people, true, args)}
-        </ul>
-      </li>
+    <ul>${section("Channels", args.channels, false, args)}${section("Direct messages", args.people, true, args)}
     </ul>
   </div>
   <a class="ui-channel-new" href="#new">${icon("plus", "3.5")}New channel</a>
