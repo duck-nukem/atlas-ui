@@ -12,14 +12,18 @@ const linked = (text: string) =>
 
 export default {
   title: "Primitives/Linked text",
-  ...html<Args>(({ text }) => `<p>${linked(text)}</p>`, {
-    docs: {
-      description: {
-        component:
-          "Plain text such as a commit subject, with each T- key linked to its task.",
+  ...html<Args>(
+    ({ text }) =>
+      `<ol class="ui-item-list"><li class="ui-commit"><span class="ui-commit-subject">${linked(text)}</span></li></ol>`,
+    {
+      docs: {
+        description: {
+          component:
+            "A commit subject with each T- key linked to its task, as the commit list shows it.",
+        },
       },
     },
-  }),
+  ),
   args: { text: "Fix the drill wipe bug from T-250 and T-251" },
 } satisfies Meta<Args>;
 
