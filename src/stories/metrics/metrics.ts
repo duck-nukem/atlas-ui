@@ -124,6 +124,7 @@ export type CardsArgs = {
   title: string;
   repository: string;
   openFor: string;
+  external: boolean;
 };
 
 export const staleCards = ({
@@ -131,6 +132,7 @@ export const staleCards = ({
   title,
   repository,
   openFor,
+  external,
 }: CardsArgs) => `<div class="ui-cards">
   <p id="stale">${count} ${count === 1 ? "pull request" : "pull requests"} open for more than three days</p>
   <ol aria-labelledby="stale">
@@ -138,7 +140,7 @@ export const staleCards = ({
       { length: count },
       (_, index) => `<li><a class="ui-card-link" href="#pr-${23 + index}">
       <span><span><span>#${23 + index}</span> ${title}</span><span>open ${openFor}</span></span>
-      <span><span class="ui-badge" data-variant="secondary"><span>${repository}</span>${icon("external-link")}</span></span>
+      <span><span class="ui-badge" data-variant="secondary"><span>${repository}</span>${external ? icon("external-link") : ""}</span></span>
     </a></li>`,
     ).join("\n    ")}
   </ol>

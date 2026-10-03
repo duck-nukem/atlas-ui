@@ -129,6 +129,7 @@ export const PullRequestCards: Story<CardsArgs> = {
     title: "Show field errors with one FormFeedback component",
     repository: "Space Clone",
     openFor: "15d",
+    external: false,
   },
   argTypes: { count: { control: { type: "range", min: 1, max: 8 } } },
 };

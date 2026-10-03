@@ -52,6 +52,7 @@ export default {
     title: "test pr",
     repository: "Space Clone",
     openFor: "15d",
+    external: false,
   },
 } satisfies Meta<Args>;
 

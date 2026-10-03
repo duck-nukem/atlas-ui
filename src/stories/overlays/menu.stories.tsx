@@ -2,14 +2,14 @@ import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
 import { html, icon, type Story } from "../html";
 
-export type MenuArgs = {
+type MenuArgs = {
   name: string;
   items: string;
   destructive: string;
   align: "start" | "end";
 };
 
-export const menu = ({
+const menu = ({
   name,
   items,
   destructive,

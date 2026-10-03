@@ -21,14 +21,7 @@ type Args = {
   disabled: boolean;
 };
 
-export const button = ({
-  label,
-  variant,
-  size,
-  icon: name,
-  link,
-  disabled,
-}: Args) => {
+const button = ({ label, variant, size, icon: name, link, disabled }: Args) => {
   const iconOnly = size.startsWith("icon");
   const attributes = [
     'class="ui-button"',
