@@ -140,7 +140,8 @@
   .ui-line-author {
     @apply mr-2;
 
-    & > * {
+    & > *,
+    & > form > button {
       @apply text-left font-semibold text-(--tone-text) enabled:hover:underline;
     }
   }
@@ -192,7 +193,7 @@
         :has(:popover-open)
       )
       > & {
-      @apply opacity-0;
+      @apply pointer-events-none opacity-0;
     }
 
     & > button,
