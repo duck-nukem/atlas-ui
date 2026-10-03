@@ -145,6 +145,410 @@
         forced-color-adjust: none;
       }
 
+      &[data-share="0"] {
+        --ui-share: 0%;
+      }
+
+      &[data-share="1"] {
+        --ui-share: 1%;
+      }
+
+      &[data-share="2"] {
+        --ui-share: 2%;
+      }
+
+      &[data-share="3"] {
+        --ui-share: 3%;
+      }
+
+      &[data-share="4"] {
+        --ui-share: 4%;
+      }
+
+      &[data-share="5"] {
+        --ui-share: 5%;
+      }
+
+      &[data-share="6"] {
+        --ui-share: 6%;
+      }
+
+      &[data-share="7"] {
+        --ui-share: 7%;
+      }
+
+      &[data-share="8"] {
+        --ui-share: 8%;
+      }
+
+      &[data-share="9"] {
+        --ui-share: 9%;
+      }
+
+      &[data-share="10"] {
+        --ui-share: 10%;
+      }
+
+      &[data-share="11"] {
+        --ui-share: 11%;
+      }
+
+      &[data-share="12"] {
+        --ui-share: 12%;
+      }
+
+      &[data-share="13"] {
+        --ui-share: 13%;
+      }
+
+      &[data-share="14"] {
+        --ui-share: 14%;
+      }
+
+      &[data-share="15"] {
+        --ui-share: 15%;
+      }
+
+      &[data-share="16"] {
+        --ui-share: 16%;
+      }
+
+      &[data-share="17"] {
+        --ui-share: 17%;
+      }
+
+      &[data-share="18"] {
+        --ui-share: 18%;
+      }
+
+      &[data-share="19"] {
+        --ui-share: 19%;
+      }
+
+      &[data-share="20"] {
+        --ui-share: 20%;
+      }
+
+      &[data-share="21"] {
+        --ui-share: 21%;
+      }
+
+      &[data-share="22"] {
+        --ui-share: 22%;
+      }
+
+      &[data-share="23"] {
+        --ui-share: 23%;
+      }
+
+      &[data-share="24"] {
+        --ui-share: 24%;
+      }
+
+      &[data-share="25"] {
+        --ui-share: 25%;
+      }
+
+      &[data-share="26"] {
+        --ui-share: 26%;
+      }
+
+      &[data-share="27"] {
+        --ui-share: 27%;
+      }
+
+      &[data-share="28"] {
+        --ui-share: 28%;
+      }
+
+      &[data-share="29"] {
+        --ui-share: 29%;
+      }
+
+      &[data-share="30"] {
+        --ui-share: 30%;
+      }
+
+      &[data-share="31"] {
+        --ui-share: 31%;
+      }
+
+      &[data-share="32"] {
+        --ui-share: 32%;
+      }
+
+      &[data-share="33"] {
+        --ui-share: 33%;
+      }
+
+      &[data-share="34"] {
+        --ui-share: 34%;
+      }
+
+      &[data-share="35"] {
+        --ui-share: 35%;
+      }
+
+      &[data-share="36"] {
+        --ui-share: 36%;
+      }
+
+      &[data-share="37"] {
+        --ui-share: 37%;
+      }
+
+      &[data-share="38"] {
+        --ui-share: 38%;
+      }
+
+      &[data-share="39"] {
+        --ui-share: 39%;
+      }
+
+      &[data-share="40"] {
+        --ui-share: 40%;
+      }
+
+      &[data-share="41"] {
+        --ui-share: 41%;
+      }
+
+      &[data-share="42"] {
+        --ui-share: 42%;
+      }
+
+      &[data-share="43"] {
+        --ui-share: 43%;
+      }
+
+      &[data-share="44"] {
+        --ui-share: 44%;
+      }
+
+      &[data-share="45"] {
+        --ui-share: 45%;
+      }
+
+      &[data-share="46"] {
+        --ui-share: 46%;
+      }
+
+      &[data-share="47"] {
+        --ui-share: 47%;
+      }
+
+      &[data-share="48"] {
+        --ui-share: 48%;
+      }
+
+      &[data-share="49"] {
+        --ui-share: 49%;
+      }
+
+      &[data-share="50"] {
+        --ui-share: 50%;
+      }
+
+      &[data-share="51"] {
+        --ui-share: 51%;
+      }
+
+      &[data-share="52"] {
+        --ui-share: 52%;
+      }
+
+      &[data-share="53"] {
+        --ui-share: 53%;
+      }
+
+      &[data-share="54"] {
+        --ui-share: 54%;
+      }
+
+      &[data-share="55"] {
+        --ui-share: 55%;
+      }
+
+      &[data-share="56"] {
+        --ui-share: 56%;
+      }
+
+      &[data-share="57"] {
+        --ui-share: 57%;
+      }
+
+      &[data-share="58"] {
+        --ui-share: 58%;
+      }
+
+      &[data-share="59"] {
+        --ui-share: 59%;
+      }
+
+      &[data-share="60"] {
+        --ui-share: 60%;
+      }
+
+      &[data-share="61"] {
+        --ui-share: 61%;
+      }
+
+      &[data-share="62"] {
+        --ui-share: 62%;
+      }
+
+      &[data-share="63"] {
+        --ui-share: 63%;
+      }
+
+      &[data-share="64"] {
+        --ui-share: 64%;
+      }
+
+      &[data-share="65"] {
+        --ui-share: 65%;
+      }
+
+      &[data-share="66"] {
+        --ui-share: 66%;
+      }
+
+      &[data-share="67"] {
+        --ui-share: 67%;
+      }
+
+      &[data-share="68"] {
+        --ui-share: 68%;
+      }
+
+      &[data-share="69"] {
+        --ui-share: 69%;
+      }
+
+      &[data-share="70"] {
+        --ui-share: 70%;
+      }
+
+      &[data-share="71"] {
+        --ui-share: 71%;
+      }
+
+      &[data-share="72"] {
+        --ui-share: 72%;
+      }
+
+      &[data-share="73"] {
+        --ui-share: 73%;
+      }
+
+      &[data-share="74"] {
+        --ui-share: 74%;
+      }
+
+      &[data-share="75"] {
+        --ui-share: 75%;
+      }
+
+      &[data-share="76"] {
+        --ui-share: 76%;
+      }
+
+      &[data-share="77"] {
+        --ui-share: 77%;
+      }
+
+      &[data-share="78"] {
+        --ui-share: 78%;
+      }
+
+      &[data-share="79"] {
+        --ui-share: 79%;
+      }
+
+      &[data-share="80"] {
+        --ui-share: 80%;
+      }
+
+      &[data-share="81"] {
+        --ui-share: 81%;
+      }
+
+      &[data-share="82"] {
+        --ui-share: 82%;
+      }
+
+      &[data-share="83"] {
+        --ui-share: 83%;
+      }
+
+      &[data-share="84"] {
+        --ui-share: 84%;
+      }
+
+      &[data-share="85"] {
+        --ui-share: 85%;
+      }
+
+      &[data-share="86"] {
+        --ui-share: 86%;
+      }
+
+      &[data-share="87"] {
+        --ui-share: 87%;
+      }
+
+      &[data-share="88"] {
+        --ui-share: 88%;
+      }
+
+      &[data-share="89"] {
+        --ui-share: 89%;
+      }
+
+      &[data-share="90"] {
+        --ui-share: 90%;
+      }
+
+      &[data-share="91"] {
+        --ui-share: 91%;
+      }
+
+      &[data-share="92"] {
+        --ui-share: 92%;
+      }
+
+      &[data-share="93"] {
+        --ui-share: 93%;
+      }
+
+      &[data-share="94"] {
+        --ui-share: 94%;
+      }
+
+      &[data-share="95"] {
+        --ui-share: 95%;
+      }
+
+      &[data-share="96"] {
+        --ui-share: 96%;
+      }
+
+      &[data-share="97"] {
+        --ui-share: 97%;
+      }
+
+      &[data-share="98"] {
+        --ui-share: 98%;
+      }
+
+      &[data-share="99"] {
+        --ui-share: 99%;
+      }
+
+      &[data-share="100"] {
+        --ui-share: 100%;
+      }
+
       & > span {
         @apply relative text-xs;
       }

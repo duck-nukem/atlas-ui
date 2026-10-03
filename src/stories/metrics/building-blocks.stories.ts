@@ -119,6 +119,15 @@ export const StatusTiles: Story<TilesArgs> = {
     alarm: "error",
   },
   argTypes: { alarm: select(["", "warning", "error"]) },
+  play: async ({ canvasElement }) => {
+    const tile = canvasElement.querySelector<HTMLElement>("[data-share='70']")!;
+
+    const ratio =
+      Number.parseFloat(getComputedStyle(tile, "::before").height) /
+      tile.getBoundingClientRect().height;
+
+    await expect(ratio).toBeCloseTo(0.7, 2);
+  },
 };
 
 const contrast = (foreground: string, background: string) => {

@@ -165,7 +165,7 @@ export const tiles = ({
         .map((part) => part.trim());
       const isBottleneck = index === bottleneck;
 
-      return `<li data-step="${step}" style="--ui-share:${share}%"${isBottleneck ? ` data-bottleneck${alarm === "" ? "" : ` data-alarm="${alarm}"`}` : ""}>
+      return `<li data-step="${step}" data-share="${share}"${isBottleneck ? ` data-bottleneck${alarm === "" ? "" : ` data-alarm="${alarm}"`}` : ""}>
     <span>${status}</span><span>${share}%</span><span>median ${median}</span>
   </li>`;
     })
