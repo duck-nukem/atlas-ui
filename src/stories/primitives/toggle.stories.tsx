@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { html, type Story } from "../html";
+import { esc, html, type Story } from "../html";
 
 type Args = { label: string; checked: boolean; disabled: boolean };
 
@@ -8,7 +8,7 @@ export default {
   ...html<Args>(
     ({ label, checked, disabled }) => `<div class="ui-switch-row">
   <input class="ui-switch" id="toggle" type="checkbox" role="switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""}>
-  <label for="toggle">${label}</label>
+  <label for="toggle">${esc(label)}</label>
 </div>`,
   ),
   args: {

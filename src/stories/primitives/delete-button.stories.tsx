@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { html, type Story } from "../html";
+import { esc, html, type Story } from "../html";
 
 type Args = { label: string; confirm: string };
 
@@ -8,9 +8,9 @@ export default {
   title: "Primitives/Delete button",
   ...html<Args>(
     ({ label, confirm }) => `<details class="ui-confirm">
-  <summary class="ui-button" data-variant="ghost" data-size="sm"><span>${label}</span><span>Cancel</span></summary>
+  <summary class="ui-button" data-variant="ghost" data-size="sm"><span>${esc(label)}</span><span>Cancel</span></summary>
   <form method="post" action="#remove">
-    <button class="ui-button" data-variant="destructive" data-size="sm" type="submit">${confirm}</button>
+    <button class="ui-button" data-variant="destructive" data-size="sm" type="submit">${esc(confirm)}</button>
   </form>
 </details>`,
   ),

@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { icons } from "../../icons/names";
-import { html, icon, select, type Story } from "../html";
+import { esc, html, icon, select, type Story } from "../html";
 
 const variants = [
   "default",
@@ -27,11 +27,11 @@ const button = ({ label, variant, size, icon: name, link, disabled }: Args) => {
     'class="ui-button"',
     variant === "default" ? "" : `data-variant="${variant}"`,
     size === "default" ? "" : `data-size="${size}"`,
-    iconOnly ? `aria-label="${label}"` : "",
+    iconOnly ? `aria-label="${esc(label)}"` : "",
   ]
     .filter(Boolean)
     .join(" ");
-  const content = `${name === "" ? "" : icon(name)}${iconOnly ? "" : label}`;
+  const content = `${name === "" ? "" : icon(name)}${iconOnly ? "" : esc(label)}`;
 
   return link
     ? `<a ${attributes} href="#${label.toLowerCase().replaceAll(" ", "-")}"${disabled ? ' aria-disabled="true"' : ""}>${content}</a>`

@@ -5,6 +5,6 @@
 - Prefer native HTML: `<dialog>`, `popover`, `command`/`commandfor`, `<details>`, links and GET forms. React only for state the browser cannot hold.
 - Kit classes are `ui-*`; variants and states are `data-*` or ARIA attributes.
 - React components are TypeScript and must pass in both the `react` and `preact` test projects, in Chromium and WebKit.
-- Every component has stories for its real uses and a `Mobile` story. Stories must pass axe in light and dark.
+- Every component has stories for its real uses, with controls; phone sizes come from the viewport picker. Stories must pass axe in light and dark.
 - Tests: arrange, act, assert, one assertion, elements found by role or `data-testid`.
 - No comments unless the code goes against common sense.
