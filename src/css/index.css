@@ -8,4 +8,8 @@
 @import "./components/avatar.css";
 @import "./components/form.css";
 @import "./components/popover.css";
+@import "./components/dialog.css";
+@import "./components/shell.css";
+@import "./components/layout.css";
+@import "./components/tabs.css";
 @import "./utilities.css";
