@@ -13,4 +13,6 @@
 @import "./components/shell.css";
 @import "./components/layout.css";
 @import "./components/tabs.css";
+@import "./components/table.css";
+@import "./components/commits.css";
 @import "./utilities.css";

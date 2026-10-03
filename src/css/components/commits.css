@@ -1,0 +1,63 @@
+@layer ui.components {
+  .ui-commits {
+    display: grid;
+    gap: var(--ui-space-4);
+
+    & h3 {
+      margin: 0 0 var(--ui-space-2);
+      color: var(--ui-color-muted-fg);
+      font-size: var(--ui-font-size-xs);
+      font-weight: 500;
+    }
+
+    & ol {
+      margin: 0;
+      padding: 0;
+      border: 1px solid var(--ui-color-border);
+      border-radius: var(--ui-radius-lg);
+      list-style: none;
+    }
+
+    & li + li {
+      border-block-start: 1px solid var(--ui-color-border);
+    }
+  }
+
+  .ui-commit {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--ui-space-1) var(--ui-space-3);
+    align-items: center;
+    padding: var(--ui-space-2) var(--ui-space-3);
+
+    & > .ui-avatar {
+      grid-row: span 2;
+    }
+
+    & > .ui-commit-message {
+      overflow: hidden;
+      color: inherit;
+      font-weight: 500;
+      white-space: nowrap;
+      text-decoration: none;
+      text-overflow: ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    & > .ui-commit-meta {
+      grid-column: 2;
+      color: var(--ui-color-muted-fg);
+      font-size: var(--ui-font-size-xs);
+    }
+
+    & > .ui-commit-sha {
+      grid-row: 1 / span 2;
+      grid-column: 3;
+      font-family: var(--ui-font-mono);
+      font-size: var(--ui-font-size-xs);
+    }
+  }
+}
