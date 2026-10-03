@@ -1,0 +1,45 @@
+@layer components {
+  .ui-commit {
+    @apply flex items-center gap-4 text-sm;
+
+    & > .ui-commit-sha {
+      @apply font-mono text-xs text-muted-foreground hover:underline;
+    }
+
+    & > .ui-commit-subject {
+      @apply min-w-0 flex-1 truncate font-medium [&_a]:hover:underline;
+    }
+
+    & > .ui-commit-author {
+      @apply hidden whitespace-nowrap text-muted-foreground sm:inline;
+    }
+
+    & > time {
+      @apply whitespace-nowrap text-muted-foreground;
+    }
+  }
+
+  .ui-mark {
+    @apply w-3 font-mono text-xs text-emerald-600;
+
+    &[data-outcome="failed"] {
+      @apply text-destructive;
+    }
+  }
+
+  .ui-details {
+    @apply grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1;
+
+    & dt {
+      @apply opacity-70;
+    }
+
+    & dd {
+      @apply break-words;
+    }
+
+    & .ui-mono {
+      @apply font-mono;
+    }
+  }
+}
