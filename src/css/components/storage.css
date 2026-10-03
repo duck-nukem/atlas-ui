@@ -1,0 +1,69 @@
+@layer components {
+  .ui-storage {
+    @apply gap-3;
+
+    & > .ui-storage-total {
+      @apply text-3xl font-semibold tabular-nums;
+    }
+
+    & > dl {
+      @apply grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 text-sm;
+
+      & > div {
+        @apply contents;
+      }
+
+      & dd {
+        @apply text-muted-foreground tabular-nums;
+      }
+    }
+  }
+
+  .ui-storage-bar {
+    @apply block h-2 w-full overflow-hidden rounded-full bg-muted;
+  }
+
+  .ui-storage-swatch {
+    @apply inline-block size-2.5 rounded-sm;
+  }
+
+  .ui-storage-bar > [data-part="repositories"] {
+    @apply fill-(--chart-blue);
+  }
+
+  .ui-storage-bar > [data-part="attachments"] {
+    @apply fill-(--chart-yellow);
+  }
+
+  .ui-storage-swatch[data-part="repositories"] {
+    @apply bg-(--chart-blue);
+  }
+
+  .ui-storage-swatch[data-part="attachments"] {
+    @apply bg-(--chart-yellow);
+  }
+
+  .ui-storage-largest {
+    @apply grid gap-1;
+
+    & > h3 {
+      @apply text-sm font-medium;
+    }
+
+    & > ol {
+      @apply grid gap-1 text-sm;
+    }
+
+    & li {
+      @apply flex justify-between gap-3;
+
+      & > a {
+        @apply min-w-0 truncate hover:underline;
+      }
+
+      & > span {
+        @apply shrink-0 text-muted-foreground tabular-nums;
+      }
+    }
+  }
+}
