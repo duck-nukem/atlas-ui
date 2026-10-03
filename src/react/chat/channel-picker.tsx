@@ -1,4 +1,10 @@
 import { type ReactElement, useId, useRef, useState } from "react";
+import {
+  ChevronsUpDownIcon,
+  HashIcon,
+  MessageCircleIcon,
+  PlusIcon,
+} from "../icons";
 import { usePopover } from "../popover";
 import {
   attentionElsewhere,
@@ -70,10 +76,10 @@ export function ChannelPicker({
   const attention = attentionElsewhere(entries, activeId);
 
   return (
-    <div className="ui-channel-picker">
+    <div>
       <button
         type="button"
-        className="ui-channel-picker-trigger"
+        className="ui-channel-trigger"
         popoverTarget={popoverId}
         data-testid="channel-picker"
         data-attention={attention}
@@ -81,25 +87,21 @@ export function ChannelPicker({
         aria-haspopup="dialog"
       >
         <span>{label}</span>
+        <ChevronsUpDownIcon className="" />
         {attention ? (
-          <span
-            className="ui-nav-dot"
-            role="img"
-            aria-label={texts.attention}
-          />
+          <span className="ui-dot" role="img" aria-label={texts.attention} />
         ) : null}
       </button>
       <div
         ref={popover.ref}
         id={popoverId}
         popover="auto"
-        className="ui-popover ui-channel-picker-popover"
+        className="ui-channel-popover"
         role="dialog"
         aria-label={texts.search}
       >
         <input
           ref={searchBox}
-          type="search"
           className="ui-input"
           value={query}
           placeholder={texts.search}
@@ -113,64 +115,54 @@ export function ChannelPicker({
             }
           }}
         />
-        <div ref={list} className="ui-channel-picker-list">
-          {sections.map((section) => (
-            <section
-              key={section.key}
-              aria-labelledby={`${popoverId}-${section.key}`}
-            >
-              <h2 id={`${popoverId}-${section.key}`} className="ui-nav-heading">
-                {section.title}
-              </h2>
-              {/* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- Safari drops list semantics when list-style is none */}
-              <ul role="list">
-                {section.items.map((entry) => (
-                  <li key={entry.id}>
-                    <a
-                      className="ui-nav-link"
-                      href={entry.href}
-                      data-testid={`pick-${entry.id}`}
-                      data-unread={entry.unread}
-                      data-direct={entry.direct}
-                      aria-current={entry.id === activeId ? "page" : undefined}
-                      onClick={popover.hide}
-                    >
-                      <span>{entry.label}</span>
-                      {entry.unread ? (
-                        <span className="ui-visually-hidden">
-                          , {texts.unread}
-                        </span>
-                      ) : null}
-                      {entry.mentioned && entry.id !== activeId ? (
-                        <span
-                          className="ui-nav-dot"
-                          role="img"
-                          aria-label={texts.attention}
-                          data-testid={`attention-${entry.id}`}
-                        />
-                      ) : null}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
+        <div ref={list} className="ui-channel-list">
+          <ul>
+            {sections.map((section) => (
+              <li key={section.key}>
+                <span>{section.title}</span>
+                <ul>
+                  {section.items.map((entry) => (
+                    <li key={entry.id}>
+                      <a
+                        className="ui-channel-link"
+                        href={entry.href}
+                        data-testid={`pick-${entry.id}`}
+                        data-unread={entry.unread}
+                        aria-current={
+                          entry.id === activeId ? "page" : undefined
+                        }
+                        onClick={popover.hide}
+                      >
+                        {entry.direct ? (
+                          <MessageCircleIcon className="" />
+                        ) : (
+                          <HashIcon className="" />
+                        )}
+                        <span>{entry.label}</span>
+                        {entry.unread ? (
+                          <span className="ui-sr-only">, {texts.unread}</span>
+                        ) : null}
+                        {entry.mentioned && entry.id !== activeId ? (
+                          <span
+                            className="ui-dot"
+                            role="img"
+                            aria-label={texts.attention}
+                            data-testid={`attention-${entry.id}`}
+                          />
+                        ) : null}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
           {sections.length === 0 ? (
-            <p
-              className="ui-channel-picker-none"
-              data-testid="no-channel-match"
-            >
-              {texts.none}
-            </p>
+            <p data-testid="no-channel-match">{texts.none}</p>
           ) : null}
         </div>
-        <a
-          className="ui-button"
-          data-variant="ghost"
-          data-size="sm"
-          href={newHref}
-          onClick={popover.hide}
-        >
+        <a className="ui-channel-new" href={newHref} onClick={popover.hide}>
+          <PlusIcon className="" />
           {texts.new}
         </a>
       </div>

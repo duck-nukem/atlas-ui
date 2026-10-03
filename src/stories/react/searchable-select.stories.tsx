@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect } from "storybook/test";
 import { SearchableSelect } from "../../react/select/searchable-select";
 import { ServerSearchSelect } from "../../react/select/server-search-select";
+import { productionContrast } from "../html";
 
 const features = [
   { value: "f1", label: "F-1 todo.md", hint: "Done" },
@@ -50,6 +51,7 @@ export const Clearable: Story = {
 
 export const Multiple: Story = {
   args: { multiple: true, defaultValue: ["f1", "f3"] },
+  parameters: productionContrast,
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("combobox", { name: "Feature" }));
     await userEvent.click(canvas.getByRole("option", { name: /F-2 Chat/ }));

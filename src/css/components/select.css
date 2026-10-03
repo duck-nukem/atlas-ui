@@ -1,0 +1,146 @@
+@layer components {
+  .ui-select-trigger {
+    @apply flex h-8 w-full min-w-0 items-center justify-between gap-2 rounded-md border bg-background px-2 text-left text-sm disabled:cursor-not-allowed disabled:opacity-60;
+
+    &[data-empty="true"] {
+      @apply text-muted-foreground;
+    }
+
+    & > span {
+      @apply truncate;
+    }
+
+    & > svg {
+      @apply size-3.5 shrink-0 opacity-60;
+    }
+  }
+
+  .ui-select-popover {
+    @apply max-w-[calc(100vw-1rem)] min-w-56 rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
+
+    width: anchor-size(width);
+    margin: --spacing(1) 0 0;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline;
+
+    & > input {
+      @apply mb-1 h-8 w-full rounded-sm border bg-background px-2 text-sm;
+    }
+  }
+
+  .ui-listbox {
+    @apply max-h-60 overflow-y-auto;
+  }
+
+  .ui-option {
+    @apply flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 text-sm hover:bg-accent;
+
+    &[data-active="true"] {
+      @apply bg-accent;
+    }
+
+    &[data-none] {
+      @apply text-muted-foreground;
+    }
+
+    & > svg {
+      @apply size-3.5 shrink-0;
+    }
+
+    &[aria-selected="false"]:not([data-none]) > svg {
+      @apply invisible;
+    }
+
+    & > span:first-of-type {
+      @apply min-w-0 truncate;
+    }
+
+    & > .ui-option-hint {
+      @apply ml-auto truncate text-xs text-muted-foreground;
+    }
+  }
+
+  .ui-select-note {
+    @apply px-2 py-1 text-sm text-muted-foreground empty:hidden;
+
+    &[data-note="searchFailed"] {
+      @apply text-destructive;
+    }
+  }
+
+  .ui-select-done {
+    @apply mt-1 h-8 w-full rounded-sm border text-sm sm:hidden;
+  }
+
+  .ui-channel-trigger {
+    @apply flex min-w-0 items-center gap-1 rounded-md px-2 py-1 text-lg font-semibold hover:bg-accent;
+
+    & > span:first-child {
+      @apply truncate;
+    }
+
+    & > svg {
+      @apply size-4 shrink-0 text-muted-foreground;
+    }
+  }
+
+  .ui-channel-popover {
+    @apply w-80 max-w-[calc(100vw-1rem)] gap-2 rounded-md border bg-popover p-2 text-popover-foreground shadow-md;
+
+    margin: --spacing(1) 0 0;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline;
+
+    &:popover-open {
+      @apply grid;
+    }
+  }
+
+  .ui-channel-list {
+    @apply max-h-80 overflow-y-auto;
+
+    & > ul {
+      @apply grid gap-2;
+    }
+
+    & > ul > li {
+      @apply grid gap-0.5;
+
+      & > span {
+        @apply px-2 text-xs font-medium text-muted-foreground uppercase;
+      }
+
+      & > ul {
+        @apply grid gap-0.5;
+      }
+    }
+
+    & > p {
+      @apply px-2 py-1 text-sm text-muted-foreground;
+    }
+  }
+
+  .ui-channel-link {
+    @apply flex items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-accent focus-visible:bg-accent focus-visible:outline-none;
+
+    & > svg {
+      @apply size-3.5 shrink-0 text-muted-foreground;
+    }
+
+    & > span:first-of-type {
+      @apply truncate;
+    }
+
+    &[aria-current="page"] {
+      @apply bg-accent;
+    }
+
+    &[data-unread="true"]:not([aria-current]) {
+      @apply font-semibold;
+    }
+  }
+
+  .ui-channel-new {
+    @apply flex items-center gap-2 rounded-md border-t px-2 pt-2 text-sm text-muted-foreground hover:text-foreground [&_svg]:size-3.5;
+  }
+}

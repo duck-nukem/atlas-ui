@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { CheckIcon, ChevronsUpDownIcon, XIcon } from "../icons";
 import { usePopover } from "../popover";
 import {
   clearShown,
@@ -214,7 +215,7 @@ export function SearchableSelect({
         type="button"
         id={id}
         role="combobox"
-        className="ui-input ui-select-trigger"
+        className="ui-select-trigger"
         popoverTarget={popoverId}
         data-testid={rest["data-testid"]}
         data-value={selected.join(",")}
@@ -230,12 +231,13 @@ export function SearchableSelect({
         disabled={disabled}
       >
         <span>{summarize(labels, selected, placeholder ?? texts.choose)}</span>
+        <ChevronsUpDownIcon className="" />
       </button>
       <div
         ref={popover.ref}
         id={popoverId}
         popover="auto"
-        className="ui-popover ui-select-popover"
+        className="ui-select-popover"
         role="dialog"
         aria-label={texts.search}
       >
@@ -243,7 +245,6 @@ export function SearchableSelect({
           ref={searchBox}
           type="text"
           role="searchbox"
-          className="ui-input"
           data-testid="select-search"
           aria-label={texts.search}
           aria-controls={listId}
@@ -281,11 +282,13 @@ export function SearchableSelect({
               role="option"
               className="ui-option"
               data-testid="option-none"
+              data-none
               data-active={highlighted === 0}
               aria-selected={selected.length === 0}
               onMouseMove={() => setActive(0)}
               onClick={clear}
             >
+              <XIcon className="" />
               {texts.none}
             </li>
           ) : null}
@@ -304,6 +307,7 @@ export function SearchableSelect({
                 onMouseMove={() => setActive(position)}
                 onClick={() => choose(option.value)}
               >
+                <CheckIcon className="" />
                 <span>{option.label}</span>
                 {option.hint === undefined ? null : (
                   <span className="ui-option-hint">{option.hint}</span>
@@ -323,8 +327,7 @@ export function SearchableSelect({
         {multiple ? (
           <button
             type="button"
-            className="ui-button ui-select-done"
-            data-variant="outline"
+            className="ui-select-done"
             data-testid="select-done"
             onClick={popover.hide}
           >
