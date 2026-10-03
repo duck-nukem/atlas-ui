@@ -50,7 +50,7 @@
     }
 
     & > .ui-goal-body {
-      @apply col-start-2 row-span-full row-start-1 min-w-0 [&>*:first-child]:border-t-0 [&>div:first-child>ul>li:first-child]:border-t-0;
+      @apply col-start-2 row-span-full row-start-1 min-w-0 [&>*:first-child]:border-t-0 [&>div:first-child>ul:first-child>li:first-child]:border-t-0;
     }
 
     &:not(:has(> .ui-goal-toggle :checked)) {
