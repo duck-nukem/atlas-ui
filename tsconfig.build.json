@@ -6,9 +6,9 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "dist",
-    "rootDir": "src/react",
+    "rootDir": "src",
     "types": []
   },
-  "include": ["src/react"],
+  "include": ["src/react", "src/interest.ts"],
   "exclude": ["src/react/**/*.test.ts", "src/react/**/*.test.tsx"]
 }

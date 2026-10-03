@@ -8,12 +8,16 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/react/index.d.ts",
       "import": "./dist/index.js"
     },
     "./atlas-ui.css": "./dist/atlas-ui.css",
     "./icons.svg": "./dist/icons.svg",
-    "./fonts.css": "./dist/fonts.css"
+    "./fonts.css": "./dist/fonts.css",
+    "./interest.js": {
+      "types": "./dist/interest.d.ts",
+      "import": "./dist/interest.js"
+    }
   },
   "files": [
     "dist"
@@ -26,7 +30,7 @@
     "build-storybook": "storybook build",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --max-warnings 0 --report-unused-disable-directives && stylelint 'src/css/**/*.css' && node scripts/check-css-literals.ts",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.ci.config.ts",
     "format": "prettier --write .",
     "check": "npm run typecheck && npm run lint && npm run test && prettier --check ."
   },

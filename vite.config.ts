@@ -4,7 +4,10 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   build: {
-    lib: { entry: "src/react/index.ts", formats: ["es"], fileName: "index" },
+    lib: {
+      entry: { index: "src/react/index.ts", interest: "src/interest.ts" },
+      formats: ["es"],
+    },
     rolldownOptions: { external: [/^react/, /^preact/] },
     emptyOutDir: false,
   },
