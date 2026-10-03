@@ -1,6 +1,6 @@
 # atlas-ui
 
-The Atlas app's look as plain HTML and CSS, so any server can render it. Only widgets that hold state ship as React components, and they also run under `preact/compat`.
+The Atlas app's look as plain HTML and CSS, so any server can render it. Two widgets that need state, the searchable select and the channel picker, are custom elements that upgrade server-rendered HTML and keep working without JavaScript.
 
 ## Use
 
@@ -8,13 +8,21 @@ The Atlas app's look as plain HTML and CSS, so any server can render it. Only wi
 npm install "git+https://<host>/atlas-ui.git#<commit>"
 ```
 
-```ts
-import "atlas-ui/fonts.css";
-import "atlas-ui/atlas-ui.css";
-import { ChannelPicker, SearchableSelect } from "atlas-ui";
+```html
+<link rel="stylesheet" href="/atlas-ui/fonts.css" />
+<link rel="stylesheet" href="/atlas-ui/atlas-ui.css" />
+<script type="module" src="/atlas-ui/elements.js"></script>
+<script type="module">
+  import { installInterest } from "/atlas-ui/interest.js";
+  installInterest();
+</script>
 ```
 
-Load `atlas-ui/interest.js` and call `installInterest()` once, so hover popovers open on hover in browsers without `interestfor` (Safari, Firefox).
+Copy `dist/` into your static files, or import the same paths from the npm package. There is nothing to compile in the app.
+
+`<atlas-select>` wraps a server-rendered `<select>`; without JavaScript it is that select, with `elements.js` it becomes the searchable dropdown and keeps the select as its value, so forms and Datastar see a normal select. Add `search-url` to search on the server; it is asked `?q=<text>` and answers `{"options":[{"value","label","hint"}]}`. `<atlas-channel-picker>` wraps a list of channel links and turns it into a searchable popover. Storybook shows the markup for both.
+
+`interest.js` makes hover popovers open on hover in browsers without `interestfor` (Safari, Firefox).
 
 Serve `atlas-ui/icons.svg` and reference icons as `<svg class="ui-icon" aria-hidden="true"><use href="/icons.svg#bell"/></svg>`. Storybook shows the markup of every component.
 
@@ -47,4 +55,4 @@ npm run storybook
 npm run check
 ```
 
-Every story has controls, and its Code panel shows the HTML that story renders. Use the viewport picker for phone sizes. Storybook's Run tests button runs the stories with axe in Chromium. `npm test` runs every story in light and dark mode in Chromium and WebKit, plus the React components under React and Preact.
+Every story has controls, and its Code panel shows the HTML that story renders. Use the viewport picker for phone sizes. Storybook's Run tests button runs the stories with axe in Chromium. `npm test` runs every story in light and dark mode, and the element tests, in Chromium and WebKit.

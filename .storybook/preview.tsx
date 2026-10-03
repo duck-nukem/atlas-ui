@@ -1,4 +1,5 @@
-import type { Decorator, Preview } from "@storybook/react-vite";
+import type { Decorator, Preview } from "@storybook/html-vite";
+import "../src/elements/index";
 import "../src/css/fonts.css";
 import "../src/css/index.css";
 import { installInterest } from "../src/interest";
@@ -26,7 +27,7 @@ const withTheme: Decorator = (Story, context) => {
     isDark(context.globals["theme"]),
   );
 
-  return <Story />;
+  return Story();
 };
 
 const preview: Preview = {

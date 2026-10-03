@@ -1,5 +1,4 @@
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
-import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
@@ -12,7 +11,7 @@ const browser = () => ({
 
 const unit = () => ({
   globals: true,
-  include: ["src/react/**/*.test.{ts,tsx}"],
+  include: ["src/elements/**/*.test.ts"],
   browser: browser(),
   setupFiles: ["src/test/setup.ts"],
   passWithNoTests: true,
@@ -22,29 +21,7 @@ const unit = () => ({
 export default defineConfig({
   test: {
     projects: [
-      { plugins: [react()], test: { ...unit(), name: "react" } },
-      {
-        resolve: {
-          alias: [
-            {
-              find: /^react-dom\/test-utils$/,
-              replacement: "preact/test-utils",
-            },
-            { find: /^react-dom(\/client)?$/, replacement: "preact/compat" },
-            {
-              find: /^react\/jsx-(dev-)?runtime$/,
-              replacement: "preact/jsx-runtime",
-            },
-            { find: /^react$/, replacement: "preact/compat" },
-            {
-              find: /^@testing-library\/react$/,
-              replacement: "@testing-library/preact",
-            },
-          ],
-        },
-        oxc: { jsx: { runtime: "automatic", importSource: "preact" } },
-        test: { ...unit(), name: "preact" },
-      },
+      { test: { ...unit(), name: "elements" } },
       ...["light", "dark"].map((theme) => ({
         plugins: [storybookTest({ configDir: ".storybook" })],
         define: { "import.meta.env.VITE_UI_THEME": JSON.stringify(theme) },

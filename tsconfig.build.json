@@ -9,6 +9,6 @@
     "rootDir": "src",
     "types": []
   },
-  "include": ["src/react", "src/interest.ts"],
-  "exclude": ["src/react/**/*.test.ts", "src/react/**/*.test.tsx"]
+  "include": ["src/elements", "src/interest.ts"],
+  "exclude": ["src/**/*.test.ts", "src/elements/markup.ts"]
 }
