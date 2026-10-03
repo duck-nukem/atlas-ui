@@ -64,7 +64,7 @@
     }
 
     & [class~="bar-label"] {
-      @apply text-xs [font-family:inherit];
+      @apply font-sans text-xs;
     }
   }
 
