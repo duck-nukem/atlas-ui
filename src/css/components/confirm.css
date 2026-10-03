@@ -1,0 +1,26 @@
+@layer components {
+  .ui-confirm {
+    @apply inline-flex;
+
+    & > summary {
+      @apply list-none text-destructive [&::-webkit-details-marker]:hidden;
+    }
+
+    & > summary > :last-child,
+    &[open] > summary > :first-child {
+      @apply hidden;
+    }
+
+    &[open] {
+      @apply flex flex-wrap items-center gap-2;
+
+      & > summary {
+        @apply order-1 text-foreground;
+      }
+
+      & > summary > :last-child {
+        @apply inline;
+      }
+    }
+  }
+}

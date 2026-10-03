@@ -1,0 +1,17 @@
+@layer components {
+  .ui-icon {
+    @apply size-4 shrink-0;
+
+    &[data-size="3"] {
+      @apply size-3;
+    }
+
+    &[data-size="3.5"] {
+      @apply size-3.5;
+    }
+
+    &[data-size="5"] {
+      @apply size-5;
+    }
+  }
+}
