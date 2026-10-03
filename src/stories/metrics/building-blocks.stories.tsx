@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { html, productionContrast, select, type Story } from "../html";
+import { html, select, type Story } from "../html";
 import {
   type CardsArgs,
   fourBands,
@@ -119,7 +119,7 @@ export const StatusTiles: Story<TilesArgs> = {
     alarm: "error",
   },
   argTypes: { alarm: select(["", "warning", "error"]) },
-  parameters: { ...html(tiles).parameters, ...productionContrast },
+  parameters: { ...html(tiles).parameters },
 };
 
 export const PullRequestCards: Story<CardsArgs> = {

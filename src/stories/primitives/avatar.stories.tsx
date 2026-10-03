@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { html, productionContrast, select, type Story } from "../html";
+import { html, select, type Story } from "../html";
 
 type Args = {
   names: string;
@@ -53,11 +53,20 @@ export const Small: Story<Args> = {
   args: { names: "Dave", size: "sm", tone: 1 },
 };
 
+export const Tones: Story<Args> = {
+  ...html<Args>(({ names, size }) =>
+    Array.from({ length: 8 }, (_, tone) => avatar(names, tone, size)).join(
+      "\n",
+    ),
+  ),
+  args: { names: "Grace Hopper" },
+};
+
 export const Stack: Story<Args> = {
   ...html(stack),
   args: {
     names: "Ada Lovelace, Grace Hopper, Alan Turing, Katherine Johnson, Dave",
     shown: 3,
   },
-  parameters: { ...html(stack).parameters, ...productionContrast },
+  parameters: { ...html(stack).parameters },
 };

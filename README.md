@@ -35,13 +35,9 @@ Components are written as Tailwind `@apply` lists copied from the app's class st
 - Opening and closing animations are left out.
 - The delete button keeps its armed state in `<details>`.
 
-## Contrast to-dos
+## Contrast
 
-These production colours fall under WCAG AA, and the affected stories report them without failing:
-
-- Muted text on muted or accent backgrounds: 4.43 to 4.44:1
-- Green-tone avatar initials: 4.09:1
-- The yellow age badge: 2.26:1
+Three production colours were darkened to meet WCAG AA: muted text (`--muted-foreground` #6c707e to #666a78), the light chart yellow (#e0a100 to #a87900) and the tone text on avatars (65% tone instead of 80%). Every story passes axe in light and dark mode.
 
 ## Develop
 

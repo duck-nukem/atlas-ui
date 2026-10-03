@@ -15,7 +15,7 @@
   --secondary: #ebecf0;
   --secondary-foreground: #1e1f22;
   --muted: #f2f3f5;
-  --muted-foreground: #6c707e;
+  --muted-foreground: #666a78;
   --accent: #edf3ff;
   --accent-foreground: #1e1f22;
   --destructive: #c7303f;
@@ -94,7 +94,7 @@
   --chart-neutral: #818594;
   --chart-neutral-soft: #dfe1e5;
   --chart-blue: #3574f0;
-  --chart-yellow: #e0a100;
+  --chart-yellow: #a87900;
   --chart-green: #208a3c;
   --chart-red: #db3b4b;
   --chart-track: var(--muted);

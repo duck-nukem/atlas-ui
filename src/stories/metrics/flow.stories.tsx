@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { html, productionContrast, type Story } from "../html";
+import { html, type Story } from "../html";
 import {
   fourBands,
   inline,
@@ -53,7 +53,7 @@ export default {
     bottleneck: 4,
     alarm: "error",
   },
-  parameters: { ...productionContrast },
+  parameters: {},
 } satisfies Meta<TilesArgs>;
 
 export const Default: Story<TilesArgs> = {};

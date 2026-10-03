@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { html, icon, productionContrast, select, type Story } from "../html";
+import { html, icon, select, type Story } from "../html";
 
 const rows = [
   [
@@ -138,7 +138,7 @@ export const FilterBar: Story<FilterArgs> = {
 </div>`,
   ),
   args: { field: "Status", value: "Done", hide: true },
-  parameters: { ...productionContrast },
+  parameters: {},
 };
 
 type DateArgs = { from: string; to: string };

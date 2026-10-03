@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect, waitFor } from "storybook/test";
-import { html, icon, productionContrast, type Story } from "../html";
+import { html, icon, type Story } from "../html";
 
 type Args = { label: string; hint: string };
 
@@ -15,7 +15,6 @@ export default {
   ),
   args: { label: "4d", hint: "Hasn't moved in 4 days" },
   parameters: {
-    ...productionContrast,
     docs: {
       description: {
         component:

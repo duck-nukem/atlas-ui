@@ -40,7 +40,7 @@
 @layer components {
   [data-tone] {
     --tone-surface: color-mix(in oklch, var(--tone) 16%, var(--card));
-    --tone-text: color-mix(in oklch, var(--tone) 80%, var(--foreground));
+    --tone-text: color-mix(in oklch, var(--tone) 65%, var(--foreground));
   }
   [data-tone="0"] {
     --tone: var(--tone-0);

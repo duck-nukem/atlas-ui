@@ -21,8 +21,6 @@ export const html = <A extends Args>(markup: (args: A) => string) => ({
 export const icon = (name: string, size?: "3" | "3.5" | "5") =>
   `<svg class="ui-icon"${size === undefined ? "" : ` data-size="${size}"`} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
 
-export const productionContrast = { a11y: { test: "todo" } } as const;
-
 export const select = <T extends string>(options: readonly T[]) => ({
   control: "select" as const,
   options,
