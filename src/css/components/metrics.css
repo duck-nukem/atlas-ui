@@ -49,7 +49,7 @@
   }
 
   .ui-metric-row {
-    @apply grid gap-x-4 gap-y-1 border-t py-3 sm:grid-cols-[9rem_minmax(0,1fr)_auto] sm:items-baseline;
+    @apply grid grid-cols-[minmax(0,1fr)] gap-x-4 gap-y-1 border-t py-3 sm:grid-cols-[9rem_minmax(0,1fr)_auto] sm:items-baseline;
 
     & > dt {
       @apply flex items-center gap-2 text-sm font-medium [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:self-center;
@@ -68,7 +68,7 @@
     }
 
     & > .ui-metric-details {
-      @apply pt-2 sm:col-span-3;
+      @apply min-w-0 pt-2 sm:col-span-3;
     }
   }
 
