@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect, waitFor } from "storybook/test";
-import { esc, html, icon, type Story } from "../html";
+import { html, icon, type Story } from "../html";
 
 type Args = { label: string; hint: string };
 
@@ -10,18 +10,18 @@ export default {
     ({
       label,
       hint,
-    }) => `<button class="ui-age" type="button" popovertarget="hint" interestfor="hint" aria-label="${esc(hint)}">${icon("clock-alert", "3.5")}${esc(label)}</button>
-<div class="ui-popover" data-size="hint" id="hint" popover><p>${esc(hint)}</p></div>`,
-  ),
-  args: { label: "4d", hint: "Hasn't moved in 4 days" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Opens 150 ms after the pointer rests on it and stays open once clicked. Browsers without interestfor get the same through atlas-ui/interest.js.",
+    }) => `<button class="ui-age" type="button" popovertarget="hint" interestfor="hint" aria-label="${hint}">${icon("clock-alert", "3.5")}${label}</button>
+<div class="ui-popover" data-size="hint" id="hint" popover><p>${hint}</p></div>`,
+    {
+      docs: {
+        description: {
+          component:
+            "Opens 150 ms after the pointer rests on it and stays open once clicked. Browsers without interestfor get the same through atlas-ui/interest.js.",
+        },
       },
     },
-  },
+  ),
+  args: { label: "4d", hint: "Hasn't moved in 4 days" },
 } satisfies Meta<Args>;
 
 export const Closed: Story<Args> = {};

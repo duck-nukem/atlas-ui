@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { esc, html, type Story } from "../html";
+import { html, type Story } from "../html";
 
 type Args = { title: string; intro: string; action: string };
 
@@ -8,12 +8,12 @@ export default {
   ...html<Args>(({ title, intro, action }) => {
     const heading =
       action === ""
-        ? `<h2>${esc(title)}</h2>`
-        : `<div class="ui-section-row"><h2>${esc(title)}</h2><a class="ui-button" data-variant="outline" data-size="sm" href="#action">${esc(action)}</a></div>`;
+        ? `<h2>${title}</h2>`
+        : `<div class="ui-section-row"><h2>${title}</h2><a class="ui-button" data-variant="outline" data-size="sm" href="#action">${action}</a></div>`;
 
     return `<section class="ui-section">
   <div class="ui-section-heading">
-    ${heading}${intro === "" ? "" : `\n    <p>${esc(intro)}</p>`}
+    ${heading}${intro === "" ? "" : `\n    <p>${intro}</p>`}
   </div>
 </section>`;
   }),

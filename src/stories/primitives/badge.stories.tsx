@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { esc, html, select, type Story } from "../html";
+import { html, select, type Story } from "../html";
 
 const variants = ["default", "secondary", "outline", "destructive"] as const;
 
@@ -9,7 +9,7 @@ export default {
   title: "Primitives/Badge",
   ...html<Args>(
     ({ label, variant }) =>
-      `<span class="ui-badge"${variant === "default" ? "" : ` data-variant="${variant}"`}>${esc(label)}</span>`,
+      `<span class="ui-badge"${variant === "default" ? "" : ` data-variant="${variant}"`}>${label}</span>`,
   ),
   args: { label: "Active", variant: "default" },
   argTypes: { variant: select(variants) },

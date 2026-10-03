@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { esc, html, icon, type Story } from "../html";
+import { html, icon, type Story } from "../html";
 
 type Args = { title: string; body: string; applications: string };
 
@@ -11,8 +11,8 @@ export default {
       body,
       applications,
     }) => `<section class="ui-choose" aria-labelledby="choose-title">
-  <div>${icon("app-window")}<h2 id="choose-title">${esc(title)}</h2></div>
-  <p>${esc(body)}</p>
+  <div>${icon("app-window")}<h2 id="choose-title">${title}</h2></div>
+  <p>${body}</p>
   <ul>
     ${applications
       .split(",")

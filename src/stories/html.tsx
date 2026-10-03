@@ -1,38 +1,62 @@
 import type { Args, Meta, StoryObj } from "@storybook/react-vite";
 
-const referencing =
-  /\b(id|for|popovertarget|interestfor|commandfor|aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/g;
+const references =
+  /(?<![\w-])(for|popovertarget|interestfor|commandfor|anchor|headers|list|form|aria-labelledby|aria-describedby|aria-controls|aria-owns|aria-activedescendant|aria-errormessage|aria-details)="([^"]+)"/g;
+const ids = /(?<![\w-])id="([^"]+)"/g;
 
 const scoped = (markup: string, scope: string) =>
-  markup.replace(
-    referencing,
-    (_, name: string, ids: string) =>
-      `${name}="${ids
-        .split(" ")
-        .map((id) => `${scope}-${id}`)
-        .join(" ")}"`,
-  );
+  markup
+    .replace(ids, (_, id: string) => `id="${scope}-${id}"`)
+    .replace(
+      references,
+      (_, name: string, targets: string) =>
+        `${name}="${targets
+          .split(" ")
+          .map((id) => `${scope}-${id}`)
+          .join(" ")}"`,
+    );
 
-export const esc = (text: string) =>
+const esc = (text: string) =>
   text
     .replaceAll("&", "&amp;")
     .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 
-export const html = <A extends Args>(markup: (args: A) => string) => ({
+const escaped = <A extends Args>(args: A): A =>
+  Object.fromEntries(
+    Object.entries(args).map(([key, value]) => [
+      key,
+      typeof value === "string" ? esc(value) : value,
+    ]),
+  ) as A;
+
+type ExtraParameters = {
+  layout?: string;
+  docs?: { description?: { component: string } };
+};
+
+export const html = <A extends Args>(
+  markup: (args: A) => string,
+  extra: ExtraParameters = {},
+) => ({
   render: (args: A, context: { id: string }) => (
     <div
       style={{ display: "contents" }}
-      dangerouslySetInnerHTML={{ __html: scoped(markup(args), context.id) }}
+      dangerouslySetInnerHTML={{
+        __html: scoped(markup(escaped(args)), context.id),
+      }}
     />
   ),
   parameters: {
+    ...extra,
     docs: {
+      ...extra.docs,
       source: {
         language: "html",
         transform: (_: string, context: { args: Args }) =>
-          markup(context.args as A).trim(),
+          markup(escaped(context.args as A)).trim(),
       },
     },
   },

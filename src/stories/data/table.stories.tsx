@@ -138,7 +138,6 @@ export const FilterBar: Story<FilterArgs> = {
 </div>`,
   ),
   args: { field: "Status", value: "Done", hide: true },
-  parameters: {},
 };
 
 type DateArgs = { from: string; to: string };

@@ -68,5 +68,4 @@ export const Stack: Story<Args> = {
     names: "Ada Lovelace, Grace Hopper, Alan Turing, Katherine Johnson, Dave",
     shown: 3,
   },
-  parameters: { ...html(stack).parameters },
 };

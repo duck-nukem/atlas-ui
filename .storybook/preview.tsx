@@ -2,6 +2,7 @@ import type { Decorator, Preview } from "@storybook/react-vite";
 import "../src/css/fonts.css";
 import "../src/css/index.css";
 import { installInterest } from "../src/interest";
+import { isDark, ThemedDocs } from "./themed-docs";
 
 installInterest(navigator.webdriver);
 
@@ -20,12 +21,10 @@ document.addEventListener(
 document.addEventListener("submit", (event) => event.preventDefault(), true);
 
 const withTheme: Decorator = (Story, context) => {
-  const theme = context.globals["theme"];
-  const dark =
-    theme === "dark" ||
-    (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-
-  document.documentElement.classList.toggle("dark", dark);
+  document.documentElement.classList.toggle(
+    "dark",
+    isDark(context.globals["theme"]),
+  );
 
   return <Story />;
 };
@@ -50,7 +49,11 @@ const preview: Preview = {
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
-    docs: { codePanel: true, canvas: { sourceState: "shown" } },
+    docs: {
+      codePanel: true,
+      canvas: { sourceState: "shown" },
+      container: ThemedDocs,
+    },
     a11y: { test: "error" },
     viewport: {
       options: {

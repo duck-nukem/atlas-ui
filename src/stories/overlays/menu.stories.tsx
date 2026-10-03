@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { esc, html, icon, type Story } from "../html";
+import { html, icon, type Story } from "../html";
 
 type MenuArgs = {
   name: string;
@@ -15,7 +15,7 @@ const menu = ({
   destructive,
   align,
 }: MenuArgs) => `<div style="display:flex;justify-content:${align === "end" ? "flex-end" : "flex-start"}">
-  <button class="ui-button" data-variant="ghost" data-size="icon-sm" type="button" popovertarget="actions" aria-label="Actions for ${esc(name)}">${icon("ellipsis")}</button>
+  <button class="ui-button" data-variant="ghost" data-size="icon-sm" type="button" popovertarget="actions" aria-label="Actions for ${name}">${icon("ellipsis")}</button>
   <div class="ui-menu"${align === "end" ? ' data-align="end"' : ""} id="actions" popover>
     ${items
       .split(",")
@@ -37,8 +37,8 @@ const menu = ({
     : `
 <dialog class="ui-dialog" id="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-body" closedby="any">
   <div class="ui-dialog-header">
-    <h2 id="confirm-title">Remove ${esc(name)}?</h2>
-    <p id="confirm-body">${esc(name)} loses access to this organization right away. Their comments and commits stay, shown as a deleted user.</p>
+    <h2 id="confirm-title">Remove ${name}?</h2>
+    <p id="confirm-body">${name} loses access to this organization right away. Their comments and commits stay, shown as a deleted user.</p>
   </div>
   <div class="ui-dialog-footer">
     <button class="ui-button" data-variant="outline" type="button" commandfor="confirm" command="close">Cancel</button>

@@ -20,11 +20,13 @@ const pages = [
 
 export default {
   title: "Layout/App shell",
-  ...html<ShellArgs>((args) =>
-    shell(
-      args,
-      `<div class="ui-page"><div class="ui-page-header"><div class="ui-page-title"><h1>${args.current}</h1></div></div></div>`,
-    ),
+  ...html<ShellArgs>(
+    (args) =>
+      shell(
+        args,
+        `<div class="ui-page"><div class="ui-page-header"><div class="ui-page-title"><h1>${args.current}</h1></div></div></div>`,
+      ),
+    { layout: "fullscreen" },
   ),
   args: {
     organization: "Test org",
@@ -37,7 +39,6 @@ export default {
     current: select(pages),
     application: select(["All applications", "Webapp", "Back office"]),
   },
-  parameters: { layout: "fullscreen" },
 } satisfies Meta<ShellArgs>;
 
 export const Default: Story<ShellArgs> = {};
