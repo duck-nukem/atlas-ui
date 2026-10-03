@@ -3,14 +3,6 @@ import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
-const unit = {
-  globals: true,
-  environment: "jsdom",
-  include: ["src/react/**/*.test.tsx"],
-  setupFiles: ["src/test/setup.ts"],
-  passWithNoTests: true,
-};
-
 const browser = () => ({
   enabled: true,
   headless: true,
@@ -18,10 +10,19 @@ const browser = () => ({
   instances: [{ browser: "chromium" as const }],
 });
 
+const unit = () => ({
+  globals: true,
+  include: ["src/react/**/*.test.{ts,tsx}"],
+  browser: browser(),
+  setupFiles: ["src/test/setup.ts"],
+  passWithNoTests: true,
+  fileParallelism: false,
+});
+
 export default defineConfig({
   test: {
     projects: [
-      { plugins: [react()], test: { ...unit, name: "react" } },
+      { plugins: [react()], test: { ...unit(), name: "react" } },
       {
         resolve: {
           alias: [
@@ -42,7 +43,7 @@ export default defineConfig({
           ],
         },
         oxc: { jsx: { runtime: "automatic", importSource: "preact" } },
-        test: { ...unit, name: "preact" },
+        test: { ...unit(), name: "preact" },
       },
       ...["light", "dark"].map((theme) => ({
         plugins: [storybookTest({ configDir: ".storybook" })],

@@ -1,0 +1,113 @@
+@layer ui.components {
+  .ui-select {
+    min-inline-size: 0;
+  }
+
+  .ui-select-trigger {
+    display: flex;
+    align-items: center;
+    padding-inline-end: var(--ui-space-8);
+    background: var(--ui-color-bg) no-repeat right var(--ui-space-2) center /
+      1rem;
+    background-image: var(--ui-chevron);
+    text-align: start;
+    cursor: pointer;
+
+    & > span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &[data-empty="true"] {
+      color: var(--ui-color-muted-fg);
+    }
+  }
+
+  .ui-select-popover {
+    min-inline-size: 14rem;
+    padding: var(--ui-space-1);
+
+    &:popover-open {
+      display: grid;
+      gap: var(--ui-space-1);
+    }
+  }
+
+  @supports (position-area: block-end) {
+    .ui-select-popover {
+      inline-size: anchor-size(inline);
+    }
+  }
+
+  .ui-listbox {
+    max-block-size: 15rem;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .ui-option {
+    display: flex;
+    gap: var(--ui-space-2);
+    align-items: center;
+    padding: var(--ui-space-1) var(--ui-space-2);
+    border-radius: var(--ui-radius-sm);
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      flex-shrink: 0;
+      inline-size: 0.875rem;
+      block-size: 0.875rem;
+    }
+
+    &[aria-selected="true"]::before {
+      content: "✓" / "";
+      line-height: 0.875rem;
+    }
+
+    &[data-active="true"] {
+      background: var(--ui-color-accent);
+      color: var(--ui-color-accent-fg);
+
+      @media (forced-colors: active) {
+        outline: 1px solid Highlight;
+      }
+    }
+
+    & > span:first-of-type {
+      min-inline-size: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    & > .ui-option-hint {
+      margin-inline-start: auto;
+      color: var(--ui-color-muted-fg);
+      font-size: var(--ui-font-size-xs);
+    }
+  }
+
+  .ui-select-note {
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-2);
+    color: var(--ui-color-muted-fg);
+
+    &:empty {
+      display: none;
+    }
+
+    &[data-note="searchFailed"] {
+      color: var(--ui-color-danger);
+    }
+  }
+
+  .ui-select-done {
+    @media (width >= 640px) {
+      display: none;
+    }
+  }
+}

@@ -16,4 +16,5 @@
 @import "./components/table.css";
 @import "./components/commits.css";
 @import "./components/charts.css";
+@import "./components/select.css";
 @import "./utilities.css";
