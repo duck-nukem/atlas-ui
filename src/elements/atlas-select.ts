@@ -130,8 +130,15 @@ export class AtlasSelect extends HTMLElement {
   #request: AbortController | undefined;
   #host = new MutationObserver(() => this.#sync());
   #content = new MutationObserver(() => this.#sync());
-  #reset = () => queueMicrotask(() => this.#sync());
+  #reset = () => setTimeout(() => this.#sync());
   #focusTrigger = () => this.#trigger.focus();
+  #flaggedInvalid = false;
+  #invalid = (event: Event) => {
+    event.preventDefault();
+    this.#flaggedInvalid = true;
+    this.#select?.setAttribute("aria-invalid", "true");
+    this.#trigger.focus();
+  };
   #outside = (event: Event) => {
     if (!(event instanceof CustomEvent)) {
       this.#sync();
@@ -148,11 +155,7 @@ export class AtlasSelect extends HTMLElement {
     this.#host.disconnect();
     this.#content.disconnect();
     this.#select?.form?.removeEventListener("reset", this.#reset);
-
-    if (this.#unsaved) {
-      this.#unsaved = false;
-      this.#select?.form?.requestSubmit();
-    }
+    this.#select = undefined;
   }
 
   attributeChangedCallback(): void {
@@ -194,6 +197,12 @@ export class AtlasSelect extends HTMLElement {
     const select = this.querySelector<HTMLSelectElement>(":scope > select");
 
     if (select === null) {
+      this.#quietly(() =>
+        this.querySelectorAll(
+          ":scope > .ui-select-trigger, :scope > .ui-select-popover",
+        ).forEach((stale) => stale.remove()),
+      );
+
       return;
     }
 
@@ -230,7 +239,7 @@ export class AtlasSelect extends HTMLElement {
       select.tabIndex = -1;
       select.setAttribute("aria-hidden", "true");
       this.#trigger.disabled = select.disabled;
-      this.#trigger.toggleAttribute("aria-required", select.required);
+      this.#trigger.setAttribute("aria-required", String(select.required));
       this.#label();
       this.#render();
     });
@@ -239,6 +248,14 @@ export class AtlasSelect extends HTMLElement {
   #attach(select: HTMLSelectElement): void {
     this.#select?.form?.removeEventListener("reset", this.#reset);
     this.#select?.removeEventListener("change", this.#outside);
+    this.#select?.removeEventListener("focus", this.#focusTrigger);
+    this.#select?.removeEventListener("invalid", this.#invalid);
+    this.#cancel();
+
+    if (this.#unsaved) {
+      this.#unsaved = false;
+      this.#submit();
+    }
     this.querySelectorAll(
       ":scope > .ui-select-trigger, :scope > .ui-select-popover",
     ).forEach((stale) => stale.remove());
@@ -248,6 +265,7 @@ export class AtlasSelect extends HTMLElement {
     this.#content.observe(select, {
       childList: true,
       subtree: true,
+      characterData: true,
       attributes: true,
       attributeFilter: [
         "selected",
@@ -259,12 +277,15 @@ export class AtlasSelect extends HTMLElement {
         "class",
         "tabindex",
         "aria-hidden",
+        "aria-labelledby",
+        "data-hint",
         ...mirrored,
       ],
     });
     select.form?.addEventListener("reset", this.#reset);
     select.addEventListener("change", this.#outside);
     select.addEventListener("focus", this.#focusTrigger);
+    select.addEventListener("invalid", this.#invalid);
   }
 
   #build(): void {
@@ -340,6 +361,7 @@ export class AtlasSelect extends HTMLElement {
       shown: () => this.#search.focus(),
     });
     this.#done.addEventListener("click", () => this.#popover?.hide());
+    this.#trigger.addEventListener("focus", () => this.#sync());
     this.#search.addEventListener("input", () =>
       this.#typed(this.#search.value),
     );
@@ -379,12 +401,9 @@ export class AtlasSelect extends HTMLElement {
       return;
     }
 
-    const labelIds = [...select.labels].map((label) => {
-      label.id ||= `atlas-select-label-${String((count += 1))}`;
-
-      return label.id;
-    });
-    const labelledBy = [select.getAttribute("aria-labelledby"), ...labelIds]
+    const labelledBy = select.getAttribute("aria-labelledby") ?? "";
+    const labelText = [...select.labels]
+      .map((label) => label.textContent?.trim() ?? "")
       .filter(Boolean)
       .join(" ");
 
@@ -398,15 +417,24 @@ export class AtlasSelect extends HTMLElement {
       }
     });
 
-    if (labelledBy === "") {
-      this.#trigger.removeAttribute("aria-labelledby");
-      this.#list.setAttribute(
-        "aria-label",
-        select.getAttribute("aria-label") ?? this.#text("search"),
-      );
-    } else {
+    if (labelledBy !== "") {
       this.#trigger.setAttribute("aria-labelledby", labelledBy);
       this.#list.setAttribute("aria-labelledby", labelledBy);
+    } else {
+      const name =
+        select.getAttribute("aria-label") ??
+        (labelText === "" ? null : labelText);
+
+      this.#trigger.removeAttribute("aria-labelledby");
+      this.#list.removeAttribute("aria-labelledby");
+
+      if (name === null) {
+        this.#trigger.removeAttribute("aria-label");
+      } else {
+        this.#trigger.setAttribute("aria-label", name);
+      }
+
+      this.#list.setAttribute("aria-label", name ?? this.#text("search"));
     }
 
     this.#list.setAttribute("aria-multiselectable", String(select.multiple));
@@ -518,6 +546,7 @@ export class AtlasSelect extends HTMLElement {
   }
 
   #opened(): void {
+    this.#sync();
     this.#startOver();
 
     if (this.#server() !== undefined) {
@@ -620,6 +649,11 @@ export class AtlasSelect extends HTMLElement {
           (values.length === 0 && option.value === "");
       });
     });
+    if (this.#flaggedInvalid && select.checkValidity()) {
+      this.#flaggedInvalid = false;
+      select.removeAttribute("aria-invalid");
+    }
+
     select.dispatchEvent(new CustomEvent("input", { bubbles: true }));
     select.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 

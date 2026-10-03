@@ -26,7 +26,12 @@ export class AtlasChannelPicker extends HTMLElement {
   #host = new MutationObserver(() => this.#sync());
 
   connectedCallback(): void {
-    this.#host.observe(this, { childList: true });
+    this.#host.observe(this, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["popover", "id", "class", "role"],
+    });
     this.#sync();
   }
 
@@ -48,12 +53,19 @@ export class AtlasChannelPicker extends HTMLElement {
     const built =
       this.children.length === 2 &&
       this.children[0] === this.#trigger &&
-      this.children[1] === this.#panel;
+      this.children[1] === this.#panel &&
+      this.#trigger.getAttribute("popovertarget") === this.#panel.id &&
+      this.#panel.getAttribute("popover") === "auto" &&
+      this.#panel.contains(this.#input) &&
+      this.#panel.contains(this.#none);
 
-    if (!built && this.querySelector("a") !== null) {
+    if (built) {
+      this.#filter(this.#input.value);
+    } else if (this.querySelector("a") !== null) {
       this.#build();
-      this.#host.takeRecords();
     }
+
+    this.#host.takeRecords();
   }
 
   #build(): void {

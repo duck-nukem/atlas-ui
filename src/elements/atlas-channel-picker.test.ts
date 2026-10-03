@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/dom";
 import { userEvent } from "vitest/browser";
+import { Idiomorph } from "idiomorph";
 import "./index";
 import { mount } from "./markup";
 
@@ -101,19 +102,17 @@ describe("atlas-channel-picker", () => {
     expect(trigger).toHaveAttribute("data-attention", "false");
   });
 
-  it("rebuilds after the server replaces its content", async () => {
+  it("filters again after a morph to the server markup", async () => {
     const container = picker(false);
-    const element = container.querySelector("atlas-channel-picker");
-
-    element?.replaceChildren(
-      ...(picker(false).querySelector("atlas-channel-picker .ui-channel-list")
-        ?.parentElement?.childNodes ?? []),
-    );
+    Idiomorph.morph(container, markup(false), { morphStyle: "innerHTML" });
     await new Promise<void>((resolve) => queueMicrotask(resolve));
+    await userEvent.click(screen.getByTestId("channel-picker"));
 
-    expect(
-      container.querySelectorAll("[data-testid=channel-picker]"),
-    ).toHaveLength(1);
+    await userEvent.type(screen.getByTestId("channel-search"), "ran");
+
+    expect(screen.getByTestId("pick-general").closest("li")).toHaveAttribute(
+      "hidden",
+    );
   });
 
   it("shows attention when the server adds it later", () => {

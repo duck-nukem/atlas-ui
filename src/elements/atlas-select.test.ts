@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { userEvent as browser } from "vitest/browser";
+import { Idiomorph } from "idiomorph";
 import { mount, selectMarkup } from "./markup";
 
 const options = [
@@ -435,17 +436,16 @@ describe("atlas-select and the server markup", () => {
 
   it("goes back to its first value when its form resets", async () => {
     mount(
-      `<form>${selectMarkup({ name: "featureId", options, selected: ["f1"], label: "Feature" })}</form>`,
+      `<form>${selectMarkup({ name: "featureId", options, selected: ["f1"], label: "Feature" })}<button type="reset">Reset</button></form>`,
     );
     await userEvent.click(screen.getByRole("combobox", { name: "Feature" }));
     await userEvent.click(screen.getByRole("option", { name: "F-2 Chat" }));
 
-    document.querySelector("form")?.reset();
-    await settle();
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
 
-    expect(screen.getByRole("combobox", { name: "Feature" }).textContent).toBe(
-      "F-1 todo.md",
-    );
+    await expect
+      .poll(() => screen.getByRole("combobox", { name: "Feature" }).textContent)
+      .toBe("F-1 todo.md");
   });
 
   it("disables its trigger when the server disables the select", async () => {
@@ -469,7 +469,7 @@ describe("atlas-select and the server markup", () => {
 
     const trigger = container.querySelector("[role=combobox]");
 
-    expect(trigger).toHaveAttribute("aria-required");
+    expect(trigger).toHaveAttribute("aria-required", "true");
   });
 
   it("submits an empty value once cleared, even without an empty option", async () => {
@@ -566,5 +566,122 @@ describe("atlas-select with a search url", () => {
     await expect
       .poll(() => screen.getByTestId("select-note").dataset["note"])
       .toBe("searchFailed");
+  });
+});
+
+describe("atlas-select under Datastar", () => {
+  it("rebuilds after a morph to the server markup", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+
+    Idiomorph.morph(
+      container,
+      selectMarkup({
+        name: "featureId",
+        options,
+        selected: ["f2"],
+        label: "Feature",
+      }),
+      { morphStyle: "innerHTML" },
+    );
+    await settle();
+
+    expect(
+      [...container.querySelectorAll(".ui-select-trigger")].map(
+        (trigger) => trigger.textContent,
+      ),
+    ).toEqual(["F-2 Chat"]);
+  });
+
+  it("keeps the native select hidden after a morph", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+
+    Idiomorph.morph(
+      container,
+      selectMarkup({
+        name: "featureId",
+        options,
+        selected: ["f2"],
+        label: "Feature",
+      }),
+      { morphStyle: "innerHTML" },
+    );
+    await settle();
+
+    expect(container.querySelector("select")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+  });
+
+  it("follows a value set on the select without an event once focused", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+    const select = container.querySelector("select");
+
+    if (select !== null) {
+      select.value = "f2";
+    }
+    screen.getByRole("combobox", { name: "Feature" }).focus();
+
+    expect(screen.getByRole("combobox", { name: "Feature" }).textContent).toBe(
+      "F-2 Chat",
+    );
+  });
+
+  it("shows a label the server changes", async () => {
+    const container = mount(
+      selectMarkup({
+        name: "featureId",
+        options,
+        selected: ["f2"],
+        label: "Feature",
+      }),
+    );
+    const text = container.querySelector("option[value=f2]")?.firstChild;
+
+    if (text !== null && text !== undefined) {
+      text.nodeValue = "F-2 Chat rework";
+    }
+    await settle();
+
+    expect(screen.getByRole("combobox", { name: "Feature" }).textContent).toBe(
+      "F-2 Chat rework",
+    );
+  });
+
+  it("keeps following server changes after it is moved", async () => {
+    const container = mount(
+      selectMarkup({ name: "featureId", options, label: "Feature" }),
+    );
+    const element = container.querySelector("atlas-select");
+    const elsewhere = mount("");
+    if (element !== null) {
+      elsewhere.append(element);
+    }
+
+    elsewhere.querySelector("select")?.add(new Option("F-3 Health", "f3"));
+    await settle();
+    await userEvent.click(screen.getByRole("combobox", { name: "Feature" }));
+
+    expect(screen.queryByRole("option", { name: "F-3 Health" })).not.toBeNull();
+  });
+
+  it("marks a required choice left empty as invalid", async () => {
+    const container = mount(
+      `<form>${selectMarkup({ name: "featureId", options: [...options, { value: "f3", label: "F-3" }], clearable: true, label: "Feature" }).replace("<select ", "<select required ")}</form>`,
+    );
+
+    container.querySelector("form")?.requestSubmit();
+    await settle();
+
+    expect(screen.getByRole("combobox", { name: "Feature" })).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
   });
 });
