@@ -50,4 +50,38 @@
       @apply font-mono;
     }
   }
+
+  .ui-line-counts {
+    & > :first-child {
+      @apply text-[color-mix(in_oklch,var(--chart-green)_85%,var(--foreground))];
+    }
+
+    & > :last-child {
+      @apply text-[color-mix(in_oklch,var(--chart-red)_85%,var(--foreground))];
+    }
+  }
+
+  .ui-changed-files {
+    @apply grid grid-cols-[minmax(0,1fr)] gap-2 text-sm;
+
+    & > h2 {
+      @apply flex flex-wrap items-baseline gap-2 font-medium;
+    }
+
+    & > ul {
+      @apply divide-y rounded-md border font-mono text-xs;
+    }
+
+    & li {
+      @apply flex items-center justify-between gap-3 px-3 py-1.5;
+
+      & > :first-child {
+        @apply min-w-0 truncate;
+      }
+
+      & > .ui-line-counts {
+        @apply whitespace-nowrap;
+      }
+    }
+  }
 }
