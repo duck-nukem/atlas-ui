@@ -56,6 +56,10 @@
     &:not(:has(> .ui-goal-toggle :checked)) {
       @apply grid-cols-[--spacing(8)_minmax(0,max-content)_auto_1fr] grid-rows-1 items-baseline bg-muted;
 
+      &::before {
+        @apply hidden;
+      }
+
       & > .ui-goal-title {
         @apply col-start-2 row-start-1 my-0 rotate-0 justify-self-start px-2 py-2 text-left text-sm [contain:none] [writing-mode:horizontal-tb];
       }
