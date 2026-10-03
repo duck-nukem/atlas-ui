@@ -1,0 +1,153 @@
+@layer components {
+  .ui-status-segments {
+    @apply flex items-center gap-3;
+  }
+
+  .ui-status-label {
+    @apply w-36 text-right text-xs text-muted-foreground;
+
+    & > span:not(:first-child) {
+      @apply hidden;
+    }
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label {
+    @apply text-foreground;
+
+    & > span:first-child {
+      @apply hidden;
+    }
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(1):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(2) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(2):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(3) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(3):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(4) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(4):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(5) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(5):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(6) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(6):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(7) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(7):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(8) {
+    @apply inline;
+  }
+
+  .ui-status-segments:has(
+      .ui-segments > button:nth-child(8):is(:hover, :focus:not(:hover > *))
+    )
+    .ui-status-label
+    > span:nth-child(9) {
+    @apply inline;
+  }
+
+  .ui-segments {
+    @apply flex w-40 gap-0.5 overflow-hidden rounded-full bg-muted;
+
+    & > button {
+      @apply h-3 flex-1 cursor-pointer bg-transparent transition-colors;
+    }
+
+    & > button[aria-pressed="true"],
+    & > button:has(~ button[aria-pressed="true"]) {
+      background: var(--ui-segment);
+    }
+
+    &:has(> button:is(:hover, :focus:not(:hover > *))) > button {
+      @apply bg-transparent;
+    }
+
+    &:has(> button:is(:hover, :focus:not(:hover > *)))
+      > :is(
+        button:is(:hover, :focus:not(:hover > *)),
+        button:has(~ button:is(:hover, :focus:not(:hover > *)))
+      ) {
+      background: var(--ui-segment);
+    }
+
+    & > button:nth-child(1) {
+      --ui-segment: color-mix(in oklch, var(--chart-red) 55%, var(--muted));
+    }
+
+    & > button:nth-child(2) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 39%, var(--muted));
+    }
+
+    & > button:nth-child(3) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 47%, var(--muted));
+    }
+
+    & > button:nth-child(4) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 56%, var(--muted));
+    }
+
+    & > button:nth-child(5) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 64%, var(--muted));
+    }
+
+    & > button:nth-child(6) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 73%, var(--muted));
+    }
+
+    & > button:nth-child(7) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 81%, var(--muted));
+    }
+
+    & > button:nth-child(8) {
+      --ui-segment: color-mix(in oklch, var(--chart-green) 90%, var(--muted));
+    }
+  }
+
+  .ui-inline-status .ui-select-trigger {
+    @apply h-7 text-xs;
+  }
+
+  .ui-inline-status {
+    @apply inline-block min-w-40;
+  }
+}

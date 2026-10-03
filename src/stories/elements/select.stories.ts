@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/html-vite";
 import { expect, waitFor } from "storybook/test";
-import { html, type Story } from "../html";
+import { html, select as selectControl, type Story } from "../html";
+import { type Status, statuses } from "../data/statuses";
 
 type Args = {
   label: string;
@@ -104,5 +105,36 @@ export const Search: Story<Args> = {
     await expect(
       canvas.getAllByRole("option").map((option) => option.textContent),
     ).toEqual(["F-2 ChatIn progress"]);
+  },
+};
+
+type InlineArgs = { task: string; current: Status };
+
+export const InlineStatus: Story<InlineArgs> = {
+  ...html<InlineArgs>(
+    ({
+      task,
+      current,
+    }) => `<form class="ui-inline-status" method="post" action="#status">
+  <atlas-select submit-on-change>
+    <select class="ui-input" name="status" aria-label="Status of ${task}">
+      ${statuses.map(([value, name]) => `<option value="${value}"${value === current ? " selected" : ""}>${name}</option>`).join("\n      ")}
+    </select>
+  </atlas-select>
+</form>`,
+  ),
+  args: { task: "T-327", current: "implementing" },
+  argTypes: { current: selectControl(statuses.map(([value]) => value)) },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(
+      canvas.getByRole("combobox", { name: "Status of T-327" }),
+    );
+
+    await waitFor(() =>
+      expect(canvas.getByRole("option", { selected: true })).toHaveAttribute(
+        "data-value",
+        "implementing",
+      ),
+    );
   },
 };
