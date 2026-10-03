@@ -132,6 +132,10 @@
       &::before {
         translate: 1rem 0;
       }
+
+      &:dir(rtl)::before {
+        translate: -1rem 0;
+      }
     }
 
     @media (forced-colors: active) {

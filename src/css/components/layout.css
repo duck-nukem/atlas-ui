@@ -4,6 +4,7 @@
     gap: var(--ui-space-4);
     max-inline-size: var(--ui-content-width);
     margin-inline: auto;
+    container-type: inline-size;
   }
 
   .ui-page-header {
@@ -43,7 +44,7 @@
     list-style: none;
 
     & li + li::before {
-      content: "/";
+      content: "/" / "";
       margin-inline-end: var(--ui-space-1);
     }
 
@@ -60,7 +61,7 @@
     display: grid;
     gap: var(--ui-space-6);
 
-    @media (width >= 1024px) {
+    @container (width >= 48rem) {
       grid-template-columns: minmax(0, 1fr) 18rem;
     }
 

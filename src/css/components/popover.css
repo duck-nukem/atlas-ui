@@ -8,10 +8,16 @@
     background: var(--ui-color-surface);
     box-shadow: var(--ui-shadow-lg);
     color: var(--ui-color-surface-fg);
-    position-area: block-end span-inline-end;
-    position-try-fallbacks:
-      flip-block,
-      flip-inline,
-      flip-block flip-inline;
+  }
+
+  @supports (position-area: block-end) {
+    .ui-popover {
+      margin: var(--ui-space-1);
+      position-area: block-end span-inline-end;
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
+    }
   }
 }

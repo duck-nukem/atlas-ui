@@ -115,13 +115,6 @@
       text-underline-offset: 4px;
     }
 
-    &[aria-pressed="true"],
-    &[aria-expanded="true"] {
-      --ui-button-bg: var(--ui-color-accent);
-      --ui-button-fg: var(--ui-color-accent-fg);
-      --ui-button-border: var(--ui-color-ring);
-    }
-
     &:hover {
       background-color: var(--ui-button-hover);
     }
@@ -151,6 +144,15 @@
         border-radius: var(--ui-radius-full);
         animation: ui-spin 0.7s linear infinite;
       }
+    }
+
+    &:is([data-variant="outline"], [data-variant="ghost"]):is(
+        [aria-pressed="true"],
+        [aria-expanded="true"]
+      ) {
+      --ui-button-bg: var(--ui-color-accent);
+      --ui-button-fg: var(--ui-color-accent-fg);
+      --ui-button-border: var(--ui-color-ring);
     }
   }
 

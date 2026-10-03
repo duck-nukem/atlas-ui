@@ -26,7 +26,7 @@ export default {
     docs: {
       description: {
         component:
-          "interestfor opens the popover on hover and keyboard focus. A popovertarget on the same button opens it on tap",
+          "interestfor opens the popover on hover and keyboard focus, and a popovertarget on the same button opens it on tap. Browsers without interestfor never show a link preview, so it holds extras only. A hover card holds no links or buttons, because it closes when the pointer leaves.",
       },
     },
   },

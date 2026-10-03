@@ -5,13 +5,13 @@ import { html, icon, mobile } from "../html";
 const menu = `
 <button class="ui-button" data-variant="ghost" data-shape="icon" type="button" popovertarget="task-actions" aria-label="Task actions">${icon("ellipsis")}</button>
 <div class="ui-popover ui-menu" id="task-actions" popover>
-  <ul>
+  <ul role="list">
     <li><a class="ui-menu-item" href="#edit">${icon("pencil")} Edit</a></li>
     <li><a class="ui-menu-item" href="#link">${icon("link-2")} Copy link</a></li>
     <li><form method="post" action="#archive"><button class="ui-menu-item" type="submit">${icon("folder")} Archive</button></form></li>
   </ul>
   <hr>
-  <ul>
+  <ul role="list">
     <li><button class="ui-menu-item" data-variant="danger" type="button" commandfor="delete-task" command="show-modal">${icon("trash-2")} Delete</button></li>
   </ul>
 </div>
@@ -37,7 +37,7 @@ export default {
     docs: {
       description: {
         component:
-          "A popover list of links and form buttons. It uses no menu role, so Tab moves through the items and Escape closes it",
+          "A popover list of links and form buttons. It has no menu role. Tab moves through the items and Escape closes it.",
       },
     },
   },

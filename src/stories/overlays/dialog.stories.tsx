@@ -13,7 +13,7 @@ const modal = `
     <div class="ui-dialog-body ui-stack">
       <div class="ui-field">
         <label class="ui-label" for="goal-title">Title</label>
-        <input class="ui-input" id="goal-title" name="title" required>
+        <input class="ui-input" id="goal-title" name="title" required autofocus>
       </div>
       <div class="ui-field">
         <label class="ui-label" for="goal-date">Target date</label>

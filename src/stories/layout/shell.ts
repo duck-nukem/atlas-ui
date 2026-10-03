@@ -20,14 +20,14 @@ const sections = [
   },
 ] as const;
 
-export const nav = (label: string) => `
-<nav class="ui-nav" aria-label="${label}">
+export const nav = () => `
+<nav class="ui-nav" aria-label="Main">
   ${sections
     .map(
       ({ heading, links }) => `
   <section>
     <h2 class="ui-nav-heading">${heading}</h2>
-    <ul>
+    <ul role="list">
       ${links
         .map(
           ([name, text, current]) =>
@@ -42,10 +42,10 @@ export const nav = (label: string) => `
 
 export const shell = (content: string) => `
 <div class="ui-shell">
-  <aside class="ui-shell-sidebar">
+  <div class="ui-shell-sidebar">
     <div class="ui-shell-brand">Acme</div>
-    ${nav("Main")}
-  </aside>
+    ${nav()}
+  </div>
   <div class="ui-shell-main">
     <header class="ui-shell-header">
       <button class="ui-button ui-shell-menu" data-variant="ghost" data-shape="icon" type="button" commandfor="nav-drawer" command="show-modal" aria-label="Open menu">${icon("menu")}</button>
@@ -58,9 +58,9 @@ export const shell = (content: string) => `
     <main class="ui-shell-content">${content}</main>
   </div>
 </div>
-<dialog class="ui-drawer" id="nav-drawer" aria-label="Menu">
+<dialog class="ui-drawer" id="nav-drawer" aria-label="Menu" closedby="any">
   <div class="ui-drawer-header">Acme
     <button class="ui-button" data-variant="ghost" data-shape="icon" type="button" commandfor="nav-drawer" command="close" aria-label="Close menu">${icon("x")}</button>
   </div>
-  ${nav("Mobile")}
+  ${nav()}
 </dialog>`;

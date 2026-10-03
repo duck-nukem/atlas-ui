@@ -58,7 +58,7 @@
     --ui-color-sidebar: light-dark(#f7f8fa, #181825);
     --ui-color-sidebar-fg: light-dark(#1e1f22, #bac2de);
     --ui-color-sidebar-accent: light-dark(#ebecf0, #313244);
-    --ui-color-sidebar-border: light-dark(#ebecf0, #181825);
+    --ui-color-sidebar-border: light-dark(#ebecf0, #313244);
     --ui-color-title-start: light-dark(#3574f0, #89b4fa);
     --ui-color-title-end: light-dark(#834df0, #cba6f7);
 

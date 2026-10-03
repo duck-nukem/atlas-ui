@@ -9,13 +9,13 @@
     box-shadow: var(--ui-shadow-lg);
     color: var(--ui-color-surface-fg);
 
-    &::backdrop {
-      background: rgb(0 0 0 / 40%);
-    }
-
     &[data-size="lg"] {
       inline-size: min(56rem, calc(100vw - 2 * var(--ui-space-4)));
     }
+  }
+
+  :is(.ui-dialog, .ui-drawer)::backdrop {
+    background: rgb(0 0 0 / 40%);
   }
 
   .ui-dialog-header,
@@ -50,7 +50,7 @@
   }
 
   .ui-drawer {
-    inline-size: min(18rem, 85vw);
+    inline-size: min(var(--ui-sidebar-width), 85vw);
     max-inline-size: none;
     block-size: 100dvh;
     max-block-size: none;
@@ -60,15 +60,6 @@
     border-inline-end: 1px solid var(--ui-color-sidebar-border);
     background: var(--ui-color-sidebar);
     color: var(--ui-color-sidebar-fg);
-
-    &::backdrop {
-      background: rgb(0 0 0 / 40%);
-    }
-
-    &[data-side="end"] {
-      margin-inline-start: auto;
-      border-inline: 1px solid var(--ui-color-border) 0;
-    }
 
     & > .ui-drawer-header {
       display: flex;

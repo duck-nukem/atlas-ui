@@ -127,6 +127,10 @@
     &[aria-current="page"] {
       background: var(--ui-color-sidebar-accent);
       font-weight: 600;
+
+      @media (forced-colors: active) {
+        outline: 1px solid Highlight;
+      }
     }
 
     & > .ui-nav-dot {
@@ -135,6 +139,10 @@
       margin-inline-start: auto;
       border-radius: var(--ui-radius-full);
       background: var(--ui-color-danger);
+
+      @media (forced-colors: active) {
+        background: CanvasText;
+      }
     }
   }
 }
