@@ -57,7 +57,7 @@ export const thresholds = ({
   <p>${scale}</p>
   <dl>
     ${bands
-      .split(";")
+      .split("|")
       .map((band, index) => {
         const [name, range] = band.split("=").map((part) => part.trim());
         const mark = index === current ? ' aria-current="true"' : "";
@@ -117,7 +117,7 @@ export const fourBands = (
   warning: string,
   attention: string,
 ) =>
-  `Excellent = ${excellent}; Good = ${good}; Warning = ${warning}; Needs attention = ${attention}`;
+  `Excellent = ${excellent} | Good = ${good} | Warning = ${warning} | Needs attention = ${attention}`;
 
 export type CardsArgs = {
   count: number;
@@ -158,7 +158,7 @@ export const tiles = ({
   alarm,
 }: TilesArgs) => `<ol class="ui-status-tiles" aria-label="Where time is spent">
   ${list
-    .split(";")
+    .split("|")
     .map((tile, index) => {
       const [status = "", step = "0", share = "0", median = ""] = tile
         .split(",")

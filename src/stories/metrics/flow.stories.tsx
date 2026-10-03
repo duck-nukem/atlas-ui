@@ -41,7 +41,7 @@ export default {
     ${tiles(args)}
   </section>
   <dl class="ui-metric-rows">
-    ${inline(metric({ label: "Batch size", rating: "elite", value: "1.0", unit: "median tasks per release", amount: "−2.5", progress: "improved", scale: "Median tasks per release", bands: "Warning = < 1; Excellent = < 5; Good = < 11; Warning = ≤ 20; Needs attention = > 20", current: 1 }))}
+    ${inline(metric({ label: "Batch size", rating: "elite", value: "1.0", unit: "median tasks per release", amount: "−2.5", progress: "improved", scale: "Median tasks per release", bands: "Warning = < 1 | Excellent = < 5 | Good = < 11 | Warning = ≤ 20 | Needs attention = > 20", current: 1 }))}
     ${inline(metric({ label: "Work in progress", value: "5", unit: "in progress", note: '<a class="ui-link" href="#limit">Set a limit</a>' }))}
     ${inline(metric({ label: "Aged tasks", rating: "warning", value: "9", unit: "tasks have stayed in their status longer than usual", note: '<a class="ui-link" href="#aged">See which ones</a>' }))}
   </dl>
@@ -49,7 +49,7 @@ export default {
   ),
   args: {
     tiles:
-      "Paused, 0, 0, 4.9d; Implementing, 3, 17, 15h; In review, 4, 3, 5h; Testing, 5, 10, 4h; Awaiting deployment, 6, 70, 4.8d",
+      "Paused, 0, 0, 4.9d | Implementing, 3, 17, 15h | In review, 4, 3, 5h | Testing, 5, 10, 4h | Awaiting deployment, 6, 70, 4.8d",
     bottleneck: 4,
     alarm: "error",
   },

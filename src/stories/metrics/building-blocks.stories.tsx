@@ -114,7 +114,7 @@ export const StatusTiles: Story<TilesArgs> = {
   ...html(tiles),
   args: {
     tiles:
-      "Paused, 0, 0, 4.9d; Implementing, 3, 17, 15h; In review, 4, 3, 5h; Testing, 5, 10, 4h; Awaiting deployment, 6, 70, 4.8d",
+      "Paused, 0, 0, 4.9d | Implementing, 3, 17, 15h | In review, 4, 3, 5h | Testing, 5, 10, 4h | Awaiting deployment, 6, 70, 4.8d",
     bottleneck: 4,
     alarm: "error",
   },
@@ -152,7 +152,7 @@ export const StatusTilesOverFullBars: Story<TilesArgs> = {
   ...html(tiles),
   args: {
     tiles:
-      "Step 0, 0, 100, 1d; Step 1, 1, 100, 1d; Step 2, 2, 100, 1d; Step 3, 3, 100, 1d; Step 4, 4, 100, 1d; Step 5, 5, 100, 1d; Step 6, 6, 100, 1d; Step 7, 7, 100, 1d",
+      "Step 0, 0, 100, 1d | Step 1, 1, 100, 1d | Step 2, 2, 100, 1d | Step 3, 3, 100, 1d | Step 4, 4, 100, 1d | Step 5, 5, 100, 1d | Step 6, 6, 100, 1d | Step 7, 7, 100, 1d",
     bottleneck: 7,
     alarm: "error",
   },
