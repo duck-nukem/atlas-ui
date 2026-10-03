@@ -69,30 +69,25 @@
     --ui-chart-green: light-dark(#208a3c, #a6e3a1);
     --ui-chart-red: light-dark(#db3b4b, #f38ba8);
     --ui-chart-track: var(--ui-color-muted);
-    --ui-flow-0: color-mix(
-      in oklch,
-      var(--ui-chart-red) 55%,
-      var(--ui-color-muted)
+    --ui-flow-0: light-dark(
+      #d94452,
+      color-mix(in oklch, var(--ui-chart-red) 55%, var(--ui-color-muted))
     );
-    --ui-flow-1: color-mix(
-      in oklch,
-      var(--ui-chart-green) 45%,
-      var(--ui-color-muted)
+    --ui-flow-1: light-dark(
+      #529c61,
+      color-mix(in oklch, var(--ui-chart-green) 45%, var(--ui-color-muted))
     );
-    --ui-flow-2: color-mix(
-      in oklch,
-      var(--ui-chart-green) 60%,
-      var(--ui-color-muted)
+    --ui-flow-2: light-dark(
+      #3f8f53,
+      color-mix(in oklch, var(--ui-chart-green) 60%, var(--ui-color-muted))
     );
-    --ui-flow-3: color-mix(
-      in oklch,
-      var(--ui-chart-green) 75%,
-      var(--ui-color-muted)
+    --ui-flow-3: light-dark(
+      #2b7540,
+      color-mix(in oklch, var(--ui-chart-green) 75%, var(--ui-color-muted))
     );
-    --ui-flow-4: color-mix(
-      in oklch,
-      var(--ui-chart-green) 90%,
-      var(--ui-color-muted)
+    --ui-flow-4: light-dark(
+      #1b5c2f,
+      color-mix(in oklch, var(--ui-chart-green) 90%, var(--ui-color-muted))
     );
 
     --ui-tone-0: light-dark(#2c6bed, #89b4fa);

@@ -31,13 +31,13 @@ const chart = `
         .map(
           ([label, counts]) => `
       <li class="ui-bar" style="--ui-total:${counts.reduce((sum, count) => sum + count, 0)}">
-        ${counts.map((count, index) => `<span data-series="${index}" style="--ui-value:${count}"></span>`).join("")}
-        <span class="ui-bar-tip">${label}: ${counts.map((count, index) => `${statuses[index]} ${count}`).join(", ")}</span>
+        ${counts.map((count, index) => (count === 0 ? "" : `<span data-series="${index}" style="--ui-value:${count}"></span>`)).join("")}
+        <div class="ui-bar-tip">${label}: ${counts.map((count, index) => `${statuses[index]} ${count}`).join(", ")}</div>
       </li>`,
         )
         .join("")}
     </ol>
-    <ul class="ui-bars-labels"><li>1 Oct</li><li>7 Oct</li><li>14 Oct</li></ul>
+    <ol class="ui-bars-labels">${days.map(([label], index) => `<li>${index % 6 === 0 ? label : ""}</li>`).join("")}</ol>
   </div>
   <details>
     <summary>Show as table</summary>
@@ -58,7 +58,7 @@ export default {
     docs: {
       description: {
         component:
-          "Stacked columns sized by --ui-total over --ui-max, with segments sized by --ui-value. Hovering a column shows its counts. The table holds the same numbers for keyboard and screen reader users.",
+          "Stacked columns sized by --ui-total over --ui-max, with segments sized by --ui-value. Hovering a column shows its counts. The table holds the same numbers for keyboard, touch and screen reader users. Leave out segments with a value of 0.",
       },
     },
   },

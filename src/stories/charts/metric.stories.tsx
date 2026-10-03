@@ -30,8 +30,8 @@ const metric = (
     <data value="${value}">${value}</data><span class="ui-metric-unit">${unit}</span>
     <span class="ui-rating" data-rating="${rating}">${icon(ratings[rating])} ${rating[0]?.toUpperCase()}${rating.slice(1)}</span>
   </p>
-  ${sparkline(values, progress, `${title} over the last 12 weeks`)}
-  <p class="ui-delta" data-progress="${progress}">${icon(delta.startsWith("+") ? "trending-up" : "trending-down")} ${delta} vs previous 30 days</p>
+  ${sparkline(values, progress, `${title} over the last 12 weeks, now ${value} ${unit}`)}
+  <p class="ui-delta" data-progress="${progress}">${icon(delta.startsWith("+") ? "trending-up" : "trending-down")} <span class="ui-visually-hidden">${progress === "improved" ? "Improved" : "Worsened"}:</span> ${delta} vs the 4 weeks before</p>
 </article>`;
 
 const grid = `
