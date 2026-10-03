@@ -19,3 +19,8 @@ export const icon = (name: string, size?: "3" | "3.5" | "5") =>
   `<svg class="ui-icon"${size === undefined ? "" : ` data-size="${size}"`} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
 
 export const productionContrast = { a11y: { test: "todo" } } as const;
+
+export const withProductionContrast = (story: StoryObj): StoryObj => ({
+  ...story,
+  parameters: { ...story.parameters, ...productionContrast },
+});

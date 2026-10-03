@@ -1,0 +1,143 @@
+@layer components {
+  .ui-table-scroll {
+    @apply relative w-full min-w-0 overflow-x-auto;
+  }
+
+  .ui-table {
+    @apply w-full caption-bottom text-sm;
+
+    & thead tr {
+      @apply border-b;
+    }
+
+    & tbody tr:last-child {
+      @apply border-0;
+    }
+
+    & tr {
+      @apply border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 has-[:popover-open]:bg-muted/50;
+    }
+
+    & th {
+      @apply h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground;
+    }
+
+    & td {
+      @apply p-2 align-middle whitespace-nowrap;
+    }
+
+    & caption {
+      @apply mt-4 text-sm text-muted-foreground;
+    }
+  }
+
+  .ui-table-empty {
+    @apply text-center text-muted-foreground;
+  }
+
+  .ui-th {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .ui-sort {
+    @apply inline-flex items-center gap-1 hover:underline [&_svg]:size-3;
+  }
+
+  .ui-column-filter {
+    @apply -m-1 rounded p-1.5 text-muted-foreground hover:bg-accent [&_svg]:size-3;
+
+    &[data-active] {
+      @apply text-primary [&_svg]:fill-current;
+    }
+  }
+
+  .ui-key {
+    @apply font-mono text-xs text-muted-foreground;
+  }
+
+  .ui-filter-bar {
+    @apply @container flex flex-wrap items-center gap-2;
+
+    & > a {
+      @apply text-xs underline;
+    }
+  }
+
+  .ui-filter-chip {
+    @apply inline-flex max-w-full min-w-0 items-stretch overflow-hidden rounded-full border text-xs;
+
+    & > button {
+      @apply inline-flex min-w-0 items-stretch whitespace-nowrap hover:bg-accent;
+
+      & > span:first-child {
+        @apply shrink-0 bg-muted px-2.5 py-1 font-medium;
+      }
+
+      & > span:last-child {
+        @apply flex min-w-0 gap-1 truncate py-1 pr-1 pl-2;
+      }
+    }
+
+    & > a {
+      @apply flex shrink-0 items-center px-2 hover:bg-accent [&_svg]:size-3;
+    }
+  }
+
+  .ui-popover[data-size="filter"] {
+    @apply w-[26rem];
+  }
+
+  .ui-filter-form {
+    @apply flex items-center gap-2;
+
+    & > .ui-input {
+      @apply h-8 min-w-0 flex-1;
+    }
+
+    & > .ui-button {
+      @apply shrink-0;
+    }
+
+    & > a {
+      @apply shrink-0 rounded p-1.5 text-muted-foreground hover:bg-accent [&_svg]:size-3.5;
+    }
+
+    & > .ui-dash {
+      @apply text-xs text-muted-foreground;
+    }
+  }
+
+  .ui-negation {
+    @apply inline-flex h-8 shrink-0 items-center rounded-md bg-muted p-0.5 text-xs;
+
+    & > button {
+      @apply h-full rounded-sm px-2 text-muted-foreground;
+
+      &[aria-pressed="true"] {
+        @apply bg-background text-foreground shadow-xs;
+      }
+    }
+  }
+
+  .ui-pagination {
+    @apply flex items-center justify-between text-sm;
+
+    & > span {
+      @apply text-muted-foreground;
+    }
+
+    & > div {
+      @apply flex gap-2;
+
+      & > a {
+        @apply underline;
+      }
+    }
+  }
+
+  .ui-sticky-below-header {
+    @apply sticky z-10 bg-background py-1;
+
+    top: var(--page-header-height, 0px);
+  }
+}

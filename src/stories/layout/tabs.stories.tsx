@@ -18,3 +18,9 @@ export const Disabled = html(`
 </nav>`);
 
 export const Mobile = mobile(tabs);
+
+export const Views = html(`
+<nav class="ui-views" aria-label="Task views">
+  <a class="ui-view" href="#overview" aria-current="page">Overview</a>
+  <a class="ui-view" href="#all">All tasks</a>
+</nav>`);

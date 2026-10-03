@@ -15,3 +15,17 @@
     }
   }
 }
+
+@layer components {
+  .ui-views {
+    @apply flex gap-1 text-sm;
+  }
+
+  .ui-view {
+    @apply rounded-md px-2 py-1 text-muted-foreground;
+
+    &[aria-current="page"] {
+      @apply bg-accent font-medium text-foreground;
+    }
+  }
+}
