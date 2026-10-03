@@ -1,17 +1,31 @@
 // usage: node scripts/build-css.ts
-import { bundle } from "lightningcss";
-import { writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-const version = (major: number, minor = 0) => (major << 16) | (minor << 8);
-const targets = {
-  chrome: version(133),
-  safari: version(18, 4),
-  firefox: version(138),
-};
-const { code } = bundle({
-  filename: "src/css/index.css",
-  minify: true,
-  targets,
+execFileSync(
+  "npx",
+  [
+    "tailwindcss",
+    "-i",
+    "src/css/index.css",
+    "-o",
+    "dist/atlas-ui.css",
+    "--minify",
+  ],
+  { stdio: "inherit" },
+);
+
+mkdirSync("dist/fonts", { recursive: true });
+
+const faces = ["geist", "geist-mono"].map((font) => {
+  const folder = `node_modules/@fontsource-variable/${font}`;
+
+  cpSync(`${folder}/files`, "dist/fonts", { recursive: true });
+
+  return readFileSync(`${folder}/index.css`, "utf8").replaceAll(
+    "./files/",
+    "./fonts/",
+  );
 });
 
-writeFileSync("dist/atlas-ui.css", code);
+writeFileSync("dist/fonts.css", faces.join("\n"));

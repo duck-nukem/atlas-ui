@@ -1,118 +1,126 @@
-@layer ui.tokens {
-  :root {
-    color-scheme: light dark;
+:root {
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-geist-mono: "Geist Mono Variable", ui-monospace, monospace;
+}
 
-    --ui-font-sans: system-ui, sans-serif;
-    --ui-font-mono: ui-monospace, "SF Mono", menlo, monospace;
-    --ui-font-size-xs: 0.75rem;
-    --ui-font-size-sm: 0.875rem;
-    --ui-font-size-md: 1rem;
-    --ui-font-size-lg: 1.125rem;
-    --ui-font-size-xl: 1.5rem;
-    --ui-font-size-2xl: 2rem;
-    --ui-line-height: 1.5;
+:root {
+  --background: #ffffff;
+  --foreground: #1e1f22;
+  --card: #ffffff;
+  --card-foreground: #1e1f22;
+  --popover: #ffffff;
+  --popover-foreground: #1e1f22;
+  --primary: #2f6ae0;
+  --primary-foreground: #ffffff;
+  --secondary: #ebecf0;
+  --secondary-foreground: #1e1f22;
+  --muted: #f2f3f5;
+  --muted-foreground: #6c707e;
+  --accent: #edf3ff;
+  --accent-foreground: #1e1f22;
+  --destructive: #c7303f;
+  --border: #dfe1e5;
+  --input: #c9ccd6;
+  --ring: #3574f0;
+  --chart-1: #3574f0;
+  --chart-2: #208a3c;
+  --chart-3: #c27d04;
+  --chart-4: #834df0;
+  --chart-5: #089e99;
+  --radius: 0.375rem;
+  --sidebar: #f7f8fa;
+  --sidebar-foreground: #1e1f22;
+  --sidebar-primary: #2f6ae0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ebecf0;
+  --sidebar-accent-foreground: #1e1f22;
+  --sidebar-border: #ebecf0;
+  --sidebar-ring: #3574f0;
+  --glow: #e56d17;
+  --title-start: #3574f0;
+  --title-end: #834df0;
+  --syntax-keyword: #0033b3;
+  --syntax-string: #067d17;
+  --syntax-number: #1750eb;
+  --syntax-title: #00627a;
+  --syntax-variable: #871094;
+  --syntax-deletion: #c7303f;
+}
 
-    --ui-space-1: 0.25rem;
-    --ui-space-2: 0.5rem;
-    --ui-space-3: 0.75rem;
-    --ui-space-4: 1rem;
-    --ui-space-6: 1.5rem;
-    --ui-space-8: 2rem;
+.dark {
+  --background: #1e1e2e;
+  --foreground: #cdd6f4;
+  --card: #1e1e2e;
+  --card-foreground: #cdd6f4;
+  --popover: #1e1e2e;
+  --popover-foreground: #cdd6f4;
+  --primary: #89b4fa;
+  --primary-foreground: #11111b;
+  --secondary: #313244;
+  --secondary-foreground: #cdd6f4;
+  --muted: #313244;
+  --muted-foreground: #a6adc8;
+  --accent: #313244;
+  --accent-foreground: #cdd6f4;
+  --destructive: #f38ba8;
+  --border: #393b50;
+  --input: #45475a;
+  --ring: #b4befe;
+  --chart-1: #89b4fa;
+  --chart-2: #a6e3a1;
+  --chart-3: #f9e2af;
+  --chart-4: #cba6f7;
+  --chart-5: #74c7ec;
+  --sidebar: #181825;
+  --sidebar-foreground: #bac2de;
+  --sidebar-primary: #89b4fa;
+  --sidebar-primary-foreground: #11111b;
+  --sidebar-accent: #313244;
+  --sidebar-accent-foreground: #cdd6f4;
+  --sidebar-border: #181825;
+  --sidebar-ring: #b4befe;
+  --glow: #fab387;
+  --title-start: #89b4fa;
+  --title-end: #cba6f7;
+  --syntax-keyword: #cba6f7;
+  --syntax-string: #a6e3a1;
+  --syntax-number: #fab387;
+  --syntax-title: #89b4fa;
+  --syntax-variable: #74c7ec;
+  --syntax-deletion: #f38ba8;
+}
 
-    --ui-radius: 0.375rem;
-    --ui-radius-sm: calc(var(--ui-radius) * 0.6);
-    --ui-radius-lg: calc(var(--ui-radius) * 1.4);
-    --ui-radius-full: 9999px;
+:root {
+  --chart-neutral: #818594;
+  --chart-neutral-soft: #dfe1e5;
+  --chart-blue: #3574f0;
+  --chart-yellow: #e0a100;
+  --chart-green: #208a3c;
+  --chart-red: #db3b4b;
+  --chart-track: var(--muted);
+  --tone-0: #2c6bed;
+  --tone-1: #0a8fc7;
+  --tone-2: #0e8a75;
+  --tone-3: #3f9a22;
+  --tone-4: #b07d00;
+  --tone-5: #d9531e;
+  --tone-6: #d6245c;
+  --tone-7: #8e44d8;
+}
 
-    --ui-control-height-xs: 1.5rem;
-    --ui-control-height-sm: 1.75rem;
-    --ui-control-height: 2rem;
-    --ui-control-height-lg: 2.25rem;
-
-    --ui-sidebar-width: 15rem;
-    --ui-content-width: 72rem;
-    --ui-duration: 150ms;
-
-    --ui-color-bg: light-dark(#fff, #1e1e2e);
-    --ui-color-fg: light-dark(#1e1f22, #cdd6f4);
-    --ui-color-surface: light-dark(#fff, #1e1e2e);
-    --ui-color-surface-fg: var(--ui-color-fg);
-    --ui-color-primary: light-dark(#2f6ae0, #89b4fa);
-    --ui-color-primary-fg: light-dark(#fff, #11111b);
-    --ui-color-secondary: light-dark(#ebecf0, #313244);
-    --ui-color-secondary-fg: var(--ui-color-fg);
-    --ui-color-muted: light-dark(#f2f3f5, #313244);
-    --ui-color-muted-fg: light-dark(#626674, #a6adc8);
-    --ui-color-accent: light-dark(#edf3ff, #313244);
-    --ui-color-accent-fg: var(--ui-color-fg);
-    --ui-color-danger: light-dark(#c7303f, #f38ba8);
-    --ui-color-danger-soft: color-mix(
-      in oklch,
-      var(--ui-color-danger) 12%,
-      var(--ui-color-bg)
-    );
-    --ui-color-border: light-dark(#dfe1e5, #393b50);
-    --ui-color-input: light-dark(#868a96, #7f849c);
-    --ui-color-ring: light-dark(#3574f0, #b4befe);
-    --ui-color-glow: light-dark(#e56d17, #fab387);
-    --ui-color-sidebar: light-dark(#f7f8fa, #181825);
-    --ui-color-sidebar-fg: light-dark(#1e1f22, #bac2de);
-    --ui-color-sidebar-accent: light-dark(#ebecf0, #313244);
-    --ui-color-sidebar-border: light-dark(#ebecf0, #313244);
-    --ui-color-title-start: light-dark(#3574f0, #89b4fa);
-    --ui-color-title-end: light-dark(#834df0, #cba6f7);
-
-    --ui-chart-neutral: light-dark(#818594, #7f849c);
-    --ui-chart-neutral-soft: light-dark(#dfe1e5, #585b70);
-    --ui-chart-blue: light-dark(#3574f0, #89b4fa);
-    --ui-chart-yellow: light-dark(#e0a100, #f9e2af);
-    --ui-chart-green: light-dark(#208a3c, #a6e3a1);
-    --ui-chart-red: light-dark(#db3b4b, #f38ba8);
-    --ui-chart-track: var(--ui-color-muted);
-    --ui-flow-0: light-dark(
-      #d94452,
-      color-mix(in oklch, var(--ui-chart-red) 55%, var(--ui-color-muted))
-    );
-    --ui-flow-1: light-dark(
-      #529c61,
-      color-mix(in oklch, var(--ui-chart-green) 45%, var(--ui-color-muted))
-    );
-    --ui-flow-2: light-dark(
-      #3f8f53,
-      color-mix(in oklch, var(--ui-chart-green) 60%, var(--ui-color-muted))
-    );
-    --ui-flow-3: light-dark(
-      #2b7540,
-      color-mix(in oklch, var(--ui-chart-green) 75%, var(--ui-color-muted))
-    );
-    --ui-flow-4: light-dark(
-      #1b5c2f,
-      color-mix(in oklch, var(--ui-chart-green) 90%, var(--ui-color-muted))
-    );
-
-    --ui-tone-0: light-dark(#2c6bed, #89b4fa);
-    --ui-tone-1: light-dark(#0a8fc7, #74c7ec);
-    --ui-tone-2: light-dark(#0e8a75, #94e2d5);
-    --ui-tone-3: light-dark(#3f9a22, #a6e3a1);
-    --ui-tone-4: light-dark(#b07d00, #f9e2af);
-    --ui-tone-5: light-dark(#d9531e, #fab387);
-    --ui-tone-6: light-dark(#d6245c, #f38ba8);
-    --ui-tone-7: light-dark(#8e44d8, #cba6f7);
-
-    --ui-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 8%);
-    --ui-shadow-lg: 0 8px 24px light-dark(rgb(0 0 0 / 16%), rgb(0 0 0 / 50%));
-    --ui-focus-ring: 0 0 0 3px
-      color-mix(in oklch, var(--ui-color-ring) 50%, transparent);
-  }
-
-  :root.light,
-  :root[data-theme="light"] {
-    color-scheme: light;
-  }
-
-  :root.dark,
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-  }
+.dark {
+  --chart-neutral: #7f849c;
+  --chart-neutral-soft: #585b70;
+  --chart-blue: #89b4fa;
+  --chart-yellow: #f9e2af;
+  --chart-green: #a6e3a1;
+  --chart-red: #f38ba8;
+  --tone-0: #89b4fa;
+  --tone-1: #74c7ec;
+  --tone-2: #94e2d5;
+  --tone-3: #a6e3a1;
+  --tone-4: #f9e2af;
+  --tone-5: #fab387;
+  --tone-6: #f38ba8;
+  --tone-7: #cba6f7;
 }

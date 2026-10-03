@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
+import "../src/css/fonts.css";
 import "../src/css/index.css";
 
 const withTheme: Decorator = (Story, context) => {

@@ -15,5 +15,7 @@ export const mobile = (markup: string): StoryObj => ({
   globals: { viewport: { value: "mobile", isRotated: false } },
 });
 
-export const icon = (name: string, size?: "sm" | "lg") =>
-  `<svg class="ui-icon"${size ? ` data-size="${size}"` : ""} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
+export const icon = (name: string, size?: "3" | "3.5" | "5") =>
+  `<svg class="ui-icon"${size === undefined ? "" : ` data-size="${size}"`} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
+
+export const productionContrast = { a11y: { test: "todo" } } as const;

@@ -1,21 +1,14 @@
-@layer ui.tokens, ui.base, ui.components, ui.utilities;
-
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tw-animate-css";
+@import "./theme.css";
+@import "./variants.css";
 @import "./tokens.css";
 @import "./base.css";
 @import "./components/icon.css";
 @import "./components/button.css";
 @import "./components/badge.css";
 @import "./components/avatar.css";
+@import "./components/switch.css";
 @import "./components/form.css";
-@import "./components/popover.css";
-@import "./components/dialog.css";
-@import "./components/menu.css";
-@import "./components/shell.css";
-@import "./components/layout.css";
-@import "./components/tabs.css";
-@import "./components/table.css";
-@import "./components/commits.css";
-@import "./components/charts.css";
-@import "./components/select.css";
-@import "./components/channel-picker.css";
-@import "./utilities.css";
+@import "./components/confirm.css";

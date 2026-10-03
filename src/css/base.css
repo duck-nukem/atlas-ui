@@ -1,75 +1,57 @@
-@layer ui.base {
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    border-color: var(--ui-color-border);
-  }
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
 
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
   body {
-    margin: 0;
-    background: var(--ui-color-bg);
-    color: var(--ui-color-fg);
-    font-family: var(--ui-font-sans);
-    font-size: var(--ui-font-size-sm);
-    line-height: var(--ui-line-height);
+    @apply bg-background text-foreground;
   }
-
-  :focus-visible {
-    outline: 2px solid var(--ui-color-ring);
-    outline-offset: 2px;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
-
-  :is(.ui-button, .ui-input, .ui-switch):is(:disabled, [aria-disabled="true"]) {
-    opacity: 0.5;
+  html {
+    @apply font-sans;
   }
-
-  :is(.ui-input, .ui-switch):disabled {
-    cursor: not-allowed;
-  }
-
-  [data-tone="0"] {
-    --ui-tone: var(--ui-tone-0);
-  }
-
-  [data-tone="1"] {
-    --ui-tone: var(--ui-tone-1);
-  }
-
-  [data-tone="2"] {
-    --ui-tone: var(--ui-tone-2);
-  }
-
-  [data-tone="3"] {
-    --ui-tone: var(--ui-tone-3);
-  }
-
-  [data-tone="4"] {
-    --ui-tone: var(--ui-tone-4);
-  }
-
-  [data-tone="5"] {
-    --ui-tone: var(--ui-tone-5);
-  }
-
-  [data-tone="6"] {
-    --ui-tone: var(--ui-tone-6);
-  }
-
-  [data-tone="7"] {
-    --ui-tone: var(--ui-tone-7);
-  }
-
-  a {
-    color: var(--ui-color-primary);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      transition-duration: 0s !important;
-      animation-duration: 0s !important;
+  @media (max-width: 767px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
     }
+  }
+}
+
+@layer components {
+  [data-tone] {
+    --tone-surface: color-mix(in oklch, var(--tone) 16%, var(--card));
+    --tone-text: color-mix(in oklch, var(--tone) 80%, var(--foreground));
+  }
+  [data-tone="0"] {
+    --tone: var(--tone-0);
+  }
+  [data-tone="1"] {
+    --tone: var(--tone-1);
+  }
+  [data-tone="2"] {
+    --tone: var(--tone-2);
+  }
+  [data-tone="3"] {
+    --tone: var(--tone-3);
+  }
+  [data-tone="4"] {
+    --tone: var(--tone-4);
+  }
+  [data-tone="5"] {
+    --tone: var(--tone-5);
+  }
+  [data-tone="6"] {
+    --tone: var(--tone-6);
+  }
+  [data-tone="7"] {
+    --tone: var(--tone-7);
   }
 }
