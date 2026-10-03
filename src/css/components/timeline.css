@@ -1,0 +1,151 @@
+@layer components {
+  .ui-goal-timeline {
+    @apply grid content-start gap-2;
+
+    & > h2 {
+      @apply font-medium;
+    }
+
+    & > p {
+      @apply text-xs text-muted-foreground;
+    }
+
+    & [data-status="active"] {
+      --ui-goal: var(--chart-blue);
+    }
+
+    & [data-status="pending_review"] {
+      --ui-goal: var(--chart-yellow);
+    }
+
+    & [data-status="succeeded"] {
+      --ui-goal: var(--chart-green);
+    }
+
+    & [data-status="failed"] {
+      --ui-goal: var(--chart-red);
+    }
+  }
+
+  .ui-timeline {
+    @apply w-full min-w-0 text-xs;
+
+    & > div {
+      @apply overflow-auto rounded-lg;
+    }
+
+    & svg {
+      @apply block max-w-none;
+    }
+  }
+
+  .ui-timeline-header {
+    & > rect {
+      fill: var(--background);
+    }
+
+    & > line {
+      stroke: var(--border);
+    }
+
+    & text {
+      @apply fill-foreground;
+
+      dominant-baseline: central;
+    }
+
+    & > g:first-of-type > text {
+      @apply text-sm font-medium;
+    }
+
+    & > g:last-of-type > text {
+      @apply text-xs;
+
+      text-anchor: middle;
+    }
+
+    & > g:last-of-type > rect {
+      fill: var(--primary);
+    }
+
+    & > g:last-of-type > rect + text {
+      fill: var(--primary-foreground);
+    }
+  }
+
+  .ui-timeline-grid {
+    & > rect {
+      fill: var(--background);
+    }
+
+    & > line {
+      stroke: var(--border);
+    }
+
+    & > path {
+      stroke: var(--border);
+      stroke-width: 0.4;
+
+      &[data-thick] {
+        stroke-width: 0.7;
+      }
+    }
+  }
+
+  .ui-timeline-now {
+    fill: var(--primary);
+
+    & > line {
+      stroke: var(--primary);
+    }
+  }
+
+  .ui-timeline-bars {
+    & > a {
+      @apply cursor-pointer outline-none;
+
+      &:focus-visible > rect:first-child {
+        @apply stroke-ring;
+
+        stroke-width: 2;
+      }
+    }
+
+    & rect:first-child {
+      fill: color-mix(in srgb, var(--ui-goal) 16%, var(--card));
+      outline: 1px solid var(--border);
+    }
+
+    & rect + rect {
+      fill: color-mix(in srgb, var(--ui-goal) var(--goal-fill), var(--card));
+    }
+
+    & text {
+      @apply fill-foreground text-[0.8125rem];
+
+      dominant-baseline: central;
+
+      &[data-inside] {
+        text-anchor: middle;
+      }
+    }
+  }
+
+  .ui-timeline-legend {
+    @apply flex flex-wrap gap-x-4 gap-y-1 text-xs;
+
+    & > li {
+      @apply flex items-center gap-1.5;
+
+      &::before {
+        @apply inline-block size-2.5 rounded-sm content-[''];
+
+        background: color-mix(
+          in srgb,
+          var(--ui-goal) var(--goal-fill),
+          var(--card)
+        );
+      }
+    }
+  }
+}

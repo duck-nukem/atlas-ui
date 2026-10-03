@@ -25,3 +25,4 @@
 @import "./components/storage.css";
 @plugin "@tailwindcss/typography";
 @import "./components/markdown.css";
+@import "./components/timeline.css";

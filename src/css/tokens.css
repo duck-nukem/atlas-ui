@@ -107,6 +107,7 @@
   --tone-6: #d6245c;
   --tone-7: #8e44d8;
   --status-fill: 45%;
+  --goal-fill: 55%;
   --status-median: color-mix(
     in oklch,
     var(--muted-foreground) 50%,
@@ -130,6 +131,7 @@
   --tone-6: #f38ba8;
   --tone-7: #cba6f7;
   --status-fill: 22%;
+  --goal-fill: 30%;
   --status-median: color-mix(
     in oklch,
     var(--muted-foreground) 20%,
