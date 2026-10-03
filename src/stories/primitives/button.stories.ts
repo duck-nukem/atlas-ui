@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/html-vite";
+import { expect } from "storybook/test";
 import { icons } from "../../icons/names";
 import { html, icon, select, type Story } from "../html";
 
@@ -19,19 +20,35 @@ type Args = {
   icon: string;
   link: boolean;
   disabled: boolean;
+  busy: boolean;
+  spinner: boolean;
 };
 
-const button = ({ label, variant, size, icon: name, link, disabled }: Args) => {
+const button = ({
+  label,
+  variant,
+  size,
+  icon: name,
+  link,
+  disabled,
+  busy,
+  spinner: withSpinner,
+}: Args) => {
   const iconOnly = size.startsWith("icon");
   const attributes = [
     'class="ui-button"',
     variant === "default" ? "" : `data-variant="${variant}"`,
     size === "default" ? "" : `data-size="${size}"`,
     iconOnly ? `aria-label="${label}"` : "",
+    busy ? 'aria-busy="true"' : "",
   ]
     .filter(Boolean)
     .join(" ");
-  const content = `${name === "" ? "" : icon(name)}${iconOnly ? "" : label}`;
+  const spinner =
+    busy || withSpinner
+      ? '<svg class="ui-icon ui-spinner" data-testid="spinner" aria-hidden="true"><use href="icons.svg#loader-circle"/></svg>'
+      : "";
+  const content = `${spinner}${name === "" ? "" : icon(name, undefined, "icon")}${iconOnly ? "" : label}`;
 
   return link
     ? `<a ${attributes} href="#${label.toLowerCase().replaceAll(" ", "-")}"${disabled ? ' aria-disabled="true"' : ""}>${content}</a>`
@@ -48,6 +65,8 @@ export default {
     icon: "",
     link: false,
     disabled: false,
+    busy: false,
+    spinner: false,
   },
   argTypes: {
     variant: select(variants),
@@ -94,3 +113,37 @@ export const IconOnly: Story<Args> = {
 };
 
 export const Pending: Story<Args> = { args: { disabled: true } };
+
+export const Loading: Story<Args> = {
+  args: { label: "Save", disabled: true, busy: true },
+  play: async ({ canvas }) => {
+    const spinner = canvas.getByTestId("spinner");
+
+    await expect(spinner).toBeVisible();
+  },
+};
+
+export const LoadingIconOnly: Story<Args> = {
+  args: {
+    label: "Notifications",
+    variant: "ghost",
+    size: "icon",
+    icon: "bell",
+    disabled: true,
+    busy: true,
+  },
+  play: async ({ canvas }) => {
+    const icon = canvas.getByTestId("icon");
+
+    await expect(icon).not.toBeVisible();
+  },
+};
+
+export const ReadyToLoad: Story<Args> = {
+  args: { label: "Save", spinner: true },
+  play: async ({ canvas }) => {
+    const spinner = canvas.getByTestId("spinner");
+
+    await expect(spinner).not.toBeVisible();
+  },
+};

@@ -58,8 +58,8 @@ export const html = <A extends Args>(
   },
 });
 
-export const icon = (name: string, size?: "3" | "3.5" | "5") =>
-  `<svg class="ui-icon"${size === undefined ? "" : ` data-size="${size}"`} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
+export const icon = (name: string, size?: "3" | "3.5" | "5", testId?: string) =>
+  `<svg class="ui-icon"${size === undefined ? "" : ` data-size="${size}"`}${testId === undefined ? "" : ` data-testid="${testId}"`} aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
 
 export const select = <T extends string>(options: readonly T[]) => ({
   control: "select" as const,

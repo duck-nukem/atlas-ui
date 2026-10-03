@@ -38,6 +38,7 @@ export const icons = [
   "info",
   "key-round",
   "lightbulb",
+  "loader-circle",
   "link-2",
   "menu",
   "message-circle",

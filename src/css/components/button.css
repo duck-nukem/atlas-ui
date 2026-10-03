@@ -35,6 +35,20 @@
       @apply size-7 rounded-[min(var(--radius-md),12px)] px-0 has-data-[icon]:px-0;
     }
 
+    & > .ui-spinner {
+      @apply hidden motion-safe:animate-spin;
+    }
+
+    &[aria-busy="true"] {
+      & > svg:not(.ui-spinner) {
+        @apply hidden;
+      }
+
+      & > .ui-spinner {
+        @apply block;
+      }
+    }
+
     &:has(> .ui-unread) {
       @apply relative;
     }
