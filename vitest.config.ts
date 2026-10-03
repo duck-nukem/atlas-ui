@@ -7,7 +7,7 @@ const browser = () => ({
   enabled: true,
   headless: true,
   provider: playwright(),
-  instances: [{ browser: "chromium" as const }],
+  instances: [{ browser: "chromium" as const }, { browser: "webkit" as const }],
 });
 
 const unit = () => ({
