@@ -11,8 +11,13 @@ export type ShellArgs = {
 const link = (name: string, label: string, current = false, dot = false) =>
   `<a class="ui-nav-link" href="#${label.toLowerCase().replaceAll(" ", "-")}"${current ? ' aria-current="page"' : ""}>${icon(name)}${label}${dot ? '<span class="ui-dot" role="status" aria-label="Someone mentioned you"></span>' : ""}</a>`;
 
+export const applications = ["Webapp", "Back office"];
+
+const slug = (name: string) => name.toLowerCase().replaceAll(" ", "-");
+
 export const applicationSelector = (
   id: string,
+  options: readonly string[],
   application = "All applications",
 ) => `
 <button class="ui-button ui-selector" data-variant="outline" data-size="sm" type="button" popovertarget="${id}">
@@ -21,9 +26,17 @@ export const applicationSelector = (
 <div class="ui-menu" data-align="end" id="${id}" popover>
   <a class="ui-menu-item" href="#all" autofocus>All applications</a>
   <hr class="ui-menu-separator">
-  <a class="ui-menu-item" href="#webapp">Webapp</a>
-  <a class="ui-menu-item" href="#cli">CLI</a>
+  ${options.map((option) => `<a class="ui-menu-item" href="#${slug(option)}">${option}</a>`).join("\n  ")}
 </div>`;
+
+export const applicationHeading = (
+  id: string,
+  options: readonly string[],
+  application?: string,
+) =>
+  options.length < 2
+    ? `<span>${options[0] ?? "Application"}</span>`
+    : applicationSelector(id, options, application);
 
 export const nav = (
   id: string,
@@ -35,7 +48,7 @@ export const nav = (
     ${link("inbox", "My desk", current === "My desk")}${link("target", "Goals", current === "Goals")}${link("puzzle", "Features", current === "Features")}${link("dam", "Flow", current === "Flow")}${link("broom-sparkles", "Housekeeping", current === "Housekeeping")}${link("message-square", "Chat", current === "Chat", mentioned)}
   </div>
   <div class="ui-nav-section" role="group" aria-label="Application">
-    <div class="ui-nav-heading">${applicationSelector(`${id}-applications`, application)}</div>
+    <div class="ui-nav-heading">${applicationHeading(`${id}-applications`, applications, application)}</div>
     ${link("square-check", "Tasks", current === "Tasks")}${link("git-branch", "Repositories", current === "Repositories")}${link("package", "Releases", current === "Releases")}${link("heart-pulse", "Health", current === "Health")}
   </div>
   <div class="ui-nav-section" role="group" aria-label="Settings">

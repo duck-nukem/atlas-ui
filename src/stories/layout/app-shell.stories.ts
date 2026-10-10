@@ -1,7 +1,7 @@
 import type { Meta } from "@storybook/html-vite";
 import { expect } from "storybook/test";
 import { html, select, type Story } from "../html";
-import { shell, type ShellArgs } from "./shell";
+import { applications, shell, type ShellArgs } from "./shell";
 
 const pages = [
   "My desk",
@@ -37,7 +37,7 @@ export default {
   },
   argTypes: {
     current: select(pages),
-    application: select(["All applications", "Webapp", "Back office"]),
+    application: select(["All applications", ...applications]),
   },
 } satisfies Meta<ShellArgs>;
 
